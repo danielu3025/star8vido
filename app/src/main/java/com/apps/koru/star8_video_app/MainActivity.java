@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mainPlayList = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
+
     }
 
     @Override

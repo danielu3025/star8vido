@@ -43,7 +43,7 @@ public class PlayList {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
     Context context;
-    private ProgressDialog progressDialog;
+    public   ProgressDialog progressDialog;
     File videoDir;
     boolean downloadFinishd = true;
     DatabaseReference playlistNode;
@@ -58,6 +58,7 @@ public class PlayList {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(contex);
 
+        progressDialog = null;
     }
 
     public void downloadPlaylist(String playlistName){
@@ -70,6 +71,7 @@ public class PlayList {
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                mainVideoView.stopPlayback();
                 //get playlist files names
                 listSnapshot = snapshot;
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
@@ -103,7 +105,7 @@ public class PlayList {
                     playlistFileNames.removeAll(playlistFileNames);
                     videoListphats.removeAll(videoListphats);
 
-                    Collections.sort(mainPlayList.list);
+                     //Collections.sort(mainPlayList.list);
                     //mainPlayList.list = new ArrayList<String>(new LinkedHashSet<String>(mainPlayList.list));
 
                     File [] folder = videoDir.listFiles();
@@ -310,7 +312,6 @@ public class PlayList {
 
     protected void dismissProgressDialog() {
         Log.d("function","dismissProgressDialog calld");
-
         progressDialog.dismiss();
     }
 }
