@@ -4,6 +4,7 @@ package com.apps.koru.star8_video_app;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,12 +48,15 @@ public class PlayList {
     boolean downloadFinishd = true;
     DatabaseReference playlistNode;
     DataSnapshot listSnapshot;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public PlayList(Context contex) {
         Log.d("function","PlayList contractor calld");
         context = contex;
         // create a File object for the parent directory
         videoDir = new File(context.getExternalCacheDir().getAbsolutePath()+"/playlist1");
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(contex);
 
     }
 
@@ -131,8 +136,20 @@ public class PlayList {
             counter++;
         }
         File[] lf = videoDir.listFiles();
+        ArrayList<String> temp = new ArrayList();
+        for (File file :lf){
+            temp.add(file.getAbsolutePath());
+        }
+        if (progressDialog != null){
+            if (progressDialog.isShowing()){
+                dismissProgressDialog();
+                progressDialog.dismiss();
+            }
+        }
+
        // mainVideoView.setVideoPath(mainPlayList.list.get(0));
-        if (counter == mainPlayList.list.size() ){
+        if (temp.containsAll(mainPlayList.list)){
+            final Bundle bundle = new Bundle();
             //mainVideoView.setVideoPath(mainPlayList.list.get(0));
             mainPlayList.onTrack =0;
             mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
@@ -150,7 +167,16 @@ public class PlayList {
 
                     mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
                     mainVideoView.start();
-            }
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mainPlayList.list.get(onTrack));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
+                    try{
+                        mFirebaseAnalytics.logEvent("video played",bundle);
+
+                    }catch (Exception e){
+                        e.getCause();
+                    }
+                }
             });
         }
     }
@@ -281,6 +307,7 @@ public class PlayList {
 
         progressDialog = ProgressDialog.show(context, title, msg, true);
     }
+
     protected void dismissProgressDialog() {
         Log.d("function","dismissProgressDialog calld");
 

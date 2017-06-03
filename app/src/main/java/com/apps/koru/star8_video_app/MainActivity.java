@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
+        Log.d("funtion called:","onResume");
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
@@ -53,6 +53,24 @@ public class MainActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mainPlayList = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("function","onStop");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("function","onResume");
         mainPlayList.downloadPlaylist("testPlaylist");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("function","onStart");
     }
 }
