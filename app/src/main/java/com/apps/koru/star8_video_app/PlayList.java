@@ -4,6 +4,7 @@ package com.apps.koru.star8_video_app;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -129,6 +130,7 @@ public class PlayList {
     }
 
     public void playTheplayList(){
+        final ArrayList<Uri> uriPlayList = new ArrayList<>();
         int counter = 0;
         Log.d("function","playTheplayList calld");
         Iterable<DataSnapshot> list =  listSnapshot.getChildren();
@@ -142,6 +144,9 @@ public class PlayList {
         for (File file :lf){
             temp.add(file.getAbsolutePath());
         }
+        for (String path :mainPlayList.list){
+            uriPlayList.add(Uri.parse(path));
+        }
         if (progressDialog != null){
             if (progressDialog.isShowing()){
                 dismissProgressDialog();
@@ -154,7 +159,8 @@ public class PlayList {
             final Bundle bundle = new Bundle();
             //mainVideoView.setVideoPath(mainPlayList.list.get(0));
             mainPlayList.onTrack =0;
-            mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
+            //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
+            mainVideoView.setVideoURI(uriPlayList.get(onTrack));
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
@@ -167,7 +173,9 @@ public class PlayList {
                         mainPlayList.onTrack=0;
                     }
 
-                    mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                  //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                    mainVideoView.setVideoURI(uriPlayList.get(onTrack));
+
                     mainVideoView.start();
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mainPlayList.list.get(onTrack));
                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
