@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public static PlayList mainPlayList;
 
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
+    private boolean pause = false;
+    private int videoStopPosition;
 
 
 
@@ -63,15 +65,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("function","onPause");
+        pause = true;
+        videoStopPosition = mainVideoView.getCurrentPosition();
+        mainVideoView.pause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Log.d("function","onResume");
+/*
         mainPlayList.downloadPlaylist("testPlaylist");
+*/
+        if (pause) {
+            mainVideoView.seekTo(videoStopPosition);
+            mainVideoView.start();
+            Log.d("function","video resumed");
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d("function","onStart");
+        if (!pause) {
+            mainPlayList.downloadPlaylist("testPlaylist");
+            Log.d("function","video started");
+        }
     }
 }

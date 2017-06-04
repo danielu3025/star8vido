@@ -181,7 +181,7 @@ public class PlayList {
                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
                     try{
-                        mFirebaseAnalytics.logEvent("video played",bundle);
+                        mFirebaseAnalytics.logEvent("videoPlayed",bundle);
 
                     }catch (Exception e){
                         e.getCause();
