@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +32,9 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 
 
+import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.apps.koru.star8_video_app.MainActivity.database;
+import static com.apps.koru.star8_video_app.MainActivity.downloadingImg;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
 import static com.apps.koru.star8_video_app.MainActivity.mainVideoView;
 
@@ -44,7 +47,7 @@ public class PlayList {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
     Context context;
-    public   ProgressDialog progressDialog;
+   // public   ProgressDialog progressDialog;
     File videoDir;
     boolean downloadFinishd = true;
     DatabaseReference playlistNode;
@@ -59,7 +62,7 @@ public class PlayList {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(contex);
 
-        progressDialog = null;
+       // progressDialog = null;
     }
 
     public void downloadPlaylist(String playlistName){
@@ -106,7 +109,7 @@ public class PlayList {
                     playlistFileNames.removeAll(playlistFileNames);
                     videoListphats.removeAll(videoListphats);
 
-                     //Collections.sort(mainPlayList.list);
+                    //Collections.sort(mainPlayList.list);
                     //mainPlayList.list = new ArrayList<String>(new LinkedHashSet<String>(mainPlayList.list));
 
                     File [] folder = videoDir.listFiles();
@@ -147,14 +150,14 @@ public class PlayList {
         for (String path :mainPlayList.list){
             uriPlayList.add(Uri.parse(path));
         }
-        if (progressDialog != null){
-            if (progressDialog.isShowing()){
-                dismissProgressDialog();
-                progressDialog.dismiss();
-            }
-        }
+//        if (progressDialog != null){
+//            if (progressDialog.isShowing()){
+//                dismissProgressDialog();
+//                progressDialog.dismiss();
+//            }
+//        }
 
-       // mainVideoView.setVideoPath(mainPlayList.list.get(0));
+        // mainVideoView.setVideoPath(mainPlayList.list.get(0));
         if (temp.containsAll(mainPlayList.list)){
             final Bundle bundle = new Bundle();
             //mainVideoView.setVideoPath(mainPlayList.list.get(0));
@@ -173,7 +176,7 @@ public class PlayList {
                         mainPlayList.onTrack=0;
                     }
 
-                  //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                    //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
                     mainVideoView.setVideoURI(uriPlayList.get(onTrack));
 
                     mainVideoView.start();
@@ -181,7 +184,7 @@ public class PlayList {
                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
                     try{
-                        mFirebaseAnalytics.logEvent("video played",bundle);
+                        mFirebaseAnalytics.logEvent("videoPlayed",bundle);
 
                     }catch (Exception e){
                         e.getCause();
@@ -237,11 +240,11 @@ public class PlayList {
 
     private void fetchFilesFromFireBaseStorage(final ArrayList<String> toDownloadList){
         Log.d("function","fetchFilesFromFireBaseStorage calld");
-
+        downloadingImg.setVisibility(View.VISIBLE);
         try {
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();
-            showProgressDialog("Downloading Playlist","complete: "+ p  + "%");
+            //showProgressDialog("Downloading Playlist","complete: "+ p  + "%");
             for (String fileName : toDownloadList) {
                 storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
                 final File videoFile = new File(videoDir, fileName);
@@ -257,8 +260,8 @@ public class PlayList {
                     public void onFailure(@NonNull Exception exception) {
                         Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
 
-                        dismissProgressDialog();
-                        showProgressDialog("connection Error",exception.getMessage());
+                        //dismissProgressDialog();
+                        //showProgressDialog("connection Error",exception.getMessage());
                         exception.getCause();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
@@ -268,13 +271,14 @@ public class PlayList {
 
                         dcount++;
                         p=p+pstep;
-                        progressDialog.setMessage("complete: "+ p  + "%");
+//                        progressDialog.setMessage("complete: "+ p  + "%");
                         if (dcount == toDownloadList.size()){
                             Log.d("status:","complete");
                             dcount = 0;
                             p = 0;
                             downloadFinishd = true;
-                            dismissProgressDialog();
+                            //dismissProgressDialog();
+                            downloadingImg.setVisibility(View.INVISIBLE);
                             playTheplayList();
                         }
                     }
@@ -283,7 +287,7 @@ public class PlayList {
         }
         catch (Exception e){
             e.printStackTrace();
-            showProgressDialog("Downloading  Error",e.getMessage());
+            //showProgressDialog("Downloading  Error",e.getMessage());
             Log.e("Main", "IOE Exception");
         }
     }
@@ -312,14 +316,14 @@ public class PlayList {
         return  fleg;
     }
 
-    protected void showProgressDialog(String title, String msg) {
-        Log.d("function","showProgressDialog calld");
+//    protected void showProgressDialog(String title, String msg) {
+//        Log.d("function","showProgressDialog calld");
+//
+//        progressDialog = ProgressDialog.show(context, title, msg, true);
+//    }
 
-        progressDialog = ProgressDialog.show(context, title, msg, true);
-    }
-
-    protected void dismissProgressDialog() {
-        Log.d("function","dismissProgressDialog calld");
-        progressDialog.dismiss();
-    }
+//    protected void dismissProgressDialog() {
+//        Log.d("function","dismissProgressDialog calld");
+//        progressDialog.dismiss();
+//    }
 }
