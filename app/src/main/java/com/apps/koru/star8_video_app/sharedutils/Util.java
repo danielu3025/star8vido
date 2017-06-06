@@ -108,7 +108,6 @@ To enable it, set this value in this class statically to true, and in runtime se
             }
 
 */
-
             // THE ASSERTION HAS FAILED!!
             // We want now to crash the app if we're in development mode (so we'll immediately see the stack trace and fix it)
             // But in production we don't want the app to crash, just report to us.
