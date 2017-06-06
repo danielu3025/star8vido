@@ -252,7 +252,6 @@ public class PlayList extends AppCompatActivity {
                     try{
                         event = uriPlayList.get(onTrack-1).toString();
                         event = event.substring(event.lastIndexOf("/") + 1);
-
                         mFirebaseAnalytics.logEvent(event,bundle);
 
                     }catch (Exception e){
