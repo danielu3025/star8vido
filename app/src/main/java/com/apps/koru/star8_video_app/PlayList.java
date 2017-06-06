@@ -3,13 +3,18 @@ package com.apps.koru.star8_video_app;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 
+import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
+import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,12 +36,15 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 
 
+import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.apps.koru.star8_video_app.MainActivity.database;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
 import static com.apps.koru.star8_video_app.MainActivity.mainVideoView;
 
 
-public class PlayList {
+public class PlayList extends AppCompatActivity {
+    static ArrayList<Uri> uriPlayList = new ArrayList<>();
+    String event;
     ArrayList<String> list = new ArrayList<>();
     int onTrack =-1;int dcount = 0; int p = 0; int pstep = 1; boolean flag = false;
     ArrayList<String> playlistFileNames = new ArrayList<>();
@@ -50,6 +58,7 @@ public class PlayList {
     DatabaseReference playlistNode;
     DataSnapshot listSnapshot;
     private FirebaseAnalytics mFirebaseAnalytics;
+    SharedPreferences sharedPreferences;
 
     public PlayList(Context contex) {
         Log.d("function","PlayList contractor calld");
@@ -63,11 +72,10 @@ public class PlayList {
     }
 
     public void downloadPlaylist(String playlistName){
-        Log.d("function","downloadPlaylist calld");
-
+        Log.d("function", "downloadPlaylist calld");
         //get the playlist files name
 
-        playlistNode =  MainActivity.database.getReference(playlistName);
+        playlistNode = MainActivity.database.getReference(playlistName);
 
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,66 +83,124 @@ public class PlayList {
                 mainVideoView.stopPlayback();
                 //get playlist files names
                 listSnapshot = snapshot;
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     playlistFileNames.add((String) postSnapshot.getValue() + ".mp4");
-                    videoListphats.add(videoDir.getAbsolutePath()+"/"+(String)postSnapshot.getValue()+".mp4");
+                    videoListphats.add(videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue() + ".mp4");
                 }
                 playlistFileNames = new ArrayList<String>(new LinkedHashSet<String>(playlistFileNames));
                 videoListphats = new ArrayList<String>(new LinkedHashSet<String>(videoListphats));
-
                 //check if playlist Folder is exists
-                if(checkFolderExists(videoDir)){
+                if (checkFolderExists(videoDir)) {
                     //all videos are in storage ?
-                    switch (allVideosOnDevice(videoDir,playlistFileNames)){
+                    switch (allVideosOnDevice(videoDir, playlistFileNames)) {
                         case 1: // all videos is in storage
                             mainPlayList.list.removeAll(list);
-                            for(int i = 0 ; i<playlistFileNames.size();i++){
-                                mainPlayList.list.add(videoDir.getAbsolutePath()+"/"+playlistFileNames.get(i));
+                            for (int i = 0; i < playlistFileNames.size(); i++) {
+                                mainPlayList.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
                             }
                             playTheplayList();
                             break;
                         case 2:// not all videos are in the storage
-                            downloadMissVideos(videoDir,videoListphats);
-                            mainPlayList.list.removeAll(list);
-                            for(int i = 0 ; i<playlistFileNames.size();i++){
-                                mainPlayList.list.add(videoDir.getAbsolutePath()+"/"+playlistFileNames.get(i));
+                            downloadMissVideos(videoDir, videoListphats);
+                            mainPlayList.list.clear();
+                            for (int i = 0; i < playlistFileNames.size(); i++) {
+                                mainPlayList.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
                             }
                             break;
                         default:
                     }
                     ArrayList<String> temp = new ArrayList<String>(playlistFileNames);
-                    playlistFileNames.removeAll(playlistFileNames);
-                    videoListphats.removeAll(videoListphats);
+                    playlistFileNames.clear();
+                    videoListphats.clear();
 
-                     //Collections.sort(mainPlayList.list);
+                    //Collections.sort(mainPlayList.list);
                     //mainPlayList.list = new ArrayList<String>(new LinkedHashSet<String>(mainPlayList.list));
 
-                    File [] folder = videoDir.listFiles();
-                    ArrayList<String> tempString = new ArrayList();
-                    for (File path:folder){
+                    File[] folder = videoDir.listFiles();
+                    ArrayList<String> tempString = new ArrayList<>();
+                    for (File path : folder) {
                         tempString.add(path.getAbsolutePath());
                     }
                     //playTheplayList(temp);
-                }
-                else {
-                    videoDir.mkdirs();
-                    downloadPlaylist("testPlaylist");
+                } else {
+                    try {
+                        videoDir.mkdirs();
+                        downloadPlaylist("testPlaylist");
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("The read failed: " ,databaseError.getMessage());
-            }
+             @Override
+             public void onCancelled(DatabaseError databaseError) {
+                 Log.e("The read failed: ", databaseError.getMessage());
+             }
         });
     }
 
+    private void saveThePlayList() {
+        AsyncHandler.post(() -> {
+            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt("size", uriPlayList.size());
+
+            for(int i=0;i<uriPlayList.size();i++)
+            {
+                editor.putString("video_" + i, String.valueOf(uriPlayList.get(i)));
+            }
+
+            editor.apply();
+        });
+    }
+
+    public void loadThePlayList(){
+        final int[] size = new int[1];
+        uriPlayList.clear();
+        AsyncHandler.post(() -> {
+            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+            UiHandler.post(() -> {
+                size[0] = sharedPreferences.getInt("size", 0);
+                for(int i=0;i<size[0];i++)
+                {
+                    uriPlayList.add(i,Uri.parse(sharedPreferences.getString("video_"+i, null)));
+
+                }
+                Log.e("function", "isfinishloading");
+                playOffline();
+            });
+        });
+    }
+
+    public void playOffline(){
+        if(uriPlayList.size()==0){
+            Toast.makeText(context, "no internet and no playlist played before",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            onTrack = 0;
+            //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
+            mainVideoView.setVideoURI(uriPlayList.get(onTrack));
+            mainVideoView.start();
+            MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    if (onTrack < uriPlayList.size()) {
+                        onTrack++;
+                    } else {
+                        onTrack = 0;
+                    }
+                    //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                    mainVideoView.setVideoURI(uriPlayList.get(onTrack));
+                    mainVideoView.start();
+                }
+            });
+        }
+    }
     public void playTheplayList(){
-        final ArrayList<Uri> uriPlayList = new ArrayList<>();
+        uriPlayList.clear();
         int counter = 0;
         Log.d("function","playTheplayList calld");
         Iterable<DataSnapshot> list =  listSnapshot.getChildren();
-        mainPlayList.list.removeAll(mainPlayList.list);
+        mainPlayList.list.clear();
         for (DataSnapshot data: list){
             mainPlayList.list.add( videoDir.getAbsolutePath()+"/"+data.getValue().toString() + ".mp4");
             counter++;
@@ -160,6 +226,7 @@ public class PlayList {
             //mainVideoView.setVideoPath(mainPlayList.list.get(0));
             mainPlayList.onTrack =0;
             //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
+
             mainVideoView.setVideoURI(uriPlayList.get(onTrack));
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -176,12 +243,17 @@ public class PlayList {
                   //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
                     mainVideoView.setVideoURI(uriPlayList.get(onTrack));
 
+                    saveThePlayList();
+
                     mainVideoView.start();
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mainPlayList.list.get(onTrack));
                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
                     try{
-                        mFirebaseAnalytics.logEvent("videoPlayed",bundle);
+                        event = uriPlayList.get(onTrack-1).toString();
+                        event = event.substring(event.lastIndexOf("/") + 1);
+
+                        mFirebaseAnalytics.logEvent(event,bundle);
 
                     }catch (Exception e){
                         e.getCause();

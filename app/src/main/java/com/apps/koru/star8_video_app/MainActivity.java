@@ -1,6 +1,10 @@
 package com.apps.koru.star8_video_app;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,35 +15,26 @@ import android.widget.MediaController;
 
 
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
 import io.fabric.sdk.android.Fabric;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
-    MediaController mediaController;
-    File videosRoot;
     public static VideoView mainVideoView;
     public static PlayList mainPlayList;
 
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
     private boolean pause = false;
     private int videoStopPosition;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mainPlayList = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
-
     }
 
     @Override
@@ -92,8 +86,18 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Log.d("function","onStart");
         if (!pause) {
-            mainPlayList.downloadPlaylist("testPlaylist");
-            Log.d("function","video started");
+            if(isNetworkAvailable()) {
+                mainPlayList.downloadPlaylist("testPlaylist");
+                Log.d("function", "video started");
+            } else {
+                mainPlayList.loadThePlayList();
+            }
         }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
