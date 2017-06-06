@@ -1,7 +1,6 @@
 package com.apps.koru.star8_video_app;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -38,6 +38,7 @@ import java.util.LinkedHashSet;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.apps.koru.star8_video_app.MainActivity.database;
+import static com.apps.koru.star8_video_app.MainActivity.downloadIcon;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
 import static com.apps.koru.star8_video_app.MainActivity.mainVideoView;
 
@@ -52,7 +53,6 @@ public class PlayList extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
     Context context;
-    public   ProgressDialog progressDialog;
     File videoDir;
     boolean downloadFinishd = true;
     DatabaseReference playlistNode;
@@ -68,7 +68,6 @@ public class PlayList extends AppCompatActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(contex);
 
-        progressDialog = null;
     }
 
     public void downloadPlaylist(String playlistName){
@@ -183,7 +182,7 @@ public class PlayList extends AppCompatActivity {
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
-                    if (onTrack < uriPlayList.size()) {
+                    if (onTrack < uriPlayList.size()-1) {
                         onTrack++;
                     } else {
                         onTrack = 0;
@@ -213,12 +212,7 @@ public class PlayList extends AppCompatActivity {
         for (String path :mainPlayList.list){
             uriPlayList.add(Uri.parse(path));
         }
-        if (progressDialog != null){
-            if (progressDialog.isShowing()){
-                dismissProgressDialog();
-                progressDialog.dismiss();
-            }
-        }
+
 
        // mainVideoView.setVideoPath(mainPlayList.list.get(0));
         if (temp.containsAll(mainPlayList.list)){
@@ -309,9 +303,9 @@ public class PlayList extends AppCompatActivity {
         Log.d("function","fetchFilesFromFireBaseStorage calld");
 
         try {
+            downloadIcon.setVisibility(View.VISIBLE);
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();
-            showProgressDialog("Downloading Playlist","complete: "+ p  + "%");
             for (String fileName : toDownloadList) {
                 storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
                 final File videoFile = new File(videoDir, fileName);
@@ -326,9 +320,7 @@ public class PlayList extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
-
-                        dismissProgressDialog();
-                        showProgressDialog("connection Error",exception.getMessage());
+                        ;
                         exception.getCause();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
@@ -338,13 +330,12 @@ public class PlayList extends AppCompatActivity {
 
                         dcount++;
                         p=p+pstep;
-                        progressDialog.setMessage("complete: "+ p  + "%");
                         if (dcount == toDownloadList.size()){
                             Log.d("status:","complete");
                             dcount = 0;
                             p = 0;
                             downloadFinishd = true;
-                            dismissProgressDialog();
+                            downloadIcon.setVisibility(View.INVISIBLE);
                             playTheplayList();
                         }
                     }
@@ -353,7 +344,6 @@ public class PlayList extends AppCompatActivity {
         }
         catch (Exception e){
             e.printStackTrace();
-            showProgressDialog("Downloading  Error",e.getMessage());
             Log.e("Main", "IOE Exception");
         }
     }
@@ -380,16 +370,5 @@ public class PlayList extends AppCompatActivity {
             }
         }
         return  fleg;
-    }
-
-    protected void showProgressDialog(String title, String msg) {
-        Log.d("function","showProgressDialog calld");
-
-        progressDialog = ProgressDialog.show(context, title, msg, true);
-    }
-
-    protected void dismissProgressDialog() {
-        Log.d("function","dismissProgressDialog calld");
-        progressDialog.dismiss();
     }
 }

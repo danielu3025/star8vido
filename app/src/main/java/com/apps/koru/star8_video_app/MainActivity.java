@@ -8,8 +8,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.VideoView;
 import android.widget.MediaController;
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
     public static VideoView mainVideoView;
     public static PlayList mainPlayList;
+    public static ImageView downloadIcon;
+    public static ImageView noInternet;
 
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
     private boolean pause = false;
@@ -50,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mainPlayList = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
+        downloadIcon = (ImageView)findViewById(R.id.downloadImg);
+        downloadIcon.setVisibility(View.INVISIBLE);
+        noInternet = (ImageView)findViewById(R.id.noConnection);
+        noInternet.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -90,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 mainPlayList.downloadPlaylist("testPlaylist");
                 Log.d("function", "video started");
             } else {
+                noInternet.setVisibility(View.VISIBLE);
                 mainPlayList.loadThePlayList();
             }
         }
