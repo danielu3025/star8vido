@@ -242,19 +242,16 @@ public class PlayList extends AppCompatActivity {
                     mainVideoView.setVideoURI(uriPlayList.get(onTrack));
 
                     saveThePlayList();
-
-                    mainVideoView.start();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mainPlayList.list.get(onTrack));
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mainPlayList.list.get(onTrack));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
                     try{
-                        event = uriPlayList.get(onTrack-1).toString();
+                        event = uriPlayList.get(onTrack).toString();
                         event = event.substring(event.lastIndexOf("/") + 1);
-                        mFirebaseAnalytics.logEvent("test",bundle);
-                        mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
                     }catch (Exception e){
                         e.getCause();
                     }
+                    mainVideoView.start();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,event);
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
+                    mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
                 }
             });
         }
