@@ -37,7 +37,6 @@ import java.util.LinkedHashSet;
 
 
 import static android.content.Context.DOWNLOAD_SERVICE;
-import static com.apps.koru.star8_video_app.ConnectivityChanged.isConnection;
 import static com.apps.koru.star8_video_app.MainActivity.database;
 import static com.apps.koru.star8_video_app.MainActivity.downloadIcon;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
@@ -131,10 +130,10 @@ public class PlayList extends AppCompatActivity {
                     }
                 }
             }
-             @Override
-             public void onCancelled(DatabaseError databaseError) {
-                 Log.e("The read failed: ", databaseError.getMessage());
-             }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("The read failed: ", databaseError.getMessage());
+            }
         });
     }
 
@@ -183,7 +182,7 @@ public class PlayList extends AppCompatActivity {
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
-                    if(isConnection){
+                    if(MainActivity.isConnection){
                         downloadPlaylist("testPlaylist");
                     }
                     if (onTrack < uriPlayList.size()-1) {
@@ -218,7 +217,7 @@ public class PlayList extends AppCompatActivity {
         }
 
 
-       // mainVideoView.setVideoPath(mainPlayList.list.get(0));
+        // mainVideoView.setVideoPath(mainPlayList.list.get(0));
         if (temp.containsAll(mainPlayList.list)){
             final Bundle bundle = new Bundle();
             //mainVideoView.setVideoPath(mainPlayList.list.get(0));
@@ -238,7 +237,7 @@ public class PlayList extends AppCompatActivity {
                         mainPlayList.onTrack=0;
                     }
 
-                  //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                    //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
                     mainVideoView.setVideoURI(uriPlayList.get(onTrack));
 
                     saveThePlayList();
@@ -374,3 +373,6 @@ public class PlayList extends AppCompatActivity {
         return  fleg;
     }
 }
+
+
+

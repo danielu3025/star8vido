@@ -38,11 +38,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".ConnectivityChanged">
+        <service android:name=".ConnectionService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
-        </receiver>
+        </service>
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -50,3 +51,5 @@
     </application>
 
 </manifest>
+
+

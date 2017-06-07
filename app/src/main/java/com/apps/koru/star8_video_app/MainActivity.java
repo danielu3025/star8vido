@@ -1,6 +1,7 @@
 package com.apps.koru.star8_video_app;
 
 
+import android.app.job.JobInfo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -17,6 +18,11 @@ import android.widget.MediaController;
 
 
 import com.crashlytics.android.Crashlytics;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.JobTrigger;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
@@ -28,7 +34,6 @@ import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.List;
 
-import static com.apps.koru.star8_video_app.ConnectivityChanged.isConnection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,9 +42,12 @@ public class MainActivity extends AppCompatActivity {
     public static PlayList mainPlayList;
     public static ImageView downloadIcon;
     public static ImageView noInternet;
+    public static boolean isConnection = false;
 
+    FirebaseJobDispatcher dispatcher;
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
     private boolean pause = false;
+    private boolean firstRun = true;
     private int videoStopPosition;
 
     @Override
@@ -75,36 +83,57 @@ public class MainActivity extends AppCompatActivity {
         pause = true;
         videoStopPosition = mainVideoView.getCurrentPosition();
         mainVideoView.pause();
+        try {
+
+            dispatcher.cancel("Connection_check");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+
+            dispatcher.cancel("Connection_check");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("function","onResume");
-/*
-        mainPlayList.downloadPlaylist("testPlaylist");
-*/
-        if (pause) {
+        try {
+            Log.d("function", "onResume");
+            dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+            Job myJob = dispatcher.newJobBuilder()
+                    .setService(ConnectionService.class) // the JobService that will be called
+                    .setTag("Connection_check")        // uniquely identifies the job
+                    .setRecurring(true)
+                    .setTrigger(Trigger.executionWindow(15, 30))
+                    .build();
+
+
+            dispatcher.mustSchedule(myJob);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!pause && isNetworkAvailable()) {
+            mainPlayList.downloadPlaylist("testPlaylist");
+            Log.d("function", "video started");
+        } else if(!pause && !isNetworkAvailable()){
+            noInternet.setVisibility(View.VISIBLE);
+            mainPlayList.loadThePlayList();
+        } else if (pause) {
             mainVideoView.seekTo(videoStopPosition);
             mainVideoView.start();
             Log.d("function","video resumed");
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("function","onStart");
-        if (!pause) {
-            if(isNetworkAvailable()) {
-                mainPlayList.downloadPlaylist("testPlaylist");
-                Log.d("function", "video started");
-            } else {
-                noInternet.setVisibility(View.VISIBLE);
-                mainPlayList.loadThePlayList();
-            }
-        }
-    }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -112,3 +141,4 @@ public class MainActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
+
