@@ -37,6 +37,7 @@ import java.util.LinkedHashSet;
 
 
 import static android.content.Context.DOWNLOAD_SERVICE;
+import static com.apps.koru.star8_video_app.ConnectivityChanged.isConnection;
 import static com.apps.koru.star8_video_app.MainActivity.database;
 import static com.apps.koru.star8_video_app.MainActivity.downloadIcon;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
@@ -182,6 +183,9 @@ public class PlayList extends AppCompatActivity {
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
+                    if(isConnection){
+                        downloadPlaylist("testPlaylist");
+                    }
                     if (onTrack < uriPlayList.size()-1) {
                         onTrack++;
                     } else {
@@ -246,7 +250,8 @@ public class PlayList extends AppCompatActivity {
                     try{
                         event = uriPlayList.get(onTrack-1).toString();
                         event = event.substring(event.lastIndexOf("/") + 1);
-                        mFirebaseAnalytics.logEvent(event,bundle);
+                        mFirebaseAnalytics.logEvent("test",bundle);
+                        mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
                     }catch (Exception e){
                         e.getCause();
                     }

@@ -28,6 +28,8 @@ import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.List;
 
+import static com.apps.koru.star8_video_app.ConnectivityChanged.isConnection;
+
 
 public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
