@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 import android.widget.MediaController;
 
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     public static PlayList mainPlayList;
     public static ImageView downloadIcon;
     public static ImageView noInternet;
+    public static Button noConnectionOk;
+    public static TextView noConnectionText;
     public static boolean isConnection = false;
 
     FirebaseJobDispatcher dispatcher;
@@ -68,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         downloadIcon.setVisibility(View.INVISIBLE);
         noInternet = (ImageView)findViewById(R.id.noConnection);
         noInternet.setVisibility(View.INVISIBLE);
+        noConnectionOk = (Button) findViewById(R.id.noConnectionOk);
+        noConnectionOk.setVisibility(View.GONE);
+        noConnectionText = (TextView) findViewById(R.id.noConnectionText);
+        noConnectionText.setVisibility(View.GONE);
     }
 
     @Override
@@ -139,6 +147,16 @@ public class MainActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void checkConnectivity(View view) {
+        if(isNetworkAvailable()) {
+            MainActivity.noConnectionText.setVisibility(View.GONE);
+            MainActivity.noConnectionOk.setVisibility(View.GONE);
+            mainPlayList.downloadPlaylist("testPlaylist");
+        } else {
+            mainPlayList.loadThePlayList();
+        }
     }
 }
 

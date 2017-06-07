@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">star8video</string>
+    <string name="click_ok_when_having_connection">click \'ok\' when having connection</string>
+    <string name="ok">OK</string>
 </resources>

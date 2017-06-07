@@ -175,6 +175,8 @@ public class PlayList extends AppCompatActivity {
         if(uriPlayList.size()==0){
             Toast.makeText(context, "no internet and no playlist played before",
                     Toast.LENGTH_LONG).show();
+            MainActivity.noConnectionText.setVisibility(View.VISIBLE);
+            MainActivity.noConnectionOk.setVisibility(View.VISIBLE);
         } else {
             onTrack = 0;
             //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
