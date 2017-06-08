@@ -174,7 +174,7 @@ public class PlayList extends AppCompatActivity {
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(mp -> {
                 if(MainActivity.isConnection){
-                    downloadPlaylist("testPlaylist");
+                    downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
                 }
                 if (onTrack < uriPlayList.size()-1) {
                     onTrack++;
