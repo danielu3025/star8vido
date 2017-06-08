@@ -1,9 +1,7 @@
 package com.apps.koru.star8_video_app;
 
 
-import android.app.job.JobInfo;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,30 +14,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
-import android.widget.MediaController;
 
 
 import com.crashlytics.android.Crashlytics;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Trigger;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 
 import io.fabric.sdk.android.Fabric;
-import java.io.File;
-import java.util.List;
+
 
 
 
 public class MainActivity extends AppCompatActivity {
-    private StorageReference mStorageRef;
     public static VideoView mainVideoView;
     public static PlayList mainPlayList;
     public static ImageView downloadIcon;
@@ -65,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
         mainPlayList = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
         downloadIcon = (ImageView)findViewById(R.id.downloadImg);
@@ -151,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkConnectivity(View view) {
         if(isNetworkAvailable()) {
-            MainActivity.noConnectionText.setVisibility(View.GONE);
-            MainActivity.noConnectionOk.setVisibility(View.GONE);
+            noConnectionText.setVisibility(View.GONE);
+            noConnectionOk.setVisibility(View.GONE);
             mainPlayList.downloadPlaylist("testPlaylist");
         } else {
             mainPlayList.loadThePlayList();

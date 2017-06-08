@@ -3,10 +3,8 @@ package com.apps.koru.star8_video_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,29 +13,20 @@ import android.widget.Toast;
 
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 
 
-import static android.content.Context.DOWNLOAD_SERVICE;
-import static com.apps.koru.star8_video_app.MainActivity.database;
 import static com.apps.koru.star8_video_app.MainActivity.downloadIcon;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
 import static com.apps.koru.star8_video_app.MainActivity.mainVideoView;
@@ -86,8 +75,8 @@ public class PlayList extends AppCompatActivity {
                     playlistFileNames.add((String) postSnapshot.getValue() + ".mp4");
                     videoListphats.add(videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue() + ".mp4");
                 }
-                playlistFileNames = new ArrayList<String>(new LinkedHashSet<String>(playlistFileNames));
-                videoListphats = new ArrayList<String>(new LinkedHashSet<String>(videoListphats));
+                playlistFileNames = new ArrayList<>(new LinkedHashSet<>(playlistFileNames));
+                videoListphats = new ArrayList<>(new LinkedHashSet<>(videoListphats));
                 //check if playlist Folder is exists
                 if (checkFolderExists(videoDir)) {
                     //all videos are in storage ?
@@ -108,7 +97,7 @@ public class PlayList extends AppCompatActivity {
                             break;
                         default:
                     }
-                    ArrayList<String> temp = new ArrayList<String>(playlistFileNames);
+                    ArrayList<String> temp = new ArrayList<>(playlistFileNames);
                     playlistFileNames.clear();
                     videoListphats.clear();
 
@@ -182,20 +171,18 @@ public class PlayList extends AppCompatActivity {
             //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
             mainVideoView.setVideoURI(uriPlayList.get(onTrack));
             mainVideoView.start();
-            MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp) {
-                    if(MainActivity.isConnection){
-                        downloadPlaylist("testPlaylist");
-                    }
-                    if (onTrack < uriPlayList.size()-1) {
-                        onTrack++;
-                    } else {
-                        onTrack = 0;
-                    }
-                    //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
-                    mainVideoView.setVideoURI(uriPlayList.get(onTrack));
-                    mainVideoView.start();
+            MainActivity.mainVideoView.setOnCompletionListener(mp -> {
+                if(MainActivity.isConnection){
+                    downloadPlaylist("testPlaylist");
                 }
+                if (onTrack < uriPlayList.size()-1) {
+                    onTrack++;
+                } else {
+                    onTrack = 0;
+                }
+                //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                mainVideoView.setVideoURI(uriPlayList.get(onTrack));
+                mainVideoView.start();
             });
         }
     }
@@ -210,7 +197,7 @@ public class PlayList extends AppCompatActivity {
             counter++;
         }
         File[] lf = videoDir.listFiles();
-        ArrayList<String> temp = new ArrayList();
+        ArrayList<String> temp = new ArrayList<>();
         for (File file :lf){
             temp.add(file.getAbsolutePath());
         }
@@ -228,32 +215,30 @@ public class PlayList extends AppCompatActivity {
 
             mainVideoView.setVideoURI(uriPlayList.get(onTrack));
             mainVideoView.start();
-            MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp) {
-                    Log.d("function","playTheplayList - on complate calld");
+            MainActivity.mainVideoView.setOnCompletionListener(mp -> {
+                Log.d("function","playTheplayList - on complate calld");
 
-                    if (mainPlayList.onTrack < MainActivity.mainPlayList.list.size()){
-                        mainPlayList.onTrack++;
-                    }
-                    if (onTrack == MainActivity.mainPlayList.list.size()){
-                        mainPlayList.onTrack=0;
-                    }
-
-                    //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
-                    mainVideoView.setVideoURI(uriPlayList.get(onTrack));
-
-                    saveThePlayList();
-                    try{
-                        event = uriPlayList.get(onTrack).toString();
-                        event = event.substring(event.lastIndexOf("/") + 1);
-                    }catch (Exception e){
-                        e.getCause();
-                    }
-                    mainVideoView.start();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,event);
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
-                    mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
+                if (mainPlayList.onTrack < MainActivity.mainPlayList.list.size()){
+                    mainPlayList.onTrack++;
                 }
+                if (onTrack == MainActivity.mainPlayList.list.size()){
+                    mainPlayList.onTrack=0;
+                }
+
+                //  mainVideoView.setVideoPath(mainPlayList.list.get(onTrack));
+                mainVideoView.setVideoURI(uriPlayList.get(onTrack));
+
+                saveThePlayList();
+                try{
+                    event = uriPlayList.get(onTrack).toString();
+                    event = event.substring(event.lastIndexOf("/") + 1);
+                }catch (Exception e){
+                    e.getCause();
+                }
+                mainVideoView.start();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME,event);
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
+                mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
             });
         }
     }
@@ -261,10 +246,7 @@ public class PlayList extends AppCompatActivity {
     private boolean checkFolderExists(File dir){
         Log.d("function","checkFolderExists calld");
 
-        if (dir.exists()){
-            return true;
-        }
-        return false;
+        return dir.exists();
     }
 
     private void downloadMissVideos(File dir, ArrayList<String> playlistPaths) {
@@ -274,8 +256,8 @@ public class PlayList extends AppCompatActivity {
         ArrayList<String> onDevice = new ArrayList<>();
         ArrayList<String> toDownloadList = new ArrayList<>();
         if (lf != null) {
-            for (int i =0 ;i<lf.length;i++){
-                onDevice.add(lf[i].getAbsolutePath());
+            for (File aLf : lf) {
+                onDevice.add(aLf.getAbsolutePath());
             }
             if (playlistPaths.size() == onDevice.size() || playlistPaths.size() < onDevice.size() ){
                 for(String path : playlistPaths){
@@ -312,35 +294,25 @@ public class PlayList extends AppCompatActivity {
             for (String fileName : toDownloadList) {
                 storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
                 final File videoFile = new File(videoDir, fileName);
-                storageRef.getFile(videoFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        Log.d("function","fetchFilesFromFireBaseStorage - onSucsees calld");
+                storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - onSucsees calld");
 
-                        System.out.println("make file: " + videoFile.getPath());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
-                        ;
-                        exception.getCause();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                        Log.d("function","fetchFilesFromFireBaseStorage - on complate calld");
+                    System.out.println("make file: " + videoFile.getPath());
+                }).addOnFailureListener(exception -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
+                    exception.getCause();
+                }).addOnCompleteListener(task -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - on complate calld");
 
-                        dcount++;
-                        p=p+pstep;
-                        if (dcount == toDownloadList.size()){
-                            Log.d("status:","complete");
-                            dcount = 0;
-                            p = 0;
-                            downloadFinishd = true;
-                            downloadIcon.setVisibility(View.INVISIBLE);
-                            playTheplayList();
-                        }
+                    dcount++;
+                    p=p+pstep;
+                    if (dcount == toDownloadList.size()){
+                        Log.d("status:","complete");
+                        dcount = 0;
+                        p = 0;
+                        downloadFinishd = true;
+                        downloadIcon.setVisibility(View.INVISIBLE);
+                        playTheplayList();
                     }
                 });
             }
