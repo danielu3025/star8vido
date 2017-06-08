@@ -62,8 +62,9 @@ public class PlayList extends AppCompatActivity {
     public void downloadPlaylist(String playlistName){
         Log.d("function", "downloadPlaylist calld");
         //get the playlist files name
+        MainActivity.noInternet.setVisibility(View.INVISIBLE);
 
-        playlistNode = MainActivity.database.getReference(playlistName);
+        playlistNode = MainActivity.database.getReference("PlayList").child(playlistName);
 
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
@@ -113,7 +114,7 @@ public class PlayList extends AppCompatActivity {
                 } else {
                     try {
                         videoDir.mkdirs();
-                        downloadPlaylist("testPlaylist");
+                        downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
                     } catch (Exception e){
                         e.printStackTrace();
                     }
