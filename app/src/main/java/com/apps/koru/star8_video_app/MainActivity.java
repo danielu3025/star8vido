@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }    }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         super.onDestroy();
         try {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     @Override
     protected void onResume() {
