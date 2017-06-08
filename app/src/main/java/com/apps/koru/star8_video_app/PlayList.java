@@ -73,6 +73,7 @@ public class PlayList extends AppCompatActivity {
     public void downloadPlaylist(String playlistName){
         Log.d("function", "downloadPlaylist calld");
         //get the playlist files name
+        MainActivity.noInternet.setVisibility(View.INVISIBLE);
 
         playlistNode = MainActivity.database.getReference(playlistName);
 
