@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!pause && isNetworkAvailable()) {
-            mainPlayList.downloadPlaylist("testPlaylist");
+            mainPlayList.downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
             Log.d("function", "video started");
         } else if(!pause && !isNetworkAvailable()){
             noInternet.setVisibility(View.VISIBLE);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         if(isNetworkAvailable()) {
             MainActivity.noConnectionText.setVisibility(View.GONE);
             MainActivity.noConnectionOk.setVisibility(View.GONE);
-            mainPlayList.downloadPlaylist("testPlaylist");
+            mainPlayList.downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
         } else {
             mainPlayList.loadThePlayList();
         }

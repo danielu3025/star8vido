@@ -75,7 +75,7 @@ public class PlayList extends AppCompatActivity {
         //get the playlist files name
         MainActivity.noInternet.setVisibility(View.INVISIBLE);
 
-        playlistNode = MainActivity.database.getReference(playlistName);
+        playlistNode = MainActivity.database.getReference("PlayList").child(playlistName);
 
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,7 +125,7 @@ public class PlayList extends AppCompatActivity {
                 } else {
                     try {
                         videoDir.mkdirs();
-                        downloadPlaylist("testPlaylist");
+                        downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -186,7 +186,7 @@ public class PlayList extends AppCompatActivity {
             MainActivity.mainVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     if(MainActivity.isConnection){
-                        downloadPlaylist("testPlaylist");
+                        downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
                     }
                     if (onTrack < uriPlayList.size()-1) {
                         onTrack++;
