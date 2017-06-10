@@ -22,10 +22,11 @@ android {
             keyPassword 'f123456'
             storePassword 'f123456'
             storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')
+            /*storeFile file('/home/shahar/AndroidStudioProjects/fastfood.jks')*/
         }
     }
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
