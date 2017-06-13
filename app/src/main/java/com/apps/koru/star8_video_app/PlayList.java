@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -63,7 +61,6 @@ public class PlayList extends AppCompatActivity {
         Log.d("function", "downloadPlaylist calld");
         //get the playlist files name
         MainActivity.noInternet.setVisibility(View.INVISIBLE);
-
         playlistNode = MainActivity.database.getReference("PlayList").child(playlistName);
 
         playlistNode.addValueEventListener(new ValueEventListener() {
@@ -144,6 +141,8 @@ public class PlayList extends AppCompatActivity {
     }
 
     public void loadThePlayList(){
+        Log.d("function", "loadThePlayList called");
+
         final int[] size = new int[1];
         uriPlayList.clear();
         AsyncHandler.post(() -> {
@@ -162,11 +161,14 @@ public class PlayList extends AppCompatActivity {
     }
 
     public void playOffline(){
+        Log.d("function", "PlayOffline called");
         if(uriPlayList.size()==0){
-            Toast.makeText(context, "no internet and no playlist played before",
-                    Toast.LENGTH_LONG).show();
             MainActivity.noConnectionText.setVisibility(View.VISIBLE);
-            MainActivity.noConnectionOk.setVisibility(View.VISIBLE);
+            MainActivity.obj.setVariableChangeListener(task -> {
+                Log.d("function", "connection_changed");
+                MainActivity.noConnectionText.setVisibility(View.GONE);
+                downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
+            });
         } else {
             onTrack = 0;
             //mainVideoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
@@ -174,6 +176,7 @@ public class PlayList extends AppCompatActivity {
             mainVideoView.start();
             MainActivity.mainVideoView.setOnCompletionListener(mp -> {
                 if(MainActivity.isConnection){
+                    Log.d("function", "isConnected");
                     downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
                 }
                 if (onTrack < uriPlayList.size()-1) {
@@ -190,7 +193,7 @@ public class PlayList extends AppCompatActivity {
     public void playTheplayList(){
         uriPlayList.clear();
         int counter = 0;
-        Log.d("function","playTheplayList calld");
+        Log.d("function","playTheplayList called");
         Iterable<DataSnapshot> list =  listSnapshot.getChildren();
         mainPlayList.list.clear();
         for (DataSnapshot data: list){
@@ -251,6 +254,8 @@ public class PlayList extends AppCompatActivity {
     }
 
     private void downloadMissVideos(File dir, ArrayList<String> playlistPaths) {
+        downloadIcon.setVisibility(View.VISIBLE);
+
         Log.d("function","downloadMissVideos calld");
 
         File[] lf = dir.listFiles();
@@ -289,7 +294,6 @@ public class PlayList extends AppCompatActivity {
         Log.d("function","fetchFilesFromFireBaseStorage calld");
 
         try {
-            downloadIcon.setVisibility(View.VISIBLE);
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();
             for (String fileName : toDownloadList) {

@@ -33,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public static PlayList mainPlayList;
     public static ImageView downloadIcon;
     public static ImageView noInternet;
-    public static Button noConnectionOk;
     public static TextView noConnectionText;
     public static boolean isConnection = false;
+    public static MyObj obj = new MyObj(false);
+
 
     FirebaseJobDispatcher dispatcher;
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         downloadIcon.setVisibility(View.INVISIBLE);
         noInternet = (ImageView)findViewById(R.id.noConnection);
         noInternet.setVisibility(View.INVISIBLE);
-        noConnectionOk = (Button) findViewById(R.id.noConnectionOk);
-        noConnectionOk.setVisibility(View.GONE);
         noConnectionText = (TextView) findViewById(R.id.noConnectionText);
         noConnectionText.setVisibility(View.GONE);
     }
@@ -135,16 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public void checkConnectivity(View view) {
-        if(isNetworkAvailable()) {
-            noConnectionText.setVisibility(View.GONE);
-            noConnectionOk.setVisibility(View.GONE);
-            mainPlayList.downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
-        } else {
-            mainPlayList.loadThePlayList();
-        }
     }
 }
 

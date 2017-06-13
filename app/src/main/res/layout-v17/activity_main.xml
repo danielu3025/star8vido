@@ -21,7 +21,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarTop"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="71dp"
         android:background="@android:color/darker_gray"
         android:minHeight="?attr/actionBarSize"
@@ -75,30 +75,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Button
-        android:id="@+id/noConnectionOk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ok"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/videoView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintVertical_bias="0.6"
-        android:onClick="checkConnectivity"/>
-
     <TextView
         android:id="@+id/noConnectionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/click_ok_when_having_connection"
+        android:text="@string/noConnectionText"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/noConnectionOk"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="24sp"
-        app:layout_constraintVertical_bias="0.8" />
+        android:textColor="#ffffff"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 

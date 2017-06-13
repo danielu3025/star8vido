@@ -17,6 +17,7 @@ public class ConnectionService extends JobService {
     public boolean onStartJob(JobParameters job) {
         if(isNetworkAvailable()){
             Log.d("Network changed ", "Flag No 1");
+            MainActivity.obj.setValue(true);
             MainActivity.isConnection = true;
             noInternet.setVisibility(View.INVISIBLE);
 
