@@ -61,7 +61,7 @@ public class PlayList extends AppCompatActivity {
         Log.d("function", "downloadPlaylist calld");
         //get the playlist files name
         MainActivity.noInternet.setVisibility(View.INVISIBLE);
-        playlistNode = MainActivity.database.getReference("PlayList").child(playlistName);
+        playlistNode = MainActivity.database.getReference("Playlists").child("-Kl8dzXX4NqC1b8mYUoG").child(playlistName);
 
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
@@ -70,8 +70,8 @@ public class PlayList extends AppCompatActivity {
                 //get playlist files names
                 listSnapshot = snapshot;
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    playlistFileNames.add((String) postSnapshot.getValue() + ".mp4");
-                    videoListphats.add(videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue() + ".mp4");
+                    playlistFileNames.add((String) postSnapshot.getValue());
+                    videoListphats.add(videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue());
                 }
                 playlistFileNames = new ArrayList<>(new LinkedHashSet<>(playlistFileNames));
                 videoListphats = new ArrayList<>(new LinkedHashSet<>(videoListphats));
@@ -111,7 +111,7 @@ public class PlayList extends AppCompatActivity {
                 } else {
                     try {
                         videoDir.mkdirs();
-                        downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
+                        downloadPlaylist("videos");
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -167,7 +167,7 @@ public class PlayList extends AppCompatActivity {
             MainActivity.obj.setVariableChangeListener(task -> {
                 Log.d("function", "connection_changed");
                 MainActivity.noConnectionText.setVisibility(View.GONE);
-                downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
+                downloadPlaylist("videos");
             });
         } else {
             onTrack = 0;
@@ -177,7 +177,7 @@ public class PlayList extends AppCompatActivity {
             MainActivity.mainVideoView.setOnCompletionListener(mp -> {
                 if(MainActivity.isConnection){
                     Log.d("function", "isConnected");
-                    downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
+                    downloadPlaylist("videos");
                 }
                 if (onTrack < uriPlayList.size()-1) {
                     onTrack++;
@@ -197,7 +197,7 @@ public class PlayList extends AppCompatActivity {
         Iterable<DataSnapshot> list =  listSnapshot.getChildren();
         mainPlayList.list.clear();
         for (DataSnapshot data: list){
-            mainPlayList.list.add( videoDir.getAbsolutePath()+"/"+data.getValue().toString() + ".mp4");
+            mainPlayList.list.add( videoDir.getAbsolutePath()+"/"+data.getValue().toString());
             counter++;
         }
         File[] lf = videoDir.listFiles();
@@ -297,7 +297,7 @@ public class PlayList extends AppCompatActivity {
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();
             for (String fileName : toDownloadList) {
-                storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
+                storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com/ph/videos").child(fileName);
                 final File videoFile = new File(videoDir, fileName);
                 storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
                     Log.d("function","fetchFilesFromFireBaseStorage - onSucsees calld");

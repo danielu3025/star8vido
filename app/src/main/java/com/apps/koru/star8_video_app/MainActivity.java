@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!pause && isNetworkAvailable()) {
-            mainPlayList.downloadPlaylist("Kl8dzXX4NqC1b8mYUoG");
+            mainPlayList.downloadPlaylist("videos");
             Log.d("function", "video started");
         } else if(!pause && !isNetworkAvailable()){
             noInternet.setVisibility(View.VISIBLE);

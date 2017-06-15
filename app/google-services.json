@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "121307284286-c1g6a5lf34f5n4efpvfclpc2vcpggaa2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apps.koru.star8_video_app",
+            "certificate_hash": "cd598a464d620b8b65188884315c413bae06ed16"
+          }
+        },
+        {
           "client_id": "121307284286-csoopia6t4csepeqapff5el8l03vj2do.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
