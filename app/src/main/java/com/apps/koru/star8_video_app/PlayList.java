@@ -255,6 +255,7 @@ public class PlayList extends AppCompatActivity {
             });
         }else {
             downloadMissVideos(videoDir,mainPlayList.list);
+            
         }
     }
 
