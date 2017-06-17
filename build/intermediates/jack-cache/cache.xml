@@ -2,208 +2,208 @@
 <items version="2" >
 
     <item
-        jar="/home/shahar/.android/build-cache/349f2dc554c7623640bea47c15dfb950328d70be/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-a7517c698a507ce42ab01bb10b10cb4bf67041ff.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/a4a43101b37b8ec2198ea572bd3d1afa586c0a9b/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-f67060be3cf76d01ba060acfe115899be89d8ea7.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/2852b42a27c59b494365c2f22ae78b12c648d741/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="204f607419af8247cc1b2a61f50663c65f841c12">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-06e6416fa909c3fffb13e3c43d448086b2b01051.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/e9328a6929b26b70ee3be9dc16f918eee2e67974/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-1040ebe619f94bbdc6c06cdc350d48cfc323fd2d.jar" />
-    </item>
-    <item
-        jar="/home/shahar/Android/Sdk/platforms/android-25/android.jar"
-        revision="25.0.3"
-        sha1="712a0312fe844a21a1b3812fa960c363a1578984">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackRuntimeLibraries/release/jars/8000/40/android-759345d7487f179d30d1424c7c1e9ae5406299fa.jar" />
-    </item>
-    <item
-        jar="/home/shahar/Android/Sdk/platforms/android-25/optional/org.apache.http.legacy.jar"
-        revision="25.0.3"
-        sha1="5f0541a4298daa0590b22cfbde43f85e2a675545">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackRuntimeLibraries/release/jars/8000/40/org.apache.http.legacy-a40526cb761e3f8ecd50c6e13d6f787e50293a0a.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/c5a11547cb25f93097609074fa5195226cf4715f/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-316bb55cdcb865eba8a9cb437c6c61c84116eb6c.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/e802e5ef6c47ce98e2e863db3a4129414369907d/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-d2772fc27feeb506403c67eba117efa936292b52.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/5ca23de977e049f395545f328530d8d18ee1b201/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-07fa3e2ba47c60a870ffecd04ccf25e896f3fe36.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/27219f1e66ad2cf515ebf49cb10fad7b188b82e1/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="662d7533b25a666c649c10a16b42edfb95f25a4f">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-3ce4859abfb238e616b499e626408b3cd5d64561.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/7a9cebf4a07b80432a8a64caf7024720efab3a7f/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="7045152f3bd1870740b9bcb1cddff495e189774e">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-9d1e7e82471234ea8640295846b3fe2a561eaa39.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/db4019e9cfc12705e32acc150a94b9d475aa3263/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-7b31c81882049437310f6acb37f4aa6e75b63276.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/c54075773575151c03e0a0ac978ba1b6e10f70c1/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-8b23b5f2f1c45e09a8a10d521117b7d3610b6f0b.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/44a89507e94ac105d4e95a8171c4cf4e072ad4c8/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-8aa233786fc53d3b8fe76065b746e1f9a556eafb.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/96f3953594bf65746d0e3dd8a899f5b54d06a339/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="8010ae6ed32828a145b25ec97bc07b7a83c6318f">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-1a66f5ba5030e274fbc7fbd83c848fbb99d1a6ff.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/4d2d956b5c1c8f4990d7dabf681da86fe6859cc9/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-53bae9b10dda0f1544222aa79a8a5390e9f16f1f.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/93b42cd38c845b05a7d08d1c580041aa8b681d46/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="13dc44b9ddaf644274b474cfea59f67bff813baf">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-d254efcc7201f655327c68eafbcb0526d39398d1.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/be442b2a18734c8ca3434c78266ee9ea188045a0/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-29aab01482065abe71816ad43c66167ae47f8b9a.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/2c03f0be753f3521acb02f5c0189c520aba6f4f1/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-91f920384a2cf2d97d9db412c72d77858a5c78c6.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/8c8666b26afd77607dd6bf2af266cd2313955df1/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="8f128aeeb7e31271b28a7adb9dac1f3a6ed9f5e7">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-46ffd45b770233acf235e1496d5afc2ebd6a4c0e.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/948600cb26e3a6a7e470b258e6e8b1e87392296a/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-e60790765c47d72d23d40f7050e77ff5165cf72d.jar" />
-    </item>
-    <item
-        jar="/home/shahar/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta4/constraint-layout-solver-1.0.0-beta4.jar"
-        revision="25.0.3"
-        sha1="0a9cb567dc008f570c28531720168f19148da965">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/constraint-layout-solver-1.0.0-beta4-ca80d7927ec659fdbb7b61872a6f8a5e60bc04e7.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/9fc703a4c4993f610209fe5fb31b203b9ae46390/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-37048431c9531977cdc5e1fed64c8c4dc59f07e4.jar" />
-    </item>
-    <item
-        jar="/home/shahar/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
-        revision="25.0.3"
-        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/support-annotations-25.3.1-a7b66d3fbb6ec874fa9b11f3ab9a55b605dc41d8.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/acebc43f16a7b7f74900856b34f69c9d0d4f0dbd/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/d34030b63f0f203c5b182af56191375443508a08/output/jars/classes.jar"
         revision="25.0.3"
         sha1="9cca2818594cc5348806d6662133491e7ea0fa8d">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-738cbb04e7cc38b76d3f65eec1a2763b1f8746c0.jar" />
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-86e46f2bfdbfff7937ca82c2976b54840e345469.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/b476448d5dba2569bbc4a521962eb6cabc50714a/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/5110433dd9284c0ea31547bfc04aa81f467efd06/output/jars/classes.jar"
         revision="25.0.3"
-        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-ab62f1c7ad0f8c4e2e3e7e2b255f81138e5d7449.jar" />
+        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e228d6351ace32894b3db54e42961b8076d03241.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/0bcf6f4f978ce0fa5f76f7ac114e67ee3e2b962f/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-57acfba7842e5a728d2c7122560b79c0f3fb7e65.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/87a5379db8f691b3b765d7dbe7f570976a455857/output/jars/classes.jar"
-        revision="25.0.3"
-        sha1="005d20a198159b87f65812fc5c51b2d84c5eba0a">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-49a02b7abee5e0ff5103f2a1782ca4d27662c457.jar" />
-    </item>
-    <item
-        jar="/home/shahar/.android/build-cache/57249ffd34e9ec0dc4d7240bf9bcf952151efbc4/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/d926bfe2f5148512ddb903bcef28a6891662d6ef/output/jars/classes.jar"
         revision="25.0.3"
         sha1="09cf6aa1390f95157e8295d02be7868f568825fc">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-2a9efe8a653a1cd0753eb0141266134224d84528.jar" />
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5238134b0db999aeb2939d76af15beccce034197.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/655160940af49cc0a4c00c11519602abe2ff1d58/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/7a3400519a3452e17dc62c9fdc48a5142c5e2c2d/output/jars/classes.jar"
         revision="25.0.3"
-        sha1="646439081688c43e04ec4aa7ba6915ddfdcc337f">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-eb1f93fdbc658002e39343a5ea75176e430bed71.jar" />
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-ff49332fb18886efb962e221f8820a7f3e3c50e1.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/5dbb43cd35dfb84af583bf52ac72f92e06ca280c/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/ee4f4cc67ca673dff403c06da155bb5920cdf953/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-cf043534f1c708e121ea0cea4ff03d38c5768ca6.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/751b1c4b16e8c11855413474314943d22b523c46/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5136ba3fe1ea53ecf16a3d53fe98a99bbceb7aa1.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/9ef511956de9c18d61e8cb1b649a5326c2953cbc/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-8076a4e97a2eb17f688ff10dd3c09f7962e56d56.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/53c1a0148a7399ebdbb60542521f2386f03fe0ee/output/jars/classes.jar"
         revision="25.0.3"
         sha1="25438f55fc6d906a0e72f30b21487541430ede43">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-a15c9a4a927340d03729288d0697fd5d67c00ecf.jar" />
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-89b682262933e63034958d4c5bd603cfc0fd263a.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/4c1e043077a9a986e1cc1a6ade9f5f4f7bed0635/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/f70595536ac9ff032743298a63790240e234e63e/output/jars/classes.jar"
         revision="25.0.3"
-        sha1="374d595ee099a19b6c1c3718cdb4c345be7a3d45">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-d5e2948571f0d7786c0be2cf5837cf7ace8ffde1.jar" />
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-49ae00a88fcae0b6f72304289f6e03604d4b4881.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/f0a960f868cee22c1699685e29aeb98471e15bbe/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/af1f6bf305a67c52229368be837ec354c2b64dd1/output/jars/classes.jar"
         revision="25.0.3"
-        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-c57b591dcb5052b78256fd2f98fcd887a472f3df.jar" />
+        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-cc18a1ab8125635e4615ccd7aabd1fa24aa3ec23.jar" />
     </item>
     <item
-        jar="/home/shahar/.android/build-cache/ead8aa3c1a71f719f33bc0c4a58dce5f7acc5c77/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.android/build-cache/f63fb15bf1aff515fffb050b2f58f01291844ac2/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="8f128aeeb7e31271b28a7adb9dac1f3a6ed9f5e7">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-b0f8ef83366fdeb57f1d8f0343d450a3c2c290bb.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/8dea8a6e44d96086ffaca2ce8ac6088bdb95c487/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="005d20a198159b87f65812fc5c51b2d84c5eba0a">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-28491211dd3ddd8ed275473b903e9944c677c56f.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/8bfca1782bf43c7b32e9a17f4721d9d07972df32/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e1e6c74b6a47cd84a717f6119a4a9915aa30e456.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/c760f10ddefdc03eb48ec7cc850899d9304490a7/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="d3a05a228d17529e4664690d0c32932df65e79ae">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e34e8f8a741c278ead891bb01d51af7955c7b062.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/520b0e6dd3aeaf8478445643de2813185c4c4235/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-6400f55964d7ee23217067ea3b04cad68992a3a3.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/2fb851795afbdeca22663bb2c833fac077dd58a8/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="646439081688c43e04ec4aa7ba6915ddfdcc337f">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-7c95b8020fbb3bcb193e3bbf7464d048979d7e72.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/affee42ee80b06f339b6175c0affc53dd91163c4/output/jars/classes.jar"
         revision="25.0.3"
         sha1="461929440e66685425a298693507f6fb27b0a872">
-        <dex dex="/home/shahar/StudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/release/jars/8000/1f/classes-5df67208118ce3544de4b7e6e4595f92417a163d.jar" />
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-f153d5c0db92f9502315c49011635377cea92ed7.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/f38cbf230f0bcf6a264a36608b83129bb78eeb0a/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="7045152f3bd1870740b9bcb1cddff495e189774e">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-56784b292bdc8ee7b015fc8f6b3e0c5956aa6eea.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/8e69618895369ca95a117635bc23cf7daf7fae59/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="662d7533b25a666c649c10a16b42edfb95f25a4f">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-0c35d6f14a7c1d6aceed60e01820a696aab70bec.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/f1d50e9a7b35eace2d9e402ceb6b580dad7d4abc/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-72cec195994d0ed47d5465c23dfa2f51ddb115f8.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/223ae6a2bccdda8988ca73eeea603e479ed38a8c/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-55d36a831fc3cdbdb73e61a9b93c6018f42303d5.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/platforms/android-25/android.jar"
+        revision="25.0.3"
+        sha1="712a0312fe844a21a1b3812fa960c363a1578984">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackRuntimeLibraries/debug/jars/8000/40/android-6bf43d49cff0415835bb2cbc10ae1fd5e3c85fd4.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/cb4145c50f7a91611a59ae3ae191278c4d55576d/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="374d595ee099a19b6c1c3718cdb4c345be7a3d45">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-99f5b1e6c40300abdf2e2996106faab0f192f7a4.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/29af8b8ee94512c620a554828cd9fa9a92b6e393/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-79d1eb667e10b77aa6a3651cdfa44e6012a57d1e.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/c8437a1051fddafe1f75fb5cc35f9a4a4093705e/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-bfa29097045014e496966a974835c0f4b1748cba.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/platforms/android-25/optional/org.apache.http.legacy.jar"
+        revision="25.0.3"
+        sha1="5f0541a4298daa0590b22cfbde43f85e2a675545">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackRuntimeLibraries/debug/jars/8000/40/org.apache.http.legacy-0775084d2f9cb50c023cc24e46c9eb99509fa508.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta4/constraint-layout-solver-1.0.0-beta4.jar"
+        revision="25.0.3"
+        sha1="0a9cb567dc008f570c28531720168f19148da965">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/constraint-layout-solver-1.0.0-beta4-b38d4bfe148a57c852d3429b021e72c672d19179.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/8fb7fa799a9e3302e083e65b340f814ef2263263/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-d3604e1cbf5731d447946ad22662898502a7a5b7.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/38d4d49fb3a2aa0a0599360377d7c74476a46602/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="8010ae6ed32828a145b25ec97bc07b7a83c6318f">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-8c7a13c37a328ee98b758a9329b397599c84e6b7.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/01411b50effc39e1a01aec319aad86e14f6e81d2/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-0aa3579fc1549f54c34a11d614b51c776689d798.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/6d30007318104e993bfa1f106668b97d1fe620b2/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="204f607419af8247cc1b2a61f50663c65f841c12">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-7aae6b26be25014f709b46c3b064864906f8992b.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/support-annotations-25.3.1-af75020ed6e41fc7361d1c0f50e890ad078c9c50.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/661df59f913ac144b86c7b0309460e447c137f91/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-c3fd20c322d2dcb491b83b9742bc6b92b3f22694.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/98653e8951fb29cb4427dcaf4ac60aa3decd7bb4/output/jars/classes.jar"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/Users/danielluzgarten/AndroidStudioProjects/star8vido/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e468f98ca580c7886b3ff345bfe7b492c588d589.jar" />
     </item>
 
 </items>

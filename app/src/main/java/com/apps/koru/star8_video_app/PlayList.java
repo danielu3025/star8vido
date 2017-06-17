@@ -309,6 +309,17 @@ public class PlayList extends AppCompatActivity {
                     System.out.println("make file: " + videoFile.getPath());
                 }).addOnFailureListener(exception -> {
                     Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
+                    if (videoFile.exists()){
+                        Log.d("deleting","deleting video: " + videoFile.getPath());
+                        try {
+                            videoFile.delete();
+                            Log.d("deleting","successes");
+
+                        }catch (Exception e){
+                            e.getCause();
+                        }
+                        
+                    }
                     exception.getCause();
                 }).addOnCompleteListener(task -> {
                     Log.d("function","fetchFilesFromFireBaseStorage - on complate calld");
