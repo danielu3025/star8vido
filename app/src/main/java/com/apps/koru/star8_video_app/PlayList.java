@@ -298,64 +298,46 @@ public class PlayList extends AppCompatActivity {
         }
 
     }
-    private int downloadVideo(String fileName) {
-        final int[] status = new int[1];
-        /*storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com/ph/videos").child(fileName);*/
-        storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
-        final File videoFile = new File(videoDir, fileName);
-        storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
-            Log.d("function","fetchFilesFromFireBaseStorage - onSucsees calld");
-
-            System.out.println("make file: " + videoFile.getPath());
-        }).addOnFailureListener(exception -> {
-            Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
-            if (videoFile.exists()){
-                Log.d("deleting","deleting video: " + videoFile.getPath());
-                try {
-                    if(videoFile.delete()) {
-                        Log.d("deleting", "successes");
-                        status[0] = 2;
-                    }
-                    else {
-                        Log.d("deleting", "failed");
-                        status[0] = 3;
-                    }
-
-                }catch (Exception e){
-                    e.getCause();
-                }
-
-            }
-            exception.getCause();
-        }).addOnCompleteListener(task -> {
-            Log.d("function","fetchFilesFromFireBaseStorage - on complete called");
-            status [0] = 1;
-
-        });
-        return status[0];
-    }
     private void fetchFilesFromFireBaseStorage(final ArrayList<String> toDownloadList){
         Log.d("function","fetchFilesFromFireBaseStorage calld");
-        int status;
         try {
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();
             for (String fileName : toDownloadList) {
-                status = downloadVideo(fileName);
-                if(status==1) {
+                storageRef = storage.getReferenceFromUrl("gs://star8videoapp.appspot.com").child(fileName);
+                final File videoFile = new File(videoDir, fileName);
+                storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - onSucsees calld");
+
+                    System.out.println("make file: " + videoFile.getPath());
+                }).addOnFailureListener(exception -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - onFail calld");
+                    if (videoFile.exists()){
+                        Log.d("deleting","deleting video: " + videoFile.getPath());
+                        try {
+                            videoFile.delete();
+                            Log.d("deleting","successes");
+
+                        }catch (Exception e){
+                            e.getCause();
+                        }
+
+                    }
+                    exception.getCause();
+                }).addOnCompleteListener(task -> {
+                    Log.d("function","fetchFilesFromFireBaseStorage - on complate calld");
+
                     dcount++;
-                    p = p + pstep;
-                    if (dcount == toDownloadList.size()) {
-                        Log.d("status:", "complete");
+                    p=p+pstep;
+                    if (dcount == toDownloadList.size()){
+                        Log.d("status:","complete");
                         dcount = 0;
                         p = 0;
                         downloadFinishd = true;
                         downloadIcon.setVisibility(View.INVISIBLE);
                         playTheplayList();
                     }
-                } else if(status == 2) {
-                    downloadVideo(fileName);
-                }
+                });
             }
         }
         catch (Exception e){
