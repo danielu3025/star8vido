@@ -28,6 +28,8 @@ import java.util.LinkedHashSet;
 import static com.apps.koru.star8_video_app.MainActivity.downloadIcon;
 import static com.apps.koru.star8_video_app.MainActivity.mainPlayList;
 import static com.apps.koru.star8_video_app.MainActivity.mainVideoView;
+import static com.apps.koru.star8_video_app.MainActivity.mainPlayListTemp;
+import static com.apps.koru.star8_video_app.MainActivity.mainVideoViewTemp;
 
 
 public class PlayList extends AppCompatActivity {
@@ -66,7 +68,9 @@ public class PlayList extends AppCompatActivity {
         playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+/*
                 mainVideoView.stopPlayback();
+*/
                 //get playlist files names
                 listSnapshot = snapshot;
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
@@ -80,17 +84,17 @@ public class PlayList extends AppCompatActivity {
                     //all videos are in storage ?
                     switch (allVideosOnDevice(videoDir, playlistFileNames)) {
                         case 1: // all videos is in storage
-                            mainPlayList.list.removeAll(list);
+                            mainPlayListTemp.list.removeAll(list);
                             for (int i = 0; i < playlistFileNames.size(); i++) {
-                                mainPlayList.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
+                                mainPlayListTemp.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
                             }
                             playTheplayList();
                             break;
                         case 2:// not all videos are in the storage
                             downloadMissVideos(videoDir, videoListphats);
-                            mainPlayList.list.clear();
+                            mainPlayListTemp.list.clear();
                             for (int i = 0; i < playlistFileNames.size(); i++) {
-                                mainPlayList.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
+                                mainPlayListTemp.list.add(videoDir.getAbsolutePath() + "/" + playlistFileNames.get(i));
                             }
                             break;
                         default:
@@ -191,6 +195,7 @@ public class PlayList extends AppCompatActivity {
         }
     }
     public void playTheplayList(){
+        mainVideoView.stopPlayback();
         uriPlayList.clear();
         int counter = 0;
         Log.d("function","playTheplayList called");
@@ -292,7 +297,6 @@ public class PlayList extends AppCompatActivity {
 
     private void fetchFilesFromFireBaseStorage(final ArrayList<String> toDownloadList){
         Log.d("function","fetchFilesFromFireBaseStorage calld");
-
         try {
             downloadFinishd = false;
             pstep = 100/toDownloadList.size();

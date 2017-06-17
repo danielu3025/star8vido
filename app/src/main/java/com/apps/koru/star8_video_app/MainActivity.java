@@ -31,6 +31,10 @@ import io.fabric.sdk.android.Fabric;
 public class MainActivity extends AppCompatActivity {
     public static VideoView mainVideoView;
     public static PlayList mainPlayList;
+
+    public static VideoView mainVideoViewTemp;
+    public static PlayList mainPlayListTemp;
+
     public static ImageView downloadIcon;
     public static ImageView noInternet;
     public static TextView noConnectionText;
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         mainPlayList = new PlayList(this);
+        mainPlayListTemp = new PlayList(this);
         mainVideoView = (VideoView) findViewById(R.id.videoView);
         downloadIcon = (ImageView)findViewById(R.id.downloadImg);
         downloadIcon.setVisibility(View.INVISIBLE);
