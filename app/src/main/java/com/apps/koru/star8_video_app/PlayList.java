@@ -254,7 +254,7 @@ public class PlayList extends AppCompatActivity {
                 mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
             });
         }else {
-            downloadPlaylist("testPlaylist");
+            downloadMissVideos(videoDir,mainPlayList.list);
         }
     }
 
