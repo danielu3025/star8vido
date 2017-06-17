@@ -253,6 +253,8 @@ public class PlayList extends AppCompatActivity {
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "video");
                 mFirebaseAnalytics.logEvent("VideoPlayed",bundle);
             });
+        }else {
+            downloadPlaylist("testPlaylist");
         }
     }
 
@@ -317,11 +319,13 @@ public class PlayList extends AppCompatActivity {
                         try {
                             videoFile.delete();
                             Log.d("deleting","successes");
+                            dcount ++;
 
                         }catch (Exception e){
                             e.getCause();
-                        }
+                            Log.d("deleting","Field");
 
+                        }
                     }
                     exception.getCause();
                 }).addOnCompleteListener(task -> {
