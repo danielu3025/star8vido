@@ -21,8 +21,8 @@ android {
             keyAlias 'key0'
             keyPassword 'f123456'
             storePassword 'f123456'
-            storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')
-            //storeFile file('/home/shahar/StudioProjects/fastfood.jks')
+            //storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')
+            storeFile file('/home/shahar/StudioProjects/fastfood.jks')
         }
     }
     compileSdkVersion 25
