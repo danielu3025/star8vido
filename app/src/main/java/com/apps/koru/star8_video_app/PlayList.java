@@ -3,11 +3,13 @@ package com.apps.koru.star8_video_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.VideoView;
 
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -21,6 +23,7 @@ import com.google.firebase.storage.StorageReference;
 
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
@@ -228,6 +231,22 @@ public class PlayList extends AppCompatActivity {
 
             mainVideoView.setVideoURI(uriPlayList.get(onTrack));
             mainVideoView.start();
+            mainVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Log.d("function","playTheplayList - on error calld");
+                    int pos = mainVideoView.getCurrentPosition();
+                    if(onTrack>0){
+                        mainVideoView.setVideoURI(uriPlayList.get(onTrack-1));
+                    }
+                    else {
+                        mainVideoView.setVideoURI(uriPlayList.get(0));
+                    }
+                    mainVideoView.seekTo(pos);
+                    mainVideoView.start();
+                    return true;
+                }
+            });
             MainActivity.mainVideoView.setOnCompletionListener(mp -> {
                 Log.d("function","playTheplayList - on complate calld");
 
@@ -332,8 +351,9 @@ public class PlayList extends AppCompatActivity {
                     exception.getCause();
                 }).addOnCompleteListener(task -> {
                     Log.d("function","fetchFilesFromFireBaseStorage - on complate calld");
-
                     dcount++;
+                    Log.d("dcount from totatl",dcount + "/" + toDownloadList.size() );
+
                     p=p+pstep;
                     if (dcount == toDownloadList.size()){
                         Log.d("status:","complete");
