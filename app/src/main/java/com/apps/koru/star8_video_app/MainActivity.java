@@ -34,12 +34,10 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isConnection = false;
     public static MyObj obj = new MyObj(false);
 
+    VideoPlayer player;
+
     FirebaseJobDispatcher dispatcher;
     public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
-    private boolean pause = false;
-    private boolean firstRun = true;
-    private int videoStopPosition;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +59,10 @@ public class MainActivity extends AppCompatActivity {
         //infoBt.setVisibility(View.INVISIBLE);
 
         PlayList playList = new PlayList(this);
-        VideoPlayer player= new VideoPlayer();
+        player= new VideoPlayer(this);
         FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
         MissFileFinder missFileFinder = new MissFileFinder();
         FireBaseDbLisner fireBaseDbLisner = new FireBaseDbLisner();
-
-//        mainPlayList = new PlayList(this);
-//        mainPlayListTemp = new PlayList(this);
-//        videoView = (VideoView) findViewById(R.id.videoView);
-//        downloadIcon = (ImageView)findViewById(R.id.downloadImg);
-//        downloadIcon.setVisibility(View.INVISIBLE);
-//        noInternet = (ImageView)findViewById(R.id.noConnection);
-//        noInternet.setVisibility(View.INVISIBLE);
-//        noConnectionText = (TextView) findViewById(R.id.noConnectionText);
-//        noConnectionText.setVisibility(View.GONE);
     }
 
     @Override
@@ -86,61 +74,54 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        Log.d("function","onPause");
-//        pause = true;
-//        videoStopPosition = videoView.getCurrentPosition();
-//        videoView.pause();
-//        try {
-//
-//            dispatcher.cancel("Connection_check");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-       // }
-    }
-
-    /*@Override
-    protected void onDestroy() {
-        super.onDestroy();
+        Log.d("function","onPause");
+        appModel.pause = true;
+        appModel.videoStopPosition = videoView.getCurrentPosition();
+        videoView.pause();
         try {
 
             dispatcher.cancel("Connection_check");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
-//        try {
-//            Log.d("function", "onResume");
-//            dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-//            Job myJob = dispatcher.newJobBuilder()
-//                    .setService(ConnectionService.class) // the JobService that will be called
-//                    .setTag("Connection_check")        // uniquely identifies the job
-//                    .setRecurring(true)
-//                    .setTrigger(Trigger.executionWindow(15, 30))
-//                    .build();
-//
-//
-//            dispatcher.mustSchedule(myJob);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (!pause && isNetworkAvailable()) {
-//            mainPlayList.downloadPlaylist("videos");
-//            /*mainPlayList.downloadPlaylist("testPlaylist");*/
-//            Log.d("function", "video started");
-//        } else if(!pause && !isNetworkAvailable()){
-//            noInternet.setVisibility(View.VISIBLE);
-//            mainPlayList.loadThePlayList();
-//        } else if (pause) {
-//            videoView.seekTo(videoStopPosition);
-//            videoView.start();
-//            Log.d("function","video resumed");
-//        }
+        Log.d("function", "onResume");
+        /*try {
+            dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+            Job myJob = dispatcher.newJobBuilder()
+                    .setService(ConnectionService.class) // the JobService that will be called
+                    .setTag("Connection_check")        // uniquely identifies the job
+                    .setRecurring(true)
+                    .setTrigger(Trigger.executionWindow(15, 30))
+                    .build();
+
+
+            dispatcher.mustSchedule(myJob);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        /*if (!appModel.pause && isNetworkAvailable()) {
+            mainPlayList.downloadPlaylist("videos");
+            *//*mainPlayList.downloadPlaylist("testPlaylist");*//*
+            Log.d("function", "video started");
+        } else if(!pause && !isNetworkAvailable()){
+            noInternet.setVisibility(View.VISIBLE);
+            mainPlayList.loadThePlayList();
+        }*/
+        if (!appModel.pause && !isNetworkAvailable()) {
+            player.loadThePlayList();;
+        }
+        if (appModel.pause) {
+            videoView.seekTo(appModel.videoStopPosition);
+            videoView.start();
+            Log.d("function","video resumed");
+        }
     }
 
     private boolean isNetworkAvailable() {

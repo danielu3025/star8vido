@@ -17,10 +17,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by danielluzgarten on 28/06/2017.
- */
-
 public class Model {
     private static final Model ourInstance = new Model();
     public static Model getInstance() {
@@ -55,6 +51,9 @@ public class Model {
     public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
     public DatabaseReference playlistNode  ;
     public ArrayList <String>dbList = new ArrayList<>();
+    public boolean playing;
+    public int videoStopPosition;
+
 
     private Model() {
     }

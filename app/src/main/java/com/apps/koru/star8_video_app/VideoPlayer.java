@@ -1,13 +1,15 @@
 package com.apps.koru.star8_video_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
-import com.apps.koru.star8_video_app.MainActivity;
-import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
+import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
+import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -15,17 +17,18 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by danielluzgarten on 30/06/2017.
- */
+import static com.apps.koru.star8_video_app.MainActivity.videoView;
 
 public class VideoPlayer {
-    Model appModel = Model.getInstance();
-    int onTrack =0;
+    private SharedPreferences sharedPreferences;
+    private Context context;
+    private Model appModel = Model.getInstance();
+    private int onTrack =0;
 
-    public VideoPlayer() {
+    public VideoPlayer(Context context) {
 
         EventBus.getDefault().register(this);
+        this.context=context;
     }
     @Subscribe
     public void onEvent(DownloadCompleteEvent event) {
@@ -49,25 +52,23 @@ public class VideoPlayer {
             onTrack = 0;
             MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             MainActivity.videoView.start();
-            MainActivity.videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    Log.d("Error"," - playing video error");
-                    if (onTrack > 0){
-                        if (onTrack != appModel.uriPlayList.size()){
-                            MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
-                        }
-                        else {
-                            MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
-                        }
-                    }
-                    else {
-                        MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
-                    }
-                    MainActivity.videoView.start();
-                    return true;
+        saveThePlayList();
+        MainActivity.videoView.setOnErrorListener((mp, what, extra) -> {
+            Log.d("Error"," - playing video error");
+            if (onTrack > 0){
+                if (onTrack != appModel.uriPlayList.size()){
+                    MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
                 }
-            });
+                else {
+                    MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
+                }
+            }
+            else {
+                MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
+            }
+            MainActivity.videoView.start();
+            return true;
+        });
         MainActivity.videoView.setOnCompletionListener(mp -> {
                  if (onTrack<appModel.uriPlayList.size()){
                      onTrack++;
@@ -78,6 +79,60 @@ public class VideoPlayer {
                 MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
                 MainActivity.videoView.start();
             });
+    }
 
+    private void saveThePlayList() {
+        AsyncHandler.post(() -> {
+            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt("size", appModel.uriPlayList.size());
+
+            for(int i=0;i<appModel.uriPlayList.size();i++)
+            {
+                editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+            }
+
+            editor.apply();
+        });
+    }
+
+    public void loadThePlayList(){
+        Log.d("function", "loadThePlayList called");
+
+        final int[] size = new int[1];
+        appModel.uriPlayList.clear();
+        AsyncHandler.post(() -> {
+            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+            UiHandler.post(() -> {
+                size[0] = sharedPreferences.getInt("size", 0);
+                for(int i=0;i<size[0];i++)
+                {
+                    appModel.uriPlayList.add(i,Uri.parse(sharedPreferences.getString("video_"+i, null)));
+
+                }
+                Log.e("function", "isFinishLoading");
+                playOffline();
+            });
+        });
+    }
+
+    public void playOffline(){
+        Log.d("function", "PlayOffline called");
+        onTrack = 0;
+        videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+        videoView.start();
+        MainActivity.videoView.setOnCompletionListener(mp -> {
+            if(MainActivity.isConnection){
+                Log.d("function", "isConnected");
+            }
+            if (onTrack < appModel.uriPlayList.size()-1) {
+                onTrack++;
+            } else {
+                onTrack = 0;
+            }
+            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            videoView.start();
+        });
     }
 }

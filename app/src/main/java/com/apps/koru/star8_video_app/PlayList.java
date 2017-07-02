@@ -28,8 +28,6 @@ public class PlayList extends AppCompatActivity {
     Context context;
     File videoDir;
     private FirebaseAnalytics mFirebaseAnalytics;
-    SharedPreferences sharedPreferences;
-
 
     public PlayList(Context contex) {
         Log.d("function", "PlayList contractor calld");
@@ -37,74 +35,6 @@ public class PlayList extends AppCompatActivity {
         videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist1");
     }
 
-    private void saveThePlayList() {
-        AsyncHandler.post(() -> {
-            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putInt("size", uriPlayList.size());
-
-            for(int i=0;i<uriPlayList.size();i++)
-            {
-                editor.putString("video_" + i, String.valueOf(uriPlayList.get(i)));
-            }
-
-            editor.apply();
-        });
-    }
-
-    public void loadThePlayList(){
-        Log.d("function", "loadThePlayList called");
-
-        final int[] size = new int[1];
-        uriPlayList.clear();
-        AsyncHandler.post(() -> {
-            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
-            UiHandler.post(() -> {
-                size[0] = sharedPreferences.getInt("size", 0);
-                for(int i=0;i<size[0];i++)
-                {
-                    uriPlayList.add(i,Uri.parse(sharedPreferences.getString("video_"+i, null)));
-
-                }
-                Log.e("function", "isfinishloading");
-                playOffline();
-            });
-        });
-    }
-
-    public void playOffline(){
-        Log.d("function", "PlayOffline called");
-        if(uriPlayList.size()==0){
-           // MainActivity.noConnectionText.setVisibility(View.VISIBLE);
-            MainActivity.obj.setVariableChangeListener(task -> {
-                Log.d("function", "connection_changed");
-                //MainActivity.noConnectionText.setVisibility(View.GONE);
-                //downloadPlaylist("videos");
-                /*downloadPlaylist("testPlaylist");*/
-            });
-        } else {
-            onTrack = 0;
-            //videoView.setVideoPath(mainPlayList.list.get(mainPlayList.onTrack));
-            videoView.setVideoURI(uriPlayList.get(onTrack));
-            videoView.start();
-            MainActivity.videoView.setOnCompletionListener(mp -> {
-                if(MainActivity.isConnection){
-                    Log.d("function", "isConnected");
-                    //downloadPlaylist("videos");
-                    /*downloadPlaylist("testPlaylist");*/
-                }
-                if (onTrack < uriPlayList.size()-1) {
-                    onTrack++;
-                } else {
-                    onTrack = 0;
-                }
-                //  videoView.setVideoPath(mainPlayList.list.get(onTrack));
-                videoView.setVideoURI(uriPlayList.get(onTrack));
-                videoView.start();
-            });
-        }
-    }
     public boolean checkFolderExists(File dir){
         Log.d("function","checkFolderExists calld");
 

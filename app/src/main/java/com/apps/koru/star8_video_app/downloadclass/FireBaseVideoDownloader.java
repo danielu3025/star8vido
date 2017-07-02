@@ -1,6 +1,7 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
 import android.util.Log;
+import android.view.View;
 
 import com.apps.koru.star8_video_app.MainActivity;
 import com.apps.koru.star8_video_app.Model;
@@ -17,11 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-
-/**
- * Created by danielluzgarten on 30/06/2017.
- */
-
 public class FireBaseVideoDownloader {
     int dcount = 0;
     Boolean erorFlag  = false;
@@ -33,6 +29,7 @@ public class FireBaseVideoDownloader {
 
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
+        MainActivity.infoBt.setVisibility(View.VISIBLE);
         MainActivity.infoBt.setText("Downloading...");
         try {
            // MainActivity.infoBt.setVisibility(View.VISIBLE);

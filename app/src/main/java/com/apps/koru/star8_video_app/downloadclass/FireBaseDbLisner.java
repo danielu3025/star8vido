@@ -12,11 +12,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-
-/**
- * Created by danielluzgarten on 28/06/2017.
- */
-
 public class FireBaseDbLisner {
     public Model appModel = Model.getInstance();
 
