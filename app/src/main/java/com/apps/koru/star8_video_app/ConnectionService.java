@@ -9,7 +9,6 @@ import android.view.View;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import static com.apps.koru.star8_video_app.MainActivity.noInternet;
 
 public class ConnectionService extends JobService {
 
@@ -19,12 +18,12 @@ public class ConnectionService extends JobService {
             Log.d("Network changed ", "Flag No 1");
             MainActivity.obj.setValue(true);
             MainActivity.isConnection = true;
-            noInternet.setVisibility(View.INVISIBLE);
+            //noInternet.setVisibility(View.INVISIBLE);
 
         } else {
             Log.d("Network changed ", "Flag No 2");
             MainActivity.isConnection = false;
-            noInternet.setVisibility(View.VISIBLE);
+            //noInternet.setVisibility(View.VISIBLE);
         }
 
         return false;
