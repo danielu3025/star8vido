@@ -1,15 +1,12 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import com.apps.koru.star8_video_app.MainActivity;
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
-import com.apps.koru.star8_video_app.events.PlayThePlayListEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -19,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 
 
 /**
