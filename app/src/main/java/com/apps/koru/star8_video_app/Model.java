@@ -48,7 +48,14 @@ public class Model {
     public String plyListRoot = "Playlists";
     public String playListKey ="-Kl8dzXX4NqC1b8mYUoG";
     public String playListName = "videos";
-    public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
+
+    /** prod **/
+    //public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
+
+    /** dev **/
+    public String storgeUrl = "gs://star8videoapp.appspot.com";
+
+
     public DatabaseReference playlistNode  ;
     public ArrayList <String>dbList = new ArrayList<>();
     public boolean playing;
@@ -63,7 +70,11 @@ public class Model {
         videoDir.mkdir();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
-        playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
+        /** prod **/
+        //playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
+        /** dev **/
+        playlistNode = database.getReference().child("testPlaylist");
+
         mainPlayList = new PlayList(context);
         mainPlayListTemp = new PlayList(context);
         mainVideoView = new VideoView(context);
