@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         appModel.initModel(this);
         videoView = (VideoView)findViewById(R.id.videoView2);
         infoBt = (Button)findViewById(R.id.infoBt);
-        infoBt.setVisibility(View.INVISIBLE);
+        //infoBt.setVisibility(View.INVISIBLE);
 
         PlayList playList = new PlayList(this);
         VideoPlayer player= new VideoPlayer();

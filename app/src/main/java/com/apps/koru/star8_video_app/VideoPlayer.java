@@ -3,6 +3,7 @@ package com.apps.koru.star8_video_app;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 
 import com.apps.koru.star8_video_app.MainActivity;
 import com.apps.koru.star8_video_app.Model;
@@ -29,6 +30,8 @@ public class VideoPlayer {
     @Subscribe
     public void onEvent(DownloadCompleteEvent event) {
         System.out.println("lets playyy!!!!!");
+        MainActivity.infoBt.setText("");
+        MainActivity.infoBt.setVisibility(View.INVISIBLE);
         MainActivity.videoView.stopPlayback();
         //get Uri play List
         File lf[] = appModel.videoDir.listFiles();
@@ -51,7 +54,12 @@ public class VideoPlayer {
                 public boolean onError(MediaPlayer mp, int what, int extra) {
                     Log.d("Error"," - playing video error");
                     if (onTrack > 0){
-                        MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                        if (onTrack != appModel.uriPlayList.size()){
+                            MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
+                        }
+                        else {
+                            MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
+                        }
                     }
                     else {
                         MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
