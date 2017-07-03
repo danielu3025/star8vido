@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         appModel.videoView = (VideoView)findViewById(R.id.videoView2);
         appModel.infoBt = (Button)findViewById(R.id.infoBt);
         //infoBt.setVisibility(View.INVISIBLE);
+        appModel.videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.ad1);
+        appModel.videoView.start();
         PlayList playList = new PlayList(this);
         DelteFilesHandler delteFilesHandler = new DelteFilesHandler();
         VideoPlayer player= new VideoPlayer(this);
