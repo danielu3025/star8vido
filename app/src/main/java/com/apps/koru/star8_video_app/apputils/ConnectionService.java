@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.apputilis;
+package com.apps.koru.star8_video_app.apputils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

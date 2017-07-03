@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.VideoView;
 
 
-import com.apps.koru.star8_video_app.apputilis.PlayOffline;
-import com.apps.koru.star8_video_app.downloadclass.DelteFilesHandler;
-import com.apps.koru.star8_video_app.downloadclass.FireBaseDbLisner;
+import com.apps.koru.star8_video_app.apputils.PlayOffline;
+import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
+import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
 import com.apps.koru.star8_video_app.objects.Model;
@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set content view AFTER ABOVE sequence (to avoid crash)
+
         super.onCreate(savedInstanceState);
+
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
@@ -46,16 +48,19 @@ public class MainActivity extends AppCompatActivity {
         LeakCanary.install(getApplication());
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main2);
+
         appModel.initModel(this);
         appModel.videoView = (VideoView)findViewById(R.id.videoView2);
+        appModel.videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.ad1);
+        appModel.videoView.start();
         appModel.infoBt = (Button)findViewById(R.id.infoBt);
-        //infoBt.setVisibility(View.INVISIBLE);
+
         PlayList playList = new PlayList(this);
-        DelteFilesHandler delteFilesHandler = new DelteFilesHandler();
+        DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
         VideoPlayer player= new VideoPlayer(this);
         FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
         MissFileFinder missFileFinder = new MissFileFinder();
-        FireBaseDbLisner fireBaseDbLisner = new FireBaseDbLisner();
+        FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
     }
 
     @Override

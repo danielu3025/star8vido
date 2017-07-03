@@ -1,12 +1,10 @@
 package com.apps.koru.star8_video_app.objects;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.VideoView;
 
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +23,7 @@ public class Model {
     }
     public Button infoBt;
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
-    FirebaseDatabase database ;
+    private FirebaseDatabase database ;
     public String event;
     public VideoView videoView;
     public ArrayList<String> list = new ArrayList<>();
@@ -41,20 +39,17 @@ public class Model {
     public boolean downloadFinishd = true;
     public DataSnapshot listSnapshot;
     public FirebaseAnalytics mFirebaseAnalytics;
-    public SharedPreferences sharedPreferences;
     public PlayList mainPlayListTemp ;
     public PlayList mainPlayList ;
-    public FirebaseJobDispatcher dispatcher;
     public boolean pause = false;
-    public String plyListRoot = "Playlists";
-    public String playListKey ="-Kl8dzXX4NqC1b8mYUoG";
-    public String playListName = "videos";
 
     /** prod **/
-    //public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
+    public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
 
     /** dev **/
+/*
     public String storgeUrl = "gs://star8videoapp.appspot.com";
+*/
 
 
     public DatabaseReference playlistNode  ;
@@ -72,9 +67,14 @@ public class Model {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         /** prod **/
-        //playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
+        String plyListRoot = "Playlists";
+        String playListKey = "-Kl8dzXX4NqC1b8mYUoG";
+        String playListName = "videos";
+        playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
         /** dev **/
+/*
         playlistNode = database.getReference().child("testPlaylist");
+*/
 
         mainPlayList = new PlayList(context);
         mainPlayListTemp = new PlayList(context);

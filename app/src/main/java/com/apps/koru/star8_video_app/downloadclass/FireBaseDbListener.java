@@ -13,10 +13,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-public class FireBaseDbLisner {
-    public Model appModel = Model.getInstance();
+public class FireBaseDbListener {
+    private Model appModel = Model.getInstance();
 
-    public FireBaseDbLisner() {
+    public FireBaseDbListener() {
         appModel.playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -25,8 +25,8 @@ public class FireBaseDbLisner {
                 appModel.dbList.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     appModel.playlistFileNames.add((String) postSnapshot.getValue());
-                    appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue());
-                    appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue());
+                    appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
+                    appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
                 }
                 appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                 appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
@@ -38,7 +38,7 @@ public class FireBaseDbLisner {
                     //all videos are in storage ?
                     switch (appModel.mainPlayList.allVideosOnDevice(appModel.videoDir, appModel.playlistFileNames)) {
                         case 1: // all videos is in storage
-                            appModel.mainPlayListTemp.list.removeAll(appModel.mainPlayListTemp.list);
+                            appModel.mainPlayListTemp.list.clear();
                             for (int i = 0; i < appModel.playlistFileNames.size(); i++) {
                                 appModel.mainPlayListTemp.list.add(appModel.videoDir.getAbsolutePath() + "/" + appModel.playlistFileNames.get(i));
                             }
@@ -46,7 +46,6 @@ public class FireBaseDbLisner {
                             EventBus.getDefault().post(new DownloadCompleteEvent("play"));
                             break;
                         case 2:// not all videos are in the storage
-                            //downloadMissVideos(videoDir, videoListphats);
                             EventBus.getDefault().post(new MissVideosEvent("download"));
                             appModel.mainPlayListTemp.list.clear();
                             for (int i = 0; i < appModel.playlistFileNames.size(); i++) {
@@ -55,8 +54,6 @@ public class FireBaseDbLisner {
                             break;
                         default:
                     }
-                    //appModel.playlistFileNames.clear();
-                    //appModel.videoListphats.clear();
                 }
             }
             @Override

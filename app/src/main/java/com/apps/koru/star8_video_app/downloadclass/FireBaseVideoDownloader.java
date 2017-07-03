@@ -31,15 +31,12 @@ public class FireBaseVideoDownloader {
         appModel.infoBt.setVisibility(View.VISIBLE);
         appModel.infoBt.setText("Downloading...");
         try {
-           // MainActivity.infoBt.setVisibility(View.VISIBLE);
-            //MainActivity.infoBt.setText("getting ready to download..");
-
             for (String fileName : event.getList()){
                 appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
                 final File videoFile = new File(appModel.videoDir.getParent(),fileName);
-
-                appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> System.out.println("Downloading file: " + videoFile.getName())).addOnFailureListener(exception -> {
-                    //MainActivity.infoBt.setText("Downloading error!");
+                System.out.println("Downloading file: " + videoFile.getName());
+                appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {}).addOnFailureListener(exception -> {
+                    //appModel.infoBt.setText("Downloading error!");
                     erorFlag = true;
                     if (videoFile.exists()){
                         Log.d("deleting","deleting video: " + videoFile.getPath());
@@ -55,7 +52,7 @@ public class FireBaseVideoDownloader {
                     exception.getCause();
                 }).addOnCompleteListener(task -> {
                     Log.d("Complete from total",(dcount+1) + "/" + event.getList().size() );
-                    //MainActivity.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
+                    //appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
 
                     try {
                         File temp =  new File(appModel.videoDir+"/"+fileName);
@@ -70,18 +67,15 @@ public class FireBaseVideoDownloader {
                     }
                     dcount++;
                     if (dcount == event.getList().size()){
-                        //MainActivity.infoBt.setText("");
+                        //appModel.infoBt.setText("");
                         Log.d("status:","complete");
                         dcount = 0;
                         appModel.downloadFinishd = true;
-                        //downloadIcon.setVisibility(View.INVISIBLE);
-                        // playTheplayList();
                         if (erorFlag){
                             erorFlag =false;
                             EventBus.getDefault().post(new MissVideosEvent("problem"));
                         }
                         else {
-                            //MainActivity.infoBt.setVisibility(View.INVISIBLE);
                             EventBus.getDefault().post(new DownloadCompleteEvent("done"));
                         }
                     }
