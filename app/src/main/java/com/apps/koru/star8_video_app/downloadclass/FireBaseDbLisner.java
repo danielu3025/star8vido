@@ -1,6 +1,7 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import com.apps.koru.star8_video_app.Model;
+import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
+import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +30,9 @@ public class FireBaseDbLisner {
                 }
                 appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                 appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
+
+                EventBus.getDefault().post(new DeleteVideosEvent(appModel.videoListphats));
+
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {
                     //all videos are in storage ?

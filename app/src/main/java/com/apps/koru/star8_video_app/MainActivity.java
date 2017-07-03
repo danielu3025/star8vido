@@ -13,9 +13,14 @@ import android.widget.Button;
 import android.widget.VideoView;
 
 
+import com.apps.koru.star8_video_app.apputilis.PlayOffline;
+import com.apps.koru.star8_video_app.downloadclass.DelteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbLisner;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
+import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -45,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         appModel.videoView = (VideoView)findViewById(R.id.videoView2);
         appModel.infoBt = (Button)findViewById(R.id.infoBt);
         //infoBt.setVisibility(View.INVISIBLE);
-
         PlayList playList = new PlayList(this);
+        DelteFilesHandler delteFilesHandler = new DelteFilesHandler();
         VideoPlayer player= new VideoPlayer(this);
         FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
         MissFileFinder missFileFinder = new MissFileFinder();
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             mainPlayList.loadThePlayList();
         }*/
         if (!appModel.pause && !isNetworkAvailable()) {
-            PlayOffline  playOffline = new PlayOffline(this);
+            PlayOffline playOffline = new PlayOffline(this);
             playOffline.loadThePlayList();
         }
         if (appModel.pause) {

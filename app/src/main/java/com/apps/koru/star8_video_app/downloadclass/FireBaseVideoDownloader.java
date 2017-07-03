@@ -3,7 +3,7 @@ package com.apps.koru.star8_video_app.downloadclass;
 import android.util.Log;
 import android.view.View;
 
-import com.apps.koru.star8_video_app.Model;
+import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;

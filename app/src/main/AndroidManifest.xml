@@ -27,7 +27,7 @@
         </activity>
 
         <receiver
-            android:name=".appPlayer"
+            android:name=".apputilis.OnBootHandler"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -40,7 +40,7 @@
         </receiver>
 
         <service
-            android:name=".ConnectionService"
+            android:name=".apputilis.ConnectionService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
