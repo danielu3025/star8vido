@@ -10,7 +10,6 @@ public class DeleteVideosEvent {
         this.list = a_list;
         System.out.println("DeleteVideosEvent Fired!");
     }
-
     public ArrayList<String> getList() {
         return list;
     }

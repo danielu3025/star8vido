@@ -8,7 +8,6 @@ public class DownloadFilesEvent {
         this.list = filesToDownloadList;
         System.out.println("DownloadFilesEvent Fired!");
     }
-
     public ArrayList <String> getList() {
         return list;
     }

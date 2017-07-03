@@ -12,7 +12,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
-
 /**
  this class need to ba activated by EventBus event trigger.
 

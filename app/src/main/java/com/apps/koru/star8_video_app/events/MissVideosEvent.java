@@ -7,7 +7,6 @@ public class MissVideosEvent {
         System.out.println("MissVideosEvent Fired!");
     }
     public String getMessage() {
-
         return message;
     }
 }

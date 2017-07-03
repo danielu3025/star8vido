@@ -75,7 +75,6 @@ public class Model {
 /*
         playlistNode = database.getReference().child("testPlaylist");
 */
-
         mainPlayList = new PlayList(context);
         mainPlayListTemp = new PlayList(context);
         VideoView mainVideoView = new VideoView(context);

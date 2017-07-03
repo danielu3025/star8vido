@@ -49,7 +49,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  */
 class Util {
 
-
     /**
      * Statics invented here to symbol thread types as integers
      *

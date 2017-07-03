@@ -22,7 +22,6 @@ public class VideoPlayer {
     private int onTrack =0;
 
     public VideoPlayer(Context context) {
-
         EventBus.getDefault().register(this);
         this.context=context;
     }

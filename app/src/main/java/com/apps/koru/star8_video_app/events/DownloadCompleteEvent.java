@@ -9,7 +9,6 @@ public class DownloadCompleteEvent {
     }
 
     public String getMessage() {
-
         return message;
     }
 }
