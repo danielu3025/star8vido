@@ -2,7 +2,6 @@ package com.apps.koru.star8_video_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.apps.koru.star8_video_app.MainActivity.videoView;
 
 public class VideoPlayer {
     private SharedPreferences sharedPreferences;
@@ -32,53 +30,54 @@ public class VideoPlayer {
     }
     @Subscribe
     public void onEvent(DownloadCompleteEvent event) {
-        System.out.println("lets playyy!!!!!");
-        MainActivity.infoBt.setText("");
-        MainActivity.infoBt.setVisibility(View.INVISIBLE);
-        MainActivity.videoView.stopPlayback();
-        //get Uri play List
-        File lf[] = appModel.videoDir.listFiles();
-        ArrayList <String >folderList = new ArrayList<>();
-        for (File file : lf){
-            folderList.add(file.getAbsolutePath());
-        }
+        if (appModel.dbList.size() != 0) {
+            System.out.println("lets playyy!!!!!");
+            MainActivity.infoBt.setText("");
+            MainActivity.infoBt.setVisibility(View.INVISIBLE);
+            appModel.videoView.stopPlayback();
+            //get Uri play List
+            File lf[] = appModel.videoDir.listFiles();
+            ArrayList<String> folderList = new ArrayList<>();
+            for (File file : lf) {
+                folderList.add(file.getAbsolutePath());
+            }
 
-        appModel.uriPlayList.clear();
+            appModel.uriPlayList.clear();
 
-        for (String path :appModel.dbList){
-            appModel.uriPlayList.add(Uri.parse(path));
-        }
-        appModel.dbList.clear();
+            for (String path : appModel.dbList) {
+                appModel.uriPlayList.add(Uri.parse(path));
+            }
             onTrack = 0;
-            MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-            MainActivity.videoView.start();
-        saveThePlayList();
-        MainActivity.videoView.setOnErrorListener((mp, what, extra) -> {
-            Log.d("Error"," - playing video error");
-            if (onTrack > 0){
-                if (onTrack != appModel.uriPlayList.size()){
-                    MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
+            appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            appModel.videoView.start();
+            saveThePlayList();
+            appModel.videoView.setOnErrorListener((mp, what, extra) -> {
+                Log.d("Error", " - playing video error");
+                if (onTrack > 0) {
+                    if (onTrack != appModel.uriPlayList.size()) {
+                        appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
+                    } else {
+                        appModel.videoView.setVideoURI(appModel.uriPlayList.get(0));
+                    }
+                } else {
+                    appModel.videoView.setVideoURI(appModel.uriPlayList.get(0));
                 }
-                else {
-                    MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
-                }
-            }
-            else {
-                MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(0));
-            }
-            MainActivity.videoView.start();
-            return true;
-        });
-        MainActivity.videoView.setOnCompletionListener(mp -> {
-                 if (onTrack<appModel.uriPlayList.size()){
-                     onTrack++;
-                 }
-                 if (onTrack==appModel.uriPlayList.size()){
-                     onTrack = 0;
-                 }
-                MainActivity.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-                MainActivity.videoView.start();
+                appModel.videoView.start();
+                return true;
             });
+            appModel.videoView.setOnCompletionListener(mp -> {
+                if (onTrack < appModel.uriPlayList.size()) {
+                    onTrack++;
+                }
+                if (onTrack == appModel.uriPlayList.size()) {
+                    onTrack = 0;
+                }
+                appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                appModel.videoView.start();
+            });
+        } else {
+            Log.d("function","error calling video player");
+        }
     }
 
     private void saveThePlayList() {
@@ -111,7 +110,7 @@ public class VideoPlayer {
                     appModel.uriPlayList.add(i,Uri.parse(sharedPreferences.getString("video_"+i, null)));
 
                 }
-                Log.e("function", "isFinishLoading");
+                Log.e("function", "isfinishloading");
                 playOffline();
             });
         });
@@ -119,20 +118,27 @@ public class VideoPlayer {
 
     public void playOffline(){
         Log.d("function", "PlayOffline called");
-        onTrack = 0;
-        videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-        videoView.start();
-        MainActivity.videoView.setOnCompletionListener(mp -> {
-            if(MainActivity.isConnection){
-                Log.d("function", "isConnected");
-            }
-            if (onTrack < appModel.uriPlayList.size()-1) {
-                onTrack++;
-            } else {
-                onTrack = 0;
-            }
-            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-            videoView.start();
-        });
+        if(appModel.uriPlayList.size()==0){
+            MainActivity.obj.setVariableChangeListener(task -> {
+                Log.d("function", "connection_changed");
+            });
+        } else {
+            onTrack = 0;
+            appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            appModel.videoView.start();
+            appModel.videoView.setOnCompletionListener(mp -> {
+                if(MainActivity.isConnection){
+                    Log.d("function", "isConnected");
+                }
+                if (onTrack < appModel.uriPlayList.size()-1) {
+                    onTrack++;
+                } else {
+                    onTrack = 0;
+                }
+                appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                appModel.videoView.start();
+            });
+        }
     }
+
 }

@@ -21,6 +21,7 @@ public class FireBaseDbLisner {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //get playlist files names
                 appModel.listSnapshot = dataSnapshot;
+                appModel.dbList.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     appModel.playlistFileNames.add((String) postSnapshot.getValue());
                     appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + (String) postSnapshot.getValue());

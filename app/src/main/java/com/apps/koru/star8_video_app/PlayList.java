@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-import static com.apps.koru.star8_video_app.MainActivity.videoView;
 
 
 public class PlayList extends AppCompatActivity {

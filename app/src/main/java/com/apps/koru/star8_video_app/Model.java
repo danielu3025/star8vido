@@ -26,6 +26,7 @@ public class Model {
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     public FirebaseDatabase database ;
     public String event;
+    public VideoView videoView;
     public ArrayList<String> list = new ArrayList<>();
     public int onTrack =-1;
     public static int dcount = 0;

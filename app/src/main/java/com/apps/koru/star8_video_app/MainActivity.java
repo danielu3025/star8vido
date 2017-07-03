@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,6 @@ import io.fabric.sdk.android.Fabric;
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
 
-    public static VideoView videoView;
     public static Button infoBt;
     //public static ImageView downloadIcon;
     //public static ImageView noInternet;
@@ -42,19 +42,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("funtion called:","onCreate");
-
-
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set content view AFTER ABOVE sequence (to avoid crash)
         super.onCreate(savedInstanceState);
+
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main2);
         Model.getInstance().database = database;
         appModel.initModel(this);
-        videoView = (VideoView)findViewById(R.id.videoView2);
+        appModel.videoView = (VideoView)findViewById(R.id.videoView2);
         infoBt = (Button)findViewById(R.id.infoBt);
         //infoBt.setVisibility(View.INVISIBLE);
 
@@ -66,9 +65,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("function","onDestroy");
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-//        Log.d("function","onStop");
+        Log.d("function","onStop");
     }
 
     @Override
@@ -76,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d("function","onPause");
         appModel.pause = true;
-        appModel.videoStopPosition = videoView.getCurrentPosition();
-        videoView.pause();
-        try {
+        appModel.videoStopPosition = appModel.videoView.getCurrentPosition();
+        appModel.videoView.pause();
+        /*try {
 
             dispatcher.cancel("Connection_check");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 
@@ -115,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
             mainPlayList.loadThePlayList();
         }*/
         if (!appModel.pause && !isNetworkAvailable()) {
-            player.loadThePlayList();;
+            player.loadThePlayList();
         }
         if (appModel.pause) {
-            videoView.seekTo(appModel.videoStopPosition);
-            videoView.start();
+            appModel.videoView.seekTo(appModel.videoStopPosition);
+            appModel.videoView.start();
             Log.d("function","video resumed");
         }
     }
