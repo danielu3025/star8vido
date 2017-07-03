@@ -2,15 +2,8 @@ package com.apps.koru.star8_video_app;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-
-import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
-import com.apps.koru.star8_video_app.sharedutils.UiHandler;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import java.io.File;
@@ -20,13 +13,11 @@ import java.util.ArrayList;
 
 
 public class PlayList extends AppCompatActivity {
-    static ArrayList<Uri> uriPlayList = new ArrayList<>();
     String event;
     public ArrayList<String> list = new ArrayList<>();
     int onTrack =-1;
     Context context;
     File videoDir;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     public PlayList(Context contex) {
         Log.d("function", "PlayList contractor calld");

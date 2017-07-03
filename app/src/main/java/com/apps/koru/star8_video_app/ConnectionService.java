@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.view.View;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -16,14 +15,9 @@ public class ConnectionService extends JobService {
     public boolean onStartJob(JobParameters job) {
         if(isNetworkAvailable()){
             Log.d("Network changed ", "Flag No 1");
-            MainActivity.obj.setValue(true);
-            MainActivity.isConnection = true;
-            //noInternet.setVisibility(View.INVISIBLE);
 
         } else {
             Log.d("Network changed ", "Flag No 2");
-            MainActivity.isConnection = false;
-            //noInternet.setVisibility(View.VISIBLE);
         }
 
         return false;

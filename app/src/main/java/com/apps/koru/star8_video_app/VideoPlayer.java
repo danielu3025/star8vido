@@ -8,8 +8,6 @@ import android.view.View;
 
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
-import com.apps.koru.star8_video_app.sharedutils.UiHandler;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -17,13 +15,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class VideoPlayer {
+class VideoPlayer {
     private SharedPreferences sharedPreferences;
     private Context context;
     private Model appModel = Model.getInstance();
     private int onTrack =0;
 
-    public VideoPlayer(Context context) {
+    VideoPlayer(Context context) {
 
         EventBus.getDefault().register(this);
         this.context=context;
@@ -32,8 +30,8 @@ public class VideoPlayer {
     public void onEvent(DownloadCompleteEvent event) {
         if (appModel.dbList.size() != 0) {
             System.out.println("lets playyy!!!!!");
-            MainActivity.infoBt.setText("");
-            MainActivity.infoBt.setVisibility(View.INVISIBLE);
+            appModel.infoBt.setText("");
+            appModel.infoBt.setVisibility(View.INVISIBLE);
             appModel.videoView.stopPlayback();
             //get Uri play List
             File lf[] = appModel.videoDir.listFiles();
@@ -95,50 +93,4 @@ public class VideoPlayer {
             editor.apply();
         });
     }
-
-    public void loadThePlayList(){
-        Log.d("function", "loadThePlayList called");
-
-        final int[] size = new int[1];
-        appModel.uriPlayList.clear();
-        AsyncHandler.post(() -> {
-            sharedPreferences = context.getSharedPreferences("play_list", Context.MODE_PRIVATE);
-            UiHandler.post(() -> {
-                size[0] = sharedPreferences.getInt("size", 0);
-                for(int i=0;i<size[0];i++)
-                {
-                    appModel.uriPlayList.add(i,Uri.parse(sharedPreferences.getString("video_"+i, null)));
-
-                }
-                Log.e("function", "isfinishloading");
-                playOffline();
-            });
-        });
-    }
-
-    public void playOffline(){
-        Log.d("function", "PlayOffline called");
-        if(appModel.uriPlayList.size()==0){
-            MainActivity.obj.setVariableChangeListener(task -> {
-                Log.d("function", "connection_changed");
-            });
-        } else {
-            onTrack = 0;
-            appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-            appModel.videoView.start();
-            appModel.videoView.setOnCompletionListener(mp -> {
-                if(MainActivity.isConnection){
-                    Log.d("function", "isConnected");
-                }
-                if (onTrack < appModel.uriPlayList.size()-1) {
-                    onTrack++;
-                } else {
-                    onTrack = 0;
-                }
-                appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-                appModel.videoView.start();
-            });
-        }
-    }
-
 }

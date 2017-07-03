@@ -5,10 +5,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,25 +17,12 @@ import com.apps.koru.star8_video_app.downloadclass.FireBaseDbLisner;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
 import com.crashlytics.android.Crashlytics;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.leakcanary.LeakCanary;
 
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
-
-    public static Button infoBt;
-    //public static ImageView downloadIcon;
-    //public static ImageView noInternet;
-    //public static TextView noConnectionText;
-    public static boolean isConnection = false;
-    public static MyObj obj = new MyObj(false);
-
-    VideoPlayer player;
-
-    FirebaseJobDispatcher dispatcher;
-    public static FirebaseDatabase  database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +33,21 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set content view AFTER ABOVE sequence (to avoid crash)
         super.onCreate(savedInstanceState);
-
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(getApplication());
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main2);
-        Model.getInstance().database = database;
         appModel.initModel(this);
         appModel.videoView = (VideoView)findViewById(R.id.videoView2);
-        infoBt = (Button)findViewById(R.id.infoBt);
+        appModel.infoBt = (Button)findViewById(R.id.infoBt);
         //infoBt.setVisibility(View.INVISIBLE);
 
         PlayList playList = new PlayList(this);
-        player= new VideoPlayer(this);
+        VideoPlayer player= new VideoPlayer(this);
         FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
         MissFileFinder missFileFinder = new MissFileFinder();
         FireBaseDbLisner fireBaseDbLisner = new FireBaseDbLisner();
@@ -120,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
             mainPlayList.loadThePlayList();
         }*/
         if (!appModel.pause && !isNetworkAvailable()) {
-            player.loadThePlayList();
+            PlayOffline  playOffline = new PlayOffline(this);
+            playOffline.loadThePlayList();
         }
         if (appModel.pause) {
             appModel.videoView.seekTo(appModel.videoStopPosition);

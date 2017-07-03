@@ -3,6 +3,7 @@ package com.apps.koru.star8_video_app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.widget.Button;
 import android.widget.VideoView;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -22,11 +23,11 @@ public class Model {
     public static Model getInstance() {
         return ourInstance;
     }
-
-    public ArrayList<Uri> uriPlayList = new ArrayList<>();
-    public FirebaseDatabase database ;
+    public Button infoBt;
+    ArrayList<Uri> uriPlayList = new ArrayList<>();
+    FirebaseDatabase database ;
     public String event;
-    public VideoView videoView;
+    VideoView videoView;
     public ArrayList<String> list = new ArrayList<>();
     public int onTrack =-1;
     public static int dcount = 0;
@@ -42,10 +43,9 @@ public class Model {
     public FirebaseAnalytics mFirebaseAnalytics;
     public SharedPreferences sharedPreferences;
     public PlayList mainPlayListTemp ;
-    public VideoView mainVideoView;
     public PlayList mainPlayList ;
     public FirebaseJobDispatcher dispatcher;
-    public boolean pause = false;
+    boolean pause = false;
     public String plyListRoot = "Playlists";
     public String playListKey ="-Kl8dzXX4NqC1b8mYUoG";
     public String playListName = "videos";
@@ -60,13 +60,13 @@ public class Model {
     public DatabaseReference playlistNode  ;
     public ArrayList <String>dbList = new ArrayList<>();
     public boolean playing;
-    public int videoStopPosition;
+    int videoStopPosition;
 
 
     private Model() {
     }
 
-    public void initModel(Context context){
+    void initModel(Context context){
         videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist1");
         videoDir.mkdir();
         database = FirebaseDatabase.getInstance();
@@ -78,6 +78,6 @@ public class Model {
 
         mainPlayList = new PlayList(context);
         mainPlayListTemp = new PlayList(context);
-        mainVideoView = new VideoView(context);
+        VideoView mainVideoView = new VideoView(context);
     }
 }

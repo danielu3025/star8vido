@@ -3,7 +3,6 @@ package com.apps.koru.star8_video_app.downloadclass;
 import android.util.Log;
 import android.view.View;
 
-import com.apps.koru.star8_video_app.MainActivity;
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
@@ -19,9 +18,9 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class FireBaseVideoDownloader {
-    int dcount = 0;
-    Boolean erorFlag  = false;
-    Model appModel = Model.getInstance();
+    private int dcount = 0;
+    private Boolean erorFlag  = false;
+    private Model appModel = Model.getInstance();
     public FireBaseVideoDownloader() {
 
         EventBus.getDefault().register(this);
@@ -29,8 +28,8 @@ public class FireBaseVideoDownloader {
 
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
-        MainActivity.infoBt.setVisibility(View.VISIBLE);
-        MainActivity.infoBt.setText("Downloading...");
+        appModel.infoBt.setVisibility(View.VISIBLE);
+        appModel.infoBt.setText("Downloading...");
         try {
            // MainActivity.infoBt.setVisibility(View.VISIBLE);
             //MainActivity.infoBt.setText("getting ready to download..");
@@ -39,10 +38,7 @@ public class FireBaseVideoDownloader {
                 appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
                 final File videoFile = new File(appModel.videoDir.getParent(),fileName);
 
-                appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
-                    System.out.println("Downloading file: " + videoFile.getName());
-
-                }).addOnFailureListener(exception -> {
+                appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> System.out.println("Downloading file: " + videoFile.getName())).addOnFailureListener(exception -> {
                     //MainActivity.infoBt.setText("Downloading error!");
                     erorFlag = true;
                     if (videoFile.exists()){
@@ -98,7 +94,7 @@ public class FireBaseVideoDownloader {
         }
     }
 
-    public void copy(File src, File dst) throws IOException {
+    private void copy(File src, File dst) throws IOException {
 
         FileInputStream inStream = new FileInputStream(src);
         FileOutputStream outStream = new FileOutputStream(dst);
