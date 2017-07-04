@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
+import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +48,9 @@ public class VideoPlayer {
             onTrack = 0;
             appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             appModel.videoView.start();
+
+            EventBus.getDefault().post(new DeleteVideosEvent(appModel.videoListphats));
+
             saveThePlayList();
             appModel.videoView.setOnErrorListener((mp, what, extra) -> {
                 Log.d("Error", " - playing video error");

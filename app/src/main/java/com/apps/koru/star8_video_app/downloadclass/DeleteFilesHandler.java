@@ -24,13 +24,11 @@ public class DeleteFilesHandler {
             folderPhats.add(file.getAbsolutePath());
         }
         for (String path : folderPhats){
-            System.out.println(folderPhats.get(i));
-            System.out.println(event.getList().get(i));
             i++;
             if (!event.getList().contains(path)){
-                File  toDelte = new File(path);
+                File  toDelete = new File(path);
                 try {
-                    toDelte.delete();
+                    toDelete.delete();
                     System.out.println("**cleaning files: " + path + "is deleted");
                 }catch (Exception e){
                     e.getCause();

@@ -33,7 +33,7 @@ public class PlayList extends AppCompatActivity {
     public int allVideosOnDevice(File dir, ArrayList<String> filesName) {
         Log.d("function","allVideosOnDevice calld");
 
-        int fleg = 2;
+        int flag = 2;
         File[] lf = dir.listFiles();
         if (lf != null) {
             ArrayList<String> onDevice = new ArrayList<>();
@@ -45,13 +45,13 @@ public class PlayList extends AppCompatActivity {
                 needToBeOnDevice.add(dir.getAbsolutePath() + "/" + name);
             }
             if (onDevice.containsAll(needToBeOnDevice)) {
-                fleg =  1;
+                flag =  1;
             }
             else {
-                fleg =2;
+                flag =2;
             }
         }
-        return  fleg;
+        return  flag;
     }
 }
 

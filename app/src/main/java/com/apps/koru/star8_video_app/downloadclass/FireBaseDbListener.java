@@ -31,8 +31,6 @@ public class FireBaseDbListener {
                 appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                 appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
 
-                EventBus.getDefault().post(new DeleteVideosEvent(appModel.videoListphats));
-
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {
                     //all videos are in storage ?
