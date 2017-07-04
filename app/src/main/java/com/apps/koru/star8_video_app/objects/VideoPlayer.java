@@ -9,6 +9,7 @@ import android.view.View;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -49,7 +50,7 @@ public class VideoPlayer {
             appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             appModel.videoView.start();
 
-            EventBus.getDefault().post(new DeleteVideosEvent(appModel.videoListphats));
+            EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
 
             saveThePlayList();
             appModel.videoView.setOnErrorListener((mp, what, extra) -> {

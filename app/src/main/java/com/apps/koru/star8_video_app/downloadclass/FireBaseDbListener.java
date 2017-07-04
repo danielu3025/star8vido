@@ -23,6 +23,7 @@ public class FireBaseDbListener {
                 //get playlist files names
                 appModel.listSnapshot = dataSnapshot;
                 appModel.dbList.clear();
+                appModel.playlistFileNames.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     appModel.playlistFileNames.add((String) postSnapshot.getValue());
                     appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
