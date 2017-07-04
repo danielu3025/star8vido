@@ -29,6 +29,7 @@ public class FireBaseVideoDownloader {
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
         appModel.infoBt.setVisibility(View.VISIBLE);
+        appModel.infoBt.getWindowVisibility();
         appModel.infoBt.setText("Downloading...");
         try {
             for (String fileName : event.getList()){
