@@ -1,13 +1,12 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
 import android.util.Log;
-import android.view.View;
 
+import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
-import com.google.firebase.storage.FileDownloadTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,12 +17,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FireBaseVideoDownloader {
     private int dcount = 0;
     private Boolean erorFlag  = false;
     private Model appModel = Model.getInstance();
+    private  String tempText ="";
     public FireBaseVideoDownloader() {
 
         EventBus.getDefault().register(this);
@@ -33,9 +32,13 @@ public class FireBaseVideoDownloader {
     public void onEvent(DownloadFilesEvent event) {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {
 
-            appModel.infoBt.setVisibility(View.VISIBLE);
-            appModel.infoBt.getWindowVisibility();
-            appModel.infoBt.setText("Downloading...");
+           // appModel.infoBt.setVisibility(View.VISIBLE);
+            //appModel.infoBt.getWindowVisibility();
+            //appModel.infoBt.setText("Downloading...");
+            EventBus.getDefault().post(new InfoEvent("vis"));
+            EventBus.getDefault().post(new InfoEvent("Downloading..."));
+
+
             try {
                 for (String fileName : event.getList()) {
                     appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
@@ -43,7 +46,7 @@ public class FireBaseVideoDownloader {
                     System.out.println("Downloading file: " + videoFile.getName());
                     appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
                     }).addOnFailureListener(exception -> {
-                        //appModel.infoBt.setText("Downloading error!");
+                        EventBus.getDefault().post(new InfoEvent("Download Error"));
                         erorFlag = true;
                         if (videoFile.exists()) {
                             Log.d("deleting", "deleting video: " + videoFile.getPath());
@@ -59,6 +62,10 @@ public class FireBaseVideoDownloader {
                         exception.getCause();
                     }).addOnCompleteListener(task -> {
                         Log.d("Complete from total", (dcount + 1) + "/" + event.getList().size());
+//                        if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
+//                            tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
+//                            EventBus.getDefault().post(new InfoEvent(tempText));
+//                        }
                         //appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
 
                         try {

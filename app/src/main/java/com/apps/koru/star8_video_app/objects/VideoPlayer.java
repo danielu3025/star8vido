@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
+import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,8 +32,11 @@ public class VideoPlayer {
     public void onEvent(DownloadCompleteEvent event) {
         if (appModel.dbList.size() != 0) {
             System.out.println("lets playyy!!!!!");
-            appModel.infoBt.setText("");
-            appModel.infoBt.setVisibility(View.INVISIBLE);
+//            appModel.infoBt.setText("");
+//            appModel.infoBt.setVisibility(View.INVISIBLE);
+            EventBus.getDefault().post(new InfoEvent(""));
+            EventBus.getDefault().post(new InfoEvent("invis"));
+
             appModel.videoView.stopPlayback();
             //get Uri play List
             File lf[] = appModel.videoDir.listFiles();

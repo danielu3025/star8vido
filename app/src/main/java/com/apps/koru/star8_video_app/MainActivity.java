@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,16 +19,22 @@ import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
+import com.apps.koru.star8_video_app.events.InfoEvent;
+import com.apps.koru.star8_video_app.events.MissVideosEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
+    Button info ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //set content view AFTER ABOVE sequence (to avoid crash)
-
+        EventBus.getDefault().register(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
@@ -53,9 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         appModel.initModel(this);
         appModel.videoView = (VideoView)findViewById(R.id.videoView2);
-        appModel.videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.ad1);
+        appModel.videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
         appModel.videoView.start();
-        appModel.infoBt = (Button)findViewById(R.id.infoBt);
+        //appModel.infoBt = (Button)findViewById(R.id.infoBt);
+        info = (Button)findViewById(R.id.infoBt);
 
         PlayList playList = new PlayList(this);
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
@@ -69,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d("function","onDestroy");
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -136,6 +145,20 @@ public class MainActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Subscribe
+    public void onEvent(InfoEvent event) {
+        if (event.getMessage() == "vis"){
+            info.setVisibility(View.VISIBLE);
+
+        }
+        else if (event.getMessage() == "invis"){
+            info.setVisibility(View.INVISIBLE);
+        }
+        else {
+            info.setText(event.getMessage());
+        }
     }
 }
 
