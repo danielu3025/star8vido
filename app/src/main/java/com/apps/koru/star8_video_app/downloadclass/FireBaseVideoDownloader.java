@@ -66,7 +66,7 @@ public class FireBaseVideoDownloader {
 //                            tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
 //                            EventBus.getDefault().post(new InfoEvent(tempText));
 //                        }
-                        //appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
+//                        appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
 
                         try {
                             File temp = new File(appModel.videoDir + "/" + fileName);

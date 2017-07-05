@@ -21,7 +21,6 @@ public class Model {
     public static Model getInstance() {
         return ourInstance;
     }
-    public Button infoBt;
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     private FirebaseDatabase database ;
     public String event;
