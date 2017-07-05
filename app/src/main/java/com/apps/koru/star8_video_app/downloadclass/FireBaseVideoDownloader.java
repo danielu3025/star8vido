@@ -7,6 +7,7 @@ import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.google.firebase.storage.FileDownloadTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,7 +45,8 @@ public class FireBaseVideoDownloader {
                     appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
                     final File videoFile = new File(appModel.videoDir.getParent(), fileName);
                     System.out.println("Downloading file: " + videoFile.getName());
-                    appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
+                    FileDownloadTask  fileDownloadTask= (FileDownloadTask) appModel.storageRef.getFile(videoFile);
+                    fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
                     }).addOnFailureListener(exception -> {
                         EventBus.getDefault().post(new InfoEvent("Download Error"));
                         erorFlag = true;
