@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             info.setText(event.getMessage());
         }
-
     }
 }
 

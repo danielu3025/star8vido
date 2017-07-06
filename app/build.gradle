@@ -21,8 +21,8 @@ android {
             keyAlias 'key0'
             keyPassword 'f123456'
             storePassword 'f123456'
-            /*storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')*/
-            storeFile file('/home/shahar/StudioProjects/fastfood.jks')
+            storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')
+//            storeFile file('/home/shahar/StudioProjects/fastfood.jks')
         }
     }
     compileSdkVersion 26
@@ -31,7 +31,7 @@ android {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 2
+        versionCode 3
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
