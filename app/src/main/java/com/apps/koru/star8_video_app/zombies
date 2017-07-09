@@ -1,0 +1,23 @@
+**shahar fire base dispacher
+        /*try {
+            dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+            Job myJob = dispatcher.newJobBuilder()
+                    .setService(ConnectionService.class) // the JobService that will be called
+                    .setTag("Connection_check")        // uniquely identifies the job
+                    .setRecurring(true)
+                    .setTrigger(Trigger.executionWindow(15, 30))
+                    .build();
+
+
+            dispatcher.mustSchedule(myJob);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        88 on pause
+        /*try {
+
+            dispatcher.cancel("Connection_check");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/

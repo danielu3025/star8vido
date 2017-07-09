@@ -1,6 +1,5 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;

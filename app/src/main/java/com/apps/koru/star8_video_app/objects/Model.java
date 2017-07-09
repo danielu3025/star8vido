@@ -13,6 +13,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -23,21 +25,14 @@ public class Model {
     }
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     private FirebaseDatabase database ;
-    public String event;
     public VideoView videoView;
-    public ArrayList<String> list = new ArrayList<>();
-    public int onTrack =-1;
-    public static int dcount = 0;
-    public int p = 0;public int pstep = 1;public  boolean flag = false;
     public ArrayList<String> playlistFileNames = new ArrayList<>();
     public ArrayList<String> videoListphats = new ArrayList<>();
     public FirebaseStorage storage;
     public StorageReference storageRef;
-    public Context context;
     public File videoDir ;
     public boolean downloadFinishd = true;
     public DataSnapshot listSnapshot;
-    public FirebaseAnalytics mFirebaseAnalytics;
     public PlayList mainPlayListTemp ;
     public PlayList mainPlayList ;
     public boolean pause = false;
@@ -47,6 +42,7 @@ public class Model {
 
     /** dev **/
    /* public String storgeUrl = "gs://star8videoapp.appspot.com";*/
+
 
 
     public DatabaseReference playlistNode  ;
@@ -67,11 +63,15 @@ public class Model {
         String plyListRoot = "Playlists";
         String playListKey = "-Kl8dzXX4NqC1b8mYUoG";
         String playListName = "videos";
-        playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
         /** dev **/
         /*playlistNode = database.getReference().child("testPlaylist");*/
-        mainPlayList = new PlayList(context);
-        mainPlayListTemp = new PlayList(context);
-        VideoView mainVideoView = new VideoView(context);
+//        String plyListRoot = "Playlists";
+//        String playListKey = "-KnB2h31UqmLlVFU0Caa";
+//        String playListName = "videos";
+
+        playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
+
+        mainPlayList = new PlayList();
+        mainPlayListTemp = new PlayList();
     }
 }

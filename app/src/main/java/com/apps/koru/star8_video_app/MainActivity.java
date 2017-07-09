@@ -2,6 +2,7 @@ package com.apps.koru.star8_video_app;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
+import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
-import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
+import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -35,6 +38,10 @@ import io.fabric.sdk.android.Fabric;
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
     Button info ;
+    int onTrack =0;
+    private SharedPreferences sharedPreferences;
+    VideoView videoView ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +66,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         appModel.initModel(this);
-        appModel.videoView = (VideoView)findViewById(R.id.videoView2);
-        appModel.videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
-        appModel.videoView.start();
-        //appModel.infoBt = (Button)findViewById(R.id.infoBt);
+        videoView = (VideoView)findViewById(R.id.videoView2);
+        videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
+        videoView.start();
+
+
         info = (Button)findViewById(R.id.infoBt);
 
-        PlayList playList = new PlayList(this);
+        PlayList playList = new PlayList();
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
-        VideoPlayer player= new VideoPlayer(this);
+        VideoPlayer player= new VideoPlayer();
         FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
         MissFileFinder missFileFinder = new MissFileFinder();
         FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
@@ -91,14 +99,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d("function","onPause");
         appModel.pause = true;
-        appModel.videoStopPosition = appModel.videoView.getCurrentPosition();
-        appModel.videoView.pause();
-        /*try {
+        appModel.videoStopPosition = videoView.getCurrentPosition();
+        videoView.pause();
 
-            dispatcher.cancel("Connection_check");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
 
@@ -106,36 +109,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("function", "onResume");
-        /*try {
-            dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-            Job myJob = dispatcher.newJobBuilder()
-                    .setService(ConnectionService.class) // the JobService that will be called
-                    .setTag("Connection_check")        // uniquely identifies the job
-                    .setRecurring(true)
-                    .setTrigger(Trigger.executionWindow(15, 30))
-                    .build();
 
-
-            dispatcher.mustSchedule(myJob);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-        /*if (!appModel.pause && isNetworkAvailable()) {
-            mainPlayList.downloadPlaylist("videos");
-            *//*mainPlayList.downloadPlaylist("testPlaylist");*//*
-            Log.d("function", "video started");
-        } else if(!pause && !isNetworkAvailable()){
-            noInternet.setVisibility(View.VISIBLE);
-            mainPlayList.loadThePlayList();
-        }*/
         if (!appModel.pause && !isNetworkAvailable()) {
             PlayOffline playOffline = new PlayOffline(this);
             playOffline.loadThePlayList();
         }
         if (appModel.pause) {
-            appModel.videoView.seekTo(appModel.videoStopPosition);
-            appModel.videoView.start();
+            videoView.seekTo(appModel.videoStopPosition);
+            videoView.start();
             Log.d("function","video resumed");
         }
     }
@@ -149,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(InfoEvent event) {
+
         if (event.getMessage() == "vis"){
             info.setVisibility(View.VISIBLE);
 
@@ -159,6 +141,60 @@ public class MainActivity extends AppCompatActivity {
         else {
             info.setText(event.getMessage());
         }
+    }
+    @Subscribe
+    public void onEvent(VideoViewEvent event) {
+        videoView.stopPlayback();
+        onTrack = 0;
+        videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+        System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
+        videoView.start();
+
+        EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
+        saveThePlayList();
+
+        videoView.setOnErrorListener((mp, what, extra) -> {
+            Log.d("Error", " - playing video error");
+            if (onTrack > 0) {
+                if (onTrack != appModel.uriPlayList.size()) {
+                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
+                } else {
+                    videoView.setVideoURI(appModel.uriPlayList.get(0));
+                }
+            } else {
+                videoView.setVideoURI(appModel.uriPlayList.get(0));
+            }
+            videoView.start();
+            return true;
+        });
+
+        videoView.setOnCompletionListener(mp -> {
+            if (onTrack < appModel.uriPlayList.size()-1) {
+                onTrack++;
+            }
+            else{
+                onTrack = 0;
+            }
+           videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
+           videoView.start();
+        });
+    }
+
+    private void saveThePlayList() {
+        AsyncHandler.post(() -> {
+            sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt("size", appModel.uriPlayList.size());
+
+            for(int i=0;i<appModel.uriPlayList.size();i++)
+            {
+                editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+            }
+
+            editor.apply();
+        });
     }
 }
 

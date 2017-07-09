@@ -13,16 +13,10 @@ import java.util.ArrayList;
 
 
 public class PlayList extends AppCompatActivity {
-    String event;
     public ArrayList<String> list = new ArrayList<>();
-    int onTrack =-1;
-    Context context;
-    File videoDir;
 
-    public PlayList(Context contex) {
+    public PlayList() {
         Log.d("function", "PlayList contractor calld");
-        context = contex;
-        videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist1");
     }
 
     public boolean checkFolderExists(File dir){

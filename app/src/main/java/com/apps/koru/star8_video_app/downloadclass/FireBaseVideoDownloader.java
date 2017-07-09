@@ -28,6 +28,7 @@ public class FireBaseVideoDownloader {
         EventBus.getDefault().register(this);
     }
 
+    @SuppressWarnings("VisibleForTests")
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {
@@ -37,12 +38,10 @@ public class FireBaseVideoDownloader {
             //appModel.infoBt.setText("Downloading...");
             EventBus.getDefault().post(new InfoEvent("vis"));
             EventBus.getDefault().post(new InfoEvent("Downloading..."));
-
-
             try {
                 for (String fileName : event.getList()) {
                     appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
-                    final File videoFile = new File(appModel.videoDir.getParent(), fileName);
+                    final File videoFile = new File(appModel.videoDir, fileName);
                     System.out.println("Downloading file: " + videoFile.getName());
                     appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
                     }).addOnFailureListener(exception -> {
@@ -62,23 +61,23 @@ public class FireBaseVideoDownloader {
                         exception.getCause();
                     }).addOnCompleteListener(task -> {
                         Log.d("Complete from total", (dcount + 1) + "/" + event.getList().size());
-//                        if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
-//                            tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
-//                            EventBus.getDefault().post(new InfoEvent(tempText));
-//                        }
+                        if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
+                            tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
+                            EventBus.getDefault().post(new InfoEvent(tempText));
+                        }
 //                        appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
 
-                        try {
-                            File temp = new File(appModel.videoDir + "/" + fileName);
-                            if (!temp.exists()) {
-                                copy(videoFile, temp);
-                                System.out.println("copy: " + videoFile.getName());
-                                videoFile.delete();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            System.out.println(" ERROR in copying " + videoFile.getName());
-                        }
+//                        try {
+//                            File temp = new File(appModel.videoDir + "/" + fileName);
+//                            if (!temp.exists()) {
+//                                copy(videoFile, temp);
+//                                System.out.println("copy: " + videoFile.getName());
+//                                videoFile.delete();
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            System.out.println(" ERROR in copying " + videoFile.getName());
+//                        }
                         dcount++;
                         if (dcount == event.getList().size()) {
                             //appModel.infoBt.setText("");
