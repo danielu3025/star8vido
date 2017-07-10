@@ -21,8 +21,10 @@ import java.util.ArrayList;
 public class Model {
     private static final Model ourInstance = new Model();
     public static Model getInstance() {
+
         return ourInstance;
     }
+    public FirebaseAnalytics mFirebaseAnalytics;
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     private FirebaseDatabase database ;
     public VideoView videoView;
@@ -36,6 +38,7 @@ public class Model {
     public PlayList mainPlayListTemp ;
     public PlayList mainPlayList ;
     public boolean pause = false;
+
 
     /** prod **/
     public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
@@ -59,6 +62,7 @@ public class Model {
         videoDir.mkdir();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         /** prod **/
         String plyListRoot = "Playlists";
         String playListKey = "-Kl8dzXX4NqC1b8mYUoG";

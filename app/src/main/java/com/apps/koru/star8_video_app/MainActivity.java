@@ -28,10 +28,14 @@ import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.sql.Time;
+import java.sql.Timestamp;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -177,6 +181,15 @@ public class MainActivity extends AppCompatActivity {
             }
            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
+            //log event
+            Bundle params = new Bundle();
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            params.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(appModel.uriPlayList.get(onTrack)));
+            params.putString("time_played", timestamp.toString());
+
+            appModel.mFirebaseAnalytics.logEvent("video_played", params);
+
+
            videoView.start();
         });
     }
@@ -190,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
             for(int i=0;i<appModel.uriPlayList.size();i++)
             {
-                editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                    editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
+                    editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
             }
 
             editor.apply();

@@ -5,10 +5,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.VideoView;
 
+import com.apps.koru.star8_video_app.events.InfoEvent;
+import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class PlayOffline {
     private Model appModel = Model.getInstance();
@@ -30,6 +35,7 @@ public class PlayOffline {
                 size[0] = sharedPreferences.getInt("size", 0);
                 for(int i=0;i<size[0];i++)
                 {
+                    appModel.dbList.add(i, sharedPreferences.getString("db_"+i,null));
                     appModel.uriPlayList.add(i, Uri.parse(sharedPreferences.getString("video_"+i, null)));
 
                 }
@@ -39,23 +45,15 @@ public class PlayOffline {
         });
     }
     private void playOffline(){
-        if(appModel.uriPlayList.size()>0) {
+        if(appModel.uriPlayList.size()>0&& appModel.dbList.size()>0) {
             Log.d("function", "PlayOffline called");
-            final int[] onTrack = {0};
-            appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack[0]));
-            appModel.videoView.start();
-            appModel.videoView.setOnCompletionListener(mp -> {
-                if (onTrack[0] < appModel.uriPlayList.size() - 1) {
-                    onTrack[0]++;
-                } else {
-                    onTrack[0] = 0;
-                }
-                appModel.videoView.setVideoURI(appModel.uriPlayList.get(onTrack[0]));
-                appModel.videoView.start();
-            });
+            EventBus.getDefault().post(new VideoViewEvent());
+
         } else {
             Toast.makeText(context.getApplicationContext(), "Turn on internet Connection!",
                     Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new InfoEvent("vis"));
+            EventBus.getDefault().post(new InfoEvent("Turn on internet Connection!"));
         }
     }
 }
