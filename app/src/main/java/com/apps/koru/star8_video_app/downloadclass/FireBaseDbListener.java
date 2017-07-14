@@ -12,6 +12,11 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+/**
+ * this class job is to listen changes in firebase db
+ * it calls also when app get acseess to the db
+ * this class decides if it nedd to download new content or start playing
+ */
 public class FireBaseDbListener {
     private Model appModel = Model.getInstance();
 

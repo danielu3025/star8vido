@@ -18,6 +18,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * this class job is to hold the state of the app
+ * its a singleton so only one instance for all the app
+ */
 public class Model {
     private static final Model ourInstance = new Model();
     public static Model getInstance() {

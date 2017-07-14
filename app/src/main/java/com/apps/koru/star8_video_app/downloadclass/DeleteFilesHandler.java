@@ -9,6 +9,12 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ *  this class job is to delete all videos that are not nursery for the play list
+ *  the class response to  event bus - DeleteVideosEvent.
+ *  then it take the list of videos it get and compere them with the videos in the device storage
+ *  any file on storage that is not found in the list get deleted
+ */
 public class DeleteFilesHandler {
     private Model appModel = Model.getInstance();
 

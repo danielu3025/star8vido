@@ -28,6 +28,8 @@ import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -152,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         onTrack = 0;
         videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
         System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
+        logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
+
         videoView.start();
 
         EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
@@ -181,14 +185,8 @@ public class MainActivity extends AppCompatActivity {
             }
            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
-            //log event
-            Bundle params = new Bundle();
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            params.putString(FirebaseAnalytics.Param.ITEM_NAME, String.valueOf(appModel.uriPlayList.get(onTrack)));
-            params.putString("time_played", timestamp.toString());
 
-            appModel.mFirebaseAnalytics.logEvent("video_played", params);
-
+            logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
            videoView.start();
         });
@@ -209,6 +207,21 @@ public class MainActivity extends AppCompatActivity {
 
             editor.apply();
         });
+    }
+    private void logEvets(String eventName, String itemName){
+        //firebase
+        Bundle params = new Bundle();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        params.putString(FirebaseAnalytics.Param.ITEM_NAME,getFileName(itemName));
+        params.putString("time_played", timestamp.toString());
+        appModel.mFirebaseAnalytics.logEvent(eventName, params);
+        //fabric
+        Answers.getInstance().logCustom(new CustomEvent("mainPlayList").putCustomAttribute("played",getFileName(itemName)));
+    }
+    private String getFileName(String path){
+        String txt =  path;
+        String lastWord = txt.substring(txt.lastIndexOf("/")+1);
+        return  lastWord;
     }
 }
 

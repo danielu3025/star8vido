@@ -18,6 +18,13 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
+/**
+ * this class job is to download a playlist from fire base storge.
+ * the class get a list with event bus and then start an async download
+ * if error was happen in the download.. it will skip it and try to download it after he finish.
+ * when download fully complete it send an event for playing
+ */
+
 public class FireBaseVideoDownloader {
     private int dcount = 0;
     private Boolean erorFlag  = false;
@@ -33,9 +40,6 @@ public class FireBaseVideoDownloader {
     public void onEvent(DownloadFilesEvent event) {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {
 
-           // appModel.infoBt.setVisibility(View.VISIBLE);
-            //appModel.infoBt.getWindowVisibility();
-            //appModel.infoBt.setText("Downloading...");
             EventBus.getDefault().post(new InfoEvent("vis"));
             EventBus.getDefault().post(new InfoEvent("Downloading..."));
             try {
@@ -65,22 +69,8 @@ public class FireBaseVideoDownloader {
                             tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
                             EventBus.getDefault().post(new InfoEvent(tempText));
                         }
-//                        appModel.infoBt.setText("Downloading videos :"  + (dcount+1) + "/" + event.getList().size());
-
-//                        try {
-//                            File temp = new File(appModel.videoDir + "/" + fileName);
-//                            if (!temp.exists()) {
-//                                copy(videoFile, temp);
-//                                System.out.println("copy: " + videoFile.getName());
-//                                videoFile.delete();
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                            System.out.println(" ERROR in copying " + videoFile.getName());
-//                        }
                         dcount++;
                         if (dcount == event.getList().size()) {
-                            //appModel.infoBt.setText("");
                             Log.d("status:", "complete");
                             dcount = 0;
                             appModel.downloadFinishd = true;
@@ -109,17 +99,6 @@ public class FireBaseVideoDownloader {
         } else {
             System.out.println("already downloading");
         }
-    }
-
-    private void copy(File src, File dst) throws IOException {
-
-        FileInputStream inStream = new FileInputStream(src);
-        FileOutputStream outStream = new FileOutputStream(dst);
-        FileChannel inChannel = inStream.getChannel();
-        FileChannel outChannel = outStream.getChannel();
-        inChannel.transferTo(0, inChannel.size(), outChannel);
-        inStream.close();
-        outStream.close();
     }
 }
 
