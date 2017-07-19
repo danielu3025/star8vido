@@ -36,7 +36,6 @@ import com.squareup.leakcanary.LeakCanary;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 import io.fabric.sdk.android.Fabric;
@@ -153,13 +152,12 @@ public class MainActivity extends AppCompatActivity {
         videoView.stopPlayback();
         onTrack = 0;
         videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+
         System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
         logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
         videoView.start();
-
-        EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
-        saveThePlayList();
+        appModel.playingVideosStarted = true;
 
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
@@ -177,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         videoView.setOnCompletionListener(mp -> {
+            if (appModel.needToRefrash){
+                System.out.println("playlist is Updated");
+                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
+                saveThePlayList();
+                appModel.needToRefrash = false;
+            }
+
             if (onTrack < appModel.uriPlayList.size()-1) {
                 onTrack++;
             }
@@ -224,4 +229,3 @@ public class MainActivity extends AppCompatActivity {
         return  lastWord;
     }
 }
-

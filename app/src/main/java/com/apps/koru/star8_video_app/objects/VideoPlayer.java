@@ -40,7 +40,11 @@ public class VideoPlayer {
                 appModel.uriPlayList.add(Uri.parse(path));
             }
 
-            EventBus.getDefault().post(new VideoViewEvent());
+            appModel.needToRefrash = true;
+
+            if (!appModel.playingVideosStarted){
+                EventBus.getDefault().post(new VideoViewEvent());
+            }
 
         } else {
             Log.d("function","error calling video player");

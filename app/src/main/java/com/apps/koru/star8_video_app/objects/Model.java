@@ -42,13 +42,15 @@ public class Model {
     public PlayList mainPlayListTemp ;
     public PlayList mainPlayList ;
     public boolean pause = false;
+    public boolean playingVideosStarted = false;
+    public boolean needToRefrash = false;
 
 
     /** prod **/
     public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
 
     /** dev **/
-   /* public String storgeUrl = "gs://star8videoapp.appspot.com";*/
+//    public String storgeUrl = "gs://star8videoapp.appspot.com";
 
 
 
@@ -74,7 +76,7 @@ public class Model {
         /** dev **/
         /*playlistNode = database.getReference().child("testPlaylist");*/
 //        String plyListRoot = "Playlists";
-//        String playListKey = "-KnB2h31UqmLlVFU0Caa";
+//        String playListKey = "test";
 //        String playListName = "videos";
 
         playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
