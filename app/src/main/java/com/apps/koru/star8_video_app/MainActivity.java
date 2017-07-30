@@ -2,11 +2,17 @@ package com.apps.koru.star8_video_app;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,9 +23,11 @@ import android.widget.VideoView;
 
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
+import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
+import com.apps.koru.star8_video_app.events.AcseesEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
@@ -31,12 +39,16 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -47,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     VideoView videoView ;
 
+    private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
+    private TelephonyManager mTelephonyManager;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("funtion called:","onCreate");
@@ -59,32 +75,42 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
+
         super.onCreate(savedInstanceState);
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
-            return;
         }
         LeakCanary.install(getApplication());
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main2);
-
         appModel.initModel(this);
+        appModel.mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
+
+
+        if (appModel.osId == ""){
+            getOsId();
+        }
+
+
         videoView = (VideoView)findViewById(R.id.videoView2);
         videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
         videoView.start();
 
 
+
         info = (Button)findViewById(R.id.infoBt);
+        info.setTransformationMethod(null);
 
         PlayList playList = new PlayList();
-        DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
-        VideoPlayer player= new VideoPlayer();
-        FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
-        MissFileFinder missFileFinder = new MissFileFinder();
-        FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
+
+
+
     }
+
 
     @Override
     protected void onDestroy() {
@@ -106,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         appModel.pause = true;
         appModel.videoStopPosition = videoView.getCurrentPosition();
         videoView.pause();
-
     }
 
 
@@ -126,6 +151,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        // cant back  moahahaha
+    }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -134,9 +164,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
+    public void onEvent(AcseesEvent event) {
+        if (event.getMessage() == "ok"){
+            DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
+            VideoPlayer player= new VideoPlayer();
+            FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
+            MissFileFinder missFileFinder = new MissFileFinder();
+            FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
+        }
+        else {
+            EventBus.getDefault().post(new InfoEvent("vis"));
+            EventBus.getDefault().post(new InfoEvent(event.getMessage()));
+
+        }
+    }
+
+    @Subscribe
     public void onEvent(InfoEvent event) {
 
-        if (event.getMessage() == "vis"){
+        if  (event.getMessage() == "vis"){
             info.setVisibility(View.VISIBLE);
 
         }
@@ -152,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         videoView.stopPlayback();
         onTrack = 0;
         videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+        System.out.println("!!!!!!! "+appModel.osId);
 
         System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
         logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
@@ -213,19 +260,34 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         });
     }
+
     private void logEvets(String eventName, String itemName){
         //firebase
         Bundle params = new Bundle();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         params.putString(FirebaseAnalytics.Param.ITEM_NAME,getFileName(itemName));
-        params.putString("time_played", timestamp.toString());
         appModel.mFirebaseAnalytics.logEvent(eventName, params);
         //fabric
         Answers.getInstance().logCustom(new CustomEvent("mainPlayList").putCustomAttribute("played",getFileName(itemName)));
     }
+
     private String getFileName(String path){
         String txt =  path;
         String lastWord = txt.substring(txt.lastIndexOf("/")+1);
         return  lastWord;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_PHONE_STATE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getOsId();
+        }
+    }
+
+    private void getOsId() {
+        mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        appModel.osId = (Settings.Secure.getString(MainActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID));
+        FirebaseSelector firebaseSelector = new FirebaseSelector();
+    }
+
 }

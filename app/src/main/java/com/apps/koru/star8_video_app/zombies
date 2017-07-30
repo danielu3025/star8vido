@@ -21,3 +21,17 @@
         } catch (Exception e) {
             e.printStackTrace();
         }*/
+**  phone stat example
+    @RequiresApi(api = Build.VERSION_CODES.M)
+//    private void permissionsAtRunTime(){
+//        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSIONS_REQUEST_READ_PHONE_STATE);
+//        } else {
+//            getOsId();
+//        }
+//    }
+//
+//    public int getAndroidVersion() {
+//        int sdkVersion = Build.VERSION.SDK_INT;
+//        return sdkVersion;
+//    }

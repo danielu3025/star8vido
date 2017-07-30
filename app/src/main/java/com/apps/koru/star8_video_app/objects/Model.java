@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.VideoView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -44,6 +45,17 @@ public class Model {
     public boolean pause = false;
     public boolean playingVideosStarted = false;
     public boolean needToRefrash = false;
+    public String osId = "";
+    public DatabaseReference imeiNode ;
+    public DatabaseReference carNode ;
+    public String carId = "";
+
+    public String plyListRoot = "Playlists";
+    public String playListName = "videos";
+    public String playListKey = "";
+    public FirebaseAuth mAuth;
+
+
 
 
     /** prod **/
@@ -64,23 +76,22 @@ public class Model {
     }
 
     public void initModel(Context context){
-        videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist1");
+        videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist");
         videoDir.mkdir();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        imeiNode = database.getReference().child("Imei");
+        carNode = database.getReference().child("Cars");
+        //conectToPlayList("-Kl8dzXX4NqC1b8mYUoG");
+
+    }
+    public void conectToPlayList (String pListKey){
         /** prod **/
-        String plyListRoot = "Playlists";
-        String playListKey = "-Kl8dzXX4NqC1b8mYUoG";
-        String playListName = "videos";
+        playListKey = pListKey;
         /** dev **/
-        /*playlistNode = database.getReference().child("testPlaylist");*/
-//        String plyListRoot = "Playlists";
-//        String playListKey = "test";
-//        String playListName = "videos";
-
+//      playListKey = "test";
         playlistNode = database.getReference().child(plyListRoot).child(playListKey).child(playListName);
-
         mainPlayList = new PlayList();
         mainPlayListTemp = new PlayList();
     }

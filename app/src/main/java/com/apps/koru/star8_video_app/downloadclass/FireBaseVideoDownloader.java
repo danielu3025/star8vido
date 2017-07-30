@@ -68,6 +68,7 @@ public class FireBaseVideoDownloader {
                         if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
                             tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
                             EventBus.getDefault().post(new InfoEvent(tempText));
+
                         }
                         dcount++;
                         if (dcount == event.getList().size()) {
