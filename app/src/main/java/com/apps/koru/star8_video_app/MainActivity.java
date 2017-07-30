@@ -111,14 +111,10 @@ public class MainActivity extends AppCompatActivity {
         }
         try {
             appModel.tvCode = appModel.installationHenler.readInstallationFile(appModel.installationHenler.getInstallation());
-            System.out.println( "tv code : " + appModel.tvCode);
+            System.out.println( "tv code: " + appModel.tvCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
 
     }
 
