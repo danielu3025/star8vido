@@ -2,7 +2,6 @@ package com.apps.koru.star8_video_app;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.VideoView;
 
 
+import com.apps.koru.star8_video_app.apputils.InstallationHenler;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
@@ -46,9 +46,8 @@ import com.squareup.leakcanary.LeakCanary;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -106,6 +105,18 @@ public class MainActivity extends AppCompatActivity {
         info.setTransformationMethod(null);
 
         PlayList playList = new PlayList();
+
+        if (appModel.installationHenler == null){
+            appModel.installationHenler = new InstallationHenler(this);
+        }
+        try {
+            appModel.tvCode = appModel.installationHenler.readInstallationFile(appModel.installationHenler.getInstallation());
+            System.out.println( "tv code : " + appModel.tvCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
 
 

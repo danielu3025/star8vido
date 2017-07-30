@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apps.koru.star8_video_app.R;
+import com.apps.koru.star8_video_app.apputils.InstallationHenler;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,8 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     Model  appModel = Model.getInstance();
     String email = "";
     String pass = "";
+    String carCode ="";
 
-    EditText inpMail;EditText inpPaas;
+    EditText inpMail;EditText inpPaas;EditText inpCarCode;
     Button login ;Button msg;
     Context context = this;
 
@@ -47,13 +49,18 @@ public class LoginActivity extends AppCompatActivity {
         msg = (Button)findViewById(R.id.msg);
         msg.setVisibility(View.INVISIBLE);
         login = (Button) findViewById(R.id.loginButoon);
+        inpCarCode = (EditText)findViewById(R.id.inpCarId);
+        appModel.installationHenler = new InstallationHenler(context);
+
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 email  = inpMail.getText().toString();
                 pass = inpPaas.getText().toString();
-                if (!email.isEmpty() && !pass.isEmpty()){
+                carCode = inpCarCode.getText().toString();
+                if (!email.isEmpty() && !pass.isEmpty() && !carCode.isEmpty()){
                     System.out.println(email + " " + pass );
                     connection();
                 }
@@ -71,6 +78,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = appModel.mAuth.getCurrentUser();
+
+                    //register car code in system
+                    appModel.installationHenler.fileHendler(carCode);
                     msg.setText("ok");
                     Intent intent = new Intent(context,MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
