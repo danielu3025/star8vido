@@ -215,13 +215,16 @@ public class MainActivity extends AppCompatActivity {
 
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
-            if (onTrack > 0) {
+            if (onTrack >=0) {
                 if (onTrack != appModel.uriPlayList.size()) {
-                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack + 1));
+                    if (onTrack<appModel.uriPlayList.size()){
+                        onTrack ++;
+                    }
+                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
                 } else {
                     videoView.setVideoURI(appModel.uriPlayList.get(0));
                 }
-            } else {
+            } else if (onTrack >=appModel.uriPlayList.size()){
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
             }
             videoView.start();
