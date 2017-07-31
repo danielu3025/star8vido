@@ -2,10 +2,9 @@ package com.apps.koru.star8_video_app.objects;
 
 import android.content.Context;
 import android.net.Uri;
-import android.widget.Button;
 import android.widget.VideoView;
 
-import com.apps.koru.star8_video_app.apputils.InstallationHenler;
+import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -14,8 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +55,7 @@ public class Model {
     public String playListKey = "";
     public FirebaseAuth mAuth;
 
-    public InstallationHenler installationHenler;
+    public InstallationHandler installationHandler;
 
 
 

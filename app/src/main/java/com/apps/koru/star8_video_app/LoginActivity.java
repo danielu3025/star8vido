@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.apps.koru.star8_video_app.R;
-import com.apps.koru.star8_video_app.apputils.InstallationHenler;
+import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         msg.setVisibility(View.INVISIBLE);
         login = (Button) findViewById(R.id.loginButoon);
         inpCarCode = (EditText)findViewById(R.id.inpCarId);
-        appModel.installationHenler = new InstallationHenler(context);
+        appModel.installationHandler = new InstallationHandler(context);
 
 
 
@@ -80,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseUser user = appModel.mAuth.getCurrentUser();
 
                     //register car code in system
-                    appModel.installationHenler.fileHendler(carCode);
+                    appModel.installationHandler.fileHendler(carCode);
                     msg.setText("ok");
                     Intent intent = new Intent(context,MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

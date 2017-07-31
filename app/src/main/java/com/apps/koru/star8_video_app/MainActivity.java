@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.VideoView;
 
 
-import com.apps.koru.star8_video_app.apputils.InstallationHenler;
+import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
@@ -106,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
         PlayList playList = new PlayList();
 
-        if (appModel.installationHenler == null){
-            appModel.installationHenler = new InstallationHenler(this);
+        if (appModel.installationHandler == null){
+            appModel.installationHandler = new InstallationHandler(this);
         }
         try {
-            appModel.tvCode = appModel.installationHenler.readInstallationFile(appModel.installationHenler.getInstallation());
+            appModel.tvCode = appModel.installationHandler.readInstallationFile(appModel.installationHandler.getInstallation());
             System.out.println( "tv code: " + appModel.tvCode);
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,8 +148,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d("function", "onResume");
 
         if (!appModel.pause && !isNetworkAvailable()) {
-            PlayOffline playOffline = new PlayOffline(this);
-            playOffline.loadThePlayList();
+            // get offline list event  than play offline event
+
+            /*PlayOffline playOffline = new PlayOffline(this);
+            playOffline.loadThePlayList();*/
         }
         if (appModel.pause) {
             videoView.seekTo(appModel.videoStopPosition);
