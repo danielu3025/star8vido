@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         OfflinePlayList offlinePlayList = new OfflinePlayList();
         PlayOffline playOffline = new PlayOffline();
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
-        
+
         if (appModel.osId.equals("")){
             getOsId();
         }
@@ -148,6 +148,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(!isNetworkAvailable()){
+            EventBus.getDefault().post(new InfoEvent("vis"));
+            EventBus.getDefault().post(new InfoEvent("Turn on internet Connection!"));
+        }
         Log.d("function", "onResume");
         /*if (!appModel.pause && !isNetworkAvailable()) {
             EventBus.getDefault().post(new GetOfflinePlayListEvent("offline",this));
@@ -235,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
         videoView.setOnCompletionListener(mp -> {
             if (appModel.needToRefrash){
-                System.out.println("playlist is Updated");
+                Log.d("**playing"," playlist has Updated");
                 EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
                 saveThePlayList();
                 appModel.needToRefrash = false;
@@ -270,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             editor.apply();
+            Log.d("saving"," playlist saved");
         });
     }
 

@@ -21,9 +21,6 @@ public class PlayOffline {
             Log.d("function", "PlayOffline called");
             EventBus.getDefault().post(new VideoViewEvent());
 
-        } else {
-            EventBus.getDefault().post(new InfoEvent("vis"));
-            EventBus.getDefault().post(new InfoEvent("Turn on internet Connection!"));
         }
     }
 }
