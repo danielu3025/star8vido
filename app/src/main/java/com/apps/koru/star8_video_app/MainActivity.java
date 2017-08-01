@@ -95,10 +95,7 @@ public class MainActivity extends AppCompatActivity {
         OfflinePlayList offlinePlayList = new OfflinePlayList();
         PlayOffline playOffline = new PlayOffline();
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
-
-
-
-
+        
         if (appModel.osId.equals("")){
             getOsId();
         }

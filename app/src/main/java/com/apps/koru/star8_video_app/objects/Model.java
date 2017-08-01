@@ -57,9 +57,6 @@ public class Model {
 
     public InstallationHandler installationHandler;
 
-
-
-
     /** prod **/
     public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
 

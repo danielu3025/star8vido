@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     Button login ;Button msg;
     Context context = this;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Remove title bar

@@ -7,9 +7,6 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 
-
-
-
 public class PlayList extends AppCompatActivity {
     public ArrayList<String> list = new ArrayList<>();
 

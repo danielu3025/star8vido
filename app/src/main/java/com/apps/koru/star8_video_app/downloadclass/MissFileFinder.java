@@ -61,5 +61,4 @@ public class MissFileFinder {
             EventBus.getDefault().post(new DownloadFilesEvent(toDownloadList));
         }
     }
-
 }

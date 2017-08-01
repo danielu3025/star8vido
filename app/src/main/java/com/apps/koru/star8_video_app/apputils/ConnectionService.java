@@ -34,4 +34,3 @@ public class ConnectionService extends JobService {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
-

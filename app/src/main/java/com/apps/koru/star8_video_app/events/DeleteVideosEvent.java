@@ -19,3 +19,4 @@ public class DeleteVideosEvent {
         return message;
     }
 }
+

@@ -50,5 +50,4 @@ public class VideoPlayer {
             Log.d("function","error calling video player");
         }
     }
-
 }
