@@ -6,8 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
-import com.apps.koru.star8_video_app.events.GetOfflinePlayList;
-import com.apps.koru.star8_video_app.events.GetToPlayOffline;
+import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -19,13 +18,15 @@ public class OfflinePlayList {
     private Model appModel = Model.getInstance();
     private SharedPreferences sharedPreferences;
     private Context context;
+    private String message;
 
     public OfflinePlayList() {
         EventBus.getDefault().register(this);
     }
     @Subscribe
-    public void onEvent(GetOfflinePlayList event) {
+    public void onEvent(GetOfflinePlayListEvent event) {
         context = event.getContext();
+        message = event.getMessage();
         Log.d("function", "loadThePlayList called");
 
         final int[] size = new int[1];
@@ -41,6 +42,11 @@ public class OfflinePlayList {
 
                 }
                 Log.e("function", "isfinishloading");
+                if (message.equals("delete")){
+                    EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
+                } else if(message.equals("offline")) {
+                    EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"offline"));
+                }
             });
         });
     }

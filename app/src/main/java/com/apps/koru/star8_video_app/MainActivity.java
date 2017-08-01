@@ -21,6 +21,7 @@ import android.widget.VideoView;
 
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
+import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
@@ -29,6 +30,7 @@ import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
 import com.apps.koru.star8_video_app.events.AcseesEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
+import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.objects.Model;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
     private TelephonyManager mTelephonyManager;
+    private InstallationHandler installationHandler;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -89,33 +92,36 @@ public class MainActivity extends AppCompatActivity {
         appModel.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
 
+        OfflinePlayList offlinePlayList = new OfflinePlayList();
+        PlayOffline playOffline = new PlayOffline();
+        DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
 
-        if (appModel.osId == ""){
+
+
+
+        if (appModel.osId.equals("")){
             getOsId();
         }
-
-
         videoView = (VideoView)findViewById(R.id.videoView2);
         videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
         videoView.start();
 
-
-
         info = (Button)findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
+        EventBus.getDefault().post(new GetOfflinePlayListEvent("delete",this));
+
 
         PlayList playList = new PlayList();
-
-        if (appModel.installationHandler == null){
-            appModel.installationHandler = new InstallationHandler(this);
+        installationHandler = appModel.installationHandler;
+        if (installationHandler == null){
+            installationHandler = new InstallationHandler(this);
         }
         try {
-            appModel.tvCode = appModel.installationHandler.readInstallationFile(appModel.installationHandler.getInstallation());
+            appModel.tvCode = InstallationHandler.readInstallationFile(installationHandler.getInstallation());
             System.out.println( "tv code: " + appModel.tvCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -146,13 +152,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("function", "onResume");
-
-        if (!appModel.pause && !isNetworkAvailable()) {
-            // get offline list event  than play offline event
-
-            /*PlayOffline playOffline = new PlayOffline(this);
-            playOffline.loadThePlayList();*/
-        }
+        /*if (!appModel.pause && !isNetworkAvailable()) {
+            EventBus.getDefault().post(new GetOfflinePlayListEvent("offline",this));
+        }*/
         if (appModel.pause) {
             videoView.seekTo(appModel.videoStopPosition);
             videoView.start();
@@ -175,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void onEvent(AcseesEvent event) {
         if (event.getMessage() == "ok"){
-            DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
             MissFileFinder missFileFinder = new MissFileFinder();
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
         videoView.start();
+        saveThePlayList();
         appModel.playingVideosStarted = true;
 
         videoView.setOnErrorListener((mp, what, extra) -> {
@@ -226,17 +228,18 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     videoView.setVideoURI(appModel.uriPlayList.get(0));
                 }
-            } else if (onTrack >=appModel.uriPlayList.size()){
+            } else if (onTrack>=appModel.uriPlayList.size()){
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
             }
             videoView.start();
+            saveThePlayList();
             return true;
         });
 
         videoView.setOnCompletionListener(mp -> {
             if (appModel.needToRefrash){
                 System.out.println("playlist is Updated");
-                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList));
+                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
                 saveThePlayList();
                 appModel.needToRefrash = false;
             }
@@ -247,12 +250,12 @@ public class MainActivity extends AppCompatActivity {
             else{
                 onTrack = 0;
             }
-           videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
 
             logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
-           videoView.start();
+            videoView.start();
         });
     }
 
@@ -265,8 +268,8 @@ public class MainActivity extends AppCompatActivity {
 
             for(int i=0;i<appModel.uriPlayList.size();i++)
             {
-                    editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
-                    editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
+                editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
             }
 
             editor.apply();

@@ -1,6 +1,9 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
+import android.util.Log;
+
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
+import com.apps.koru.star8_video_app.events.GetToPlayOfflineEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,12 +20,15 @@ import java.util.ArrayList;
  */
 public class DeleteFilesHandler {
     private Model appModel = Model.getInstance();
-
+    private String message;
+    private ArrayList<String> list;
     public DeleteFilesHandler() {
         EventBus.getDefault().register(this);
     }
     @Subscribe
     public void onEvent(DeleteVideosEvent event) {
+        message = event.getMessage();
+        list = event.getList();
         File[] lf = appModel.videoDir.listFiles();
         ArrayList<String> folderPhats = new ArrayList<>();
         int i = 0;
@@ -31,7 +37,7 @@ public class DeleteFilesHandler {
         }
         for (String path : folderPhats){
             i++;
-            if (!event.getList().contains(path)){
+            if (!list.contains(path)){
                 File  toDelete = new File(path);
                 try {
                     toDelete.delete();
@@ -40,6 +46,11 @@ public class DeleteFilesHandler {
                     e.getCause();
                 }
             }
+        }
+        if(message.equals("delete")){
+            EventBus.getDefault().post(new GetToPlayOfflineEvent("play"));
+        } else if(message.equals("offline")){
+            EventBus.getDefault().post(new GetToPlayOfflineEvent("play"));
         }
     }
 }

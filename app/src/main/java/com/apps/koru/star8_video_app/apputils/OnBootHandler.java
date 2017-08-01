@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.apps.koru.star8_video_app.LoginActivity;
-import com.apps.koru.star8_video_app.MainActivity;
 
 public class OnBootHandler extends BroadcastReceiver {
     @Override
