@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
+import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 
 
@@ -39,10 +40,11 @@ public class VideoPlayer {
             for (String path : appModel.dbList) {
                 appModel.uriPlayList.add(Uri.parse(path));
             }
-
+            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
             appModel.needToRefrash = true;
 
             if (!appModel.playingVideosStarted){
+                EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 EventBus.getDefault().post(new VideoViewEvent());
             }
 

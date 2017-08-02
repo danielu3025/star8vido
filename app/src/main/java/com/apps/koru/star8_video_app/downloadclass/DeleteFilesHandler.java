@@ -1,7 +1,5 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import android.util.Log;
-
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.GetToPlayOfflineEvent;
 import com.apps.koru.star8_video_app.objects.Model;

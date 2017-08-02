@@ -32,6 +32,7 @@ import com.apps.koru.star8_video_app.events.AcseesEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
+import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
@@ -215,8 +216,8 @@ public class MainActivity extends AppCompatActivity {
         logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
         videoView.start();
-        saveThePlayList();
         appModel.playingVideosStarted = true;
+        EventBus.getDefault().post(new SaveThePlayListEvent("save"));
 
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
             }
             videoView.start();
-            saveThePlayList();
+            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
             return true;
         });
 
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
                 EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
-                saveThePlayList();
+                EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 appModel.needToRefrash = false;
             }
 
@@ -260,7 +261,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void saveThePlayList() {
+    @Subscribe
+    public void onEvent(SaveThePlayListEvent event) {
         AsyncHandler.post(() -> {
             sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

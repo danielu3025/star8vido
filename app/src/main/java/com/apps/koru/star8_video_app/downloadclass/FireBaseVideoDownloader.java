@@ -31,7 +31,6 @@ public class FireBaseVideoDownloader {
         EventBus.getDefault().register(this);
     }
 
-    @SuppressWarnings("VisibleForTests")
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {

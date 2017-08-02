@@ -2,9 +2,7 @@ package com.apps.koru.star8_video_app.apputils;
 
 import android.util.Log;
 
-import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.GetToPlayOfflineEvent;
-import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 
