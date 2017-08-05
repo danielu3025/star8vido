@@ -18,7 +18,6 @@ public class PlayOffline {
         if(appModel.uriPlayList.size()>0&& appModel.dbList.size()>0) {
             Log.d("function", "PlayOffline called");
             EventBus.getDefault().post(new VideoViewEvent());
-
         }
     }
 }

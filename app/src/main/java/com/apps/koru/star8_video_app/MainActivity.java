@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -38,6 +39,7 @@ import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
+import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
@@ -78,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-
         super.onCreate(savedInstanceState);
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -88,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
         }
         LeakCanary.install(getApplication());
         Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_main2);
+
         appModel.initModel(this);
         appModel.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
@@ -96,21 +98,27 @@ public class MainActivity extends AppCompatActivity {
         OfflinePlayList offlinePlayList = new OfflinePlayList();
         PlayOffline playOffline = new PlayOffline();
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
-
-        if (appModel.osId.equals("")){
-            getOsId();
-        }
-        videoView = (VideoView)findViewById(R.id.videoView2);
-        videoView.setVideoPath("android.resource://"+getPackageName()+"/"+ R.raw.adx);
-        videoView.start();
-
-        info = (Button)findViewById(R.id.infoBt);
-        info.setTransformationMethod(null);
-        EventBus.getDefault().post(new GetOfflinePlayListEvent("delete",this));
-
-
         PlayList playList = new PlayList();
+
+        FirebaseSelector firebaseSelector = new FirebaseSelector();
+
+        /*if (appModel.osId.equals("")){
+            getOsId();
+        }*/
+
+        info = (Button) findViewById(R.id.infoBt);
+        info.setTransformationMethod(null);
+
+        if(!appModel.pause) {
+            videoView = (VideoView) findViewById(R.id.videoView2);
+            videoView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.adx);
+            videoView.start();
+            EventBus.getDefault().post(new GetOfflinePlayListEvent("delete", this));
+        }
+
+
         installationHandler = appModel.installationHandler;
+
         if (installationHandler == null){
             installationHandler = new InstallationHandler(this);
         }
@@ -140,9 +148,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d("function","onPause");
-        appModel.pause = true;
-        appModel.videoStopPosition = videoView.getCurrentPosition();
         videoView.pause();
+        savePlayListPosition();
     }
 
 
@@ -158,9 +165,7 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().post(new GetOfflinePlayListEvent("offline",this));
         }*/
         if (appModel.pause) {
-            videoView.seekTo(appModel.videoStopPosition);
-            videoView.start();
-            Log.d("function","video resumed");
+            loadPlayListPosition();
         }
     }
 
@@ -178,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(AcseesEvent event) {
-        if (event.getMessage() == "ok"){
+        if (event.getMessage().equals("ok")){
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
             MissFileFinder missFileFinder = new MissFileFinder();
@@ -194,30 +199,35 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void onEvent(InfoEvent event) {
 
-        if  (event.getMessage() == "vis"){
-            info.setVisibility(View.VISIBLE);
+        switch (event.getMessage()) {
+            case "vis":
+                info.setVisibility(View.VISIBLE);
 
-        }
-        else if (event.getMessage() == "invis"){
-            info.setVisibility(View.INVISIBLE);
-        }
-        else {
-            info.setText(event.getMessage());
+                break;
+            case "invis":
+                info.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                info.setText(event.getMessage());
+                break;
         }
     }
     @Subscribe
     public void onEvent(VideoViewEvent event) {
-        videoView.stopPlayback();
-        onTrack = 0;
-        videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-        System.out.println("!!!!!!! "+appModel.osId);
+        if(!appModel.playing) {
+            videoView.stopPlayback();
+            onTrack = 0;
+            videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+            System.out.println("!!!!!!! " + appModel.osId);
 
-        System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
-        logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
+            System.out.println("Playing:>> " + onTrack + ": " + appModel.uriPlayList.get(onTrack));
+            logEvets("video_played", String.valueOf(appModel.uriPlayList.get(onTrack)));
 
-        videoView.start();
+            videoView.start();
+            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+        }
+
         appModel.playingVideosStarted = true;
-        EventBus.getDefault().post(new SaveThePlayListEvent("save"));
 
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
@@ -234,14 +244,13 @@ public class MainActivity extends AppCompatActivity {
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
             }
             videoView.start();
-            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
             return true;
         });
 
         videoView.setOnCompletionListener(mp -> {
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
-                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
+                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"del"));
                 EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 appModel.needToRefrash = false;
             }
@@ -253,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                 onTrack = 0;
             }
             videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
 
             logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
@@ -276,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             editor.apply();
-            Log.d("saving"," playlist saved");
+            Log.d("**saving"," playlist saved");
         });
     }
 
@@ -295,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         String lastWord = txt.substring(txt.lastIndexOf("/")+1);
         return  lastWord;
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_PHONE_STATE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -306,7 +316,47 @@ public class MainActivity extends AppCompatActivity {
     private void getOsId() {
         mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         appModel.osId = (Settings.Secure.getString(MainActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID));
-        FirebaseSelector firebaseSelector = new FirebaseSelector();
+    }*/
+    private void savePlayListPosition(){
+        AsyncHandler.post(() -> {
+            sharedPreferences = this.getSharedPreferences("play_list_position", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt("onTrack", onTrack);
+            editor.putInt("position",videoView.getCurrentPosition());
+            editor.putBoolean("pause",true);
+            editor.apply();
+            runOnUiThread(()-> {
+                appModel.pause=true;
+                Log.d("**saving"," playlist position saved");
+
+            });
+        });
     }
 
+    private void loadPlayListPosition(){
+        AsyncHandler.post(() -> {
+            sharedPreferences = this.getSharedPreferences("play_list_position", Context.MODE_PRIVATE);
+            UiHandler.post(() -> {
+                onTrack = sharedPreferences.getInt("onTrack", 0);
+                appModel.videoStopPosition = sharedPreferences.getInt("position", 0);
+                appModel.pause = sharedPreferences.getBoolean("pause", false);
+                Log.e("**loading", " is finished");
+
+
+                if(appModel.uriPlayList.size()>0 && appModel.pause)  {
+                    videoView = (VideoView) findViewById(R.id.videoView2);
+                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                    videoView.seekTo(appModel.videoStopPosition);
+                    videoView.start();
+                    appModel.playing = true;
+                    EventBus.getDefault().post(new VideoViewEvent());
+                } else {
+                    System.out.println("something went wrong");
+                }
+                Log.d("function", "video resumed");
+
+            });
+        });
+    }
 }

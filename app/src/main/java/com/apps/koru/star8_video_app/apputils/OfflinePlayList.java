@@ -39,9 +39,8 @@ public class OfflinePlayList {
                 {
                     appModel.dbList.add(i, sharedPreferences.getString("db_"+i,null));
                     appModel.uriPlayList.add(i, Uri.parse(sharedPreferences.getString("video_"+i, null)));
-
                 }
-                Log.e("function", "isfinishloading");
+                Log.e("**loading", " is finished");
                 if (message.equals("delete")){
                     EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"delete"));
                 } else if(message.equals("offline")) {

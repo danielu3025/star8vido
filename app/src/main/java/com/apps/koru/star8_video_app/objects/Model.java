@@ -30,7 +30,6 @@ public class Model {
     public FirebaseAnalytics mFirebaseAnalytics;
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     private FirebaseDatabase database ;
-    public VideoView videoView;
     public ArrayList<String> playlistFileNames = new ArrayList<>();
     public ArrayList<String> videoListphats = new ArrayList<>();
     public FirebaseStorage storage;
