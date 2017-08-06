@@ -2,5 +2,9 @@
     <string name="app_name">star8video</string>
     <string name="noConnectionText">turn on internet connection</string>
     <string name="ok">OK</string>
+    <string name="login">login</string>
+    <string name="tv_code">TV Code</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
 
 </resources>

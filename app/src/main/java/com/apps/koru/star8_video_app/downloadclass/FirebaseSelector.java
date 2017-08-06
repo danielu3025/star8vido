@@ -1,6 +1,6 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import com.apps.koru.star8_video_app.events.AcseesEvent;
+import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 
@@ -30,7 +30,7 @@ public class FirebaseSelector {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     appModel.conectToPlayList((String) dataSnapshot.getValue());
-                                    EventBus.getDefault().post(new AcseesEvent("ok"));
+                                    EventBus.getDefault().post(new AccessEvent("ok"));
                                 }
 
                                 @Override

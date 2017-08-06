@@ -2,15 +2,11 @@ package com.apps.koru.star8_video_app;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -29,7 +25,7 @@ import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
-import com.apps.koru.star8_video_app.events.AcseesEvent;
+import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
@@ -67,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
     private TelephonyManager mTelephonyManager;
     private InstallationHandler installationHandler;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("funtion called:","onCreate");
@@ -79,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
         //set content view AFTER ABOVE sequence (to avoid crash)
         EventBus.getDefault().register(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        if (!isTaskRoot()) {
+            final Intent intent = getIntent();
+            Log.d("boot","im here!!");
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {
+                Log.d("shit happens", "Main Activity is not the root.  Finishing Main Activity instead of launching.");
+                finish();
+                return;
+            }
+        }
 
         super.onCreate(savedInstanceState);
 
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main2);
 
-        appModel.initModel(this);
+        appModel.initModel(this.getApplicationContext());
         appModel.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
 
@@ -110,10 +114,13 @@ public class MainActivity extends AppCompatActivity {
         info.setTransformationMethod(null);
 
         if(!appModel.pause) {
+            if(appModel.uriPlayList.size() == 0) {
+                appModel.dbList.clear();
+            }
             videoView = (VideoView) findViewById(R.id.videoView2);
             videoView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.adx);
             videoView.start();
-            EventBus.getDefault().post(new GetOfflinePlayListEvent("delete", this));
+            EventBus.getDefault().post(new GetOfflinePlayListEvent("delete", this.getApplicationContext()));
         }
 
 
@@ -161,9 +168,6 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().post(new InfoEvent("Turn on internet Connection!"));
         }
         Log.d("function", "onResume");
-        /*if (!appModel.pause && !isNetworkAvailable()) {
-            EventBus.getDefault().post(new GetOfflinePlayListEvent("offline",this));
-        }*/
         if (appModel.pause) {
             loadPlayListPosition();
         }
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onEvent(AcseesEvent event) {
+    public void onEvent(AccessEvent event) {
         if (event.getMessage().equals("ok")){
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
@@ -343,16 +347,19 @@ public class MainActivity extends AppCompatActivity {
                 appModel.pause = sharedPreferences.getBoolean("pause", false);
                 Log.e("**loading", " is finished");
 
-
                 if(appModel.uriPlayList.size()>0 && appModel.pause)  {
                     videoView = (VideoView) findViewById(R.id.videoView2);
+                    System.out.println("uriPlaylist Size: " + appModel.uriPlayList.size());
+                    videoView.pause();
                     videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
                     videoView.seekTo(appModel.videoStopPosition);
                     videoView.start();
                     appModel.playing = true;
                     EventBus.getDefault().post(new VideoViewEvent());
-                } else {
-                    System.out.println("something went wrong");
+                } else if (appModel.pause && appModel.uriPlayList.size() == 0) {
+                    videoView = (VideoView) findViewById(R.id.videoView2);
+                    videoView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.adx);
+                    videoView.start();
                 }
                 Log.d("function", "video resumed");
 
