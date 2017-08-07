@@ -36,7 +36,7 @@ public class FireBaseVideoDownloader {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {
 
             EventBus.getDefault().post(new InfoEvent("vis"));
-            EventBus.getDefault().post(new InfoEvent("Downloading..."));
+            EventBus.getDefault().post(new InfoEvent("Downloading videos :"  +"0/"+event.getList().size()));
             try {
                 for (String fileName : event.getList()) {
                     appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
