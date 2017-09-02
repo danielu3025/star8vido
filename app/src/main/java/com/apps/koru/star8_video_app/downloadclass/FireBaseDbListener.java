@@ -1,14 +1,20 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
+import android.os.Bundle;
+
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
@@ -28,14 +34,22 @@ public class FireBaseDbListener {
                 appModel.listSnapshot = dataSnapshot;
                 appModel.dbList.clear();
                 appModel.playlistFileNames.clear();
+                if (dataSnapshot.getChildrenCount()<1){
+                    System.out.println("empty playlist");
+                    Bundle params = new Bundle();
+                    params.putString("status","emptyPlaylist");
+                    appModel.mFirebaseAnalytics.logEvent("emptyPlatList", params);
+                    //fabric
+                    Answers.getInstance().logCustom(new CustomEvent("emptyPlatList").putCustomAttribute("status","emptyPlaylist"));
+                }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     appModel.playlistFileNames.add((String) postSnapshot.getValue());
                     appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
                     appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
-                }
-                appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
-                appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
 
+                    appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
+                    appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
+                }
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {
                     //all videos are in storage ?
@@ -58,6 +72,7 @@ public class FireBaseDbListener {
                         default:
                     }
                 }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

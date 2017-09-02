@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("!!!!!!! " + appModel.osId);
 
             System.out.println("Playing:>> " + onTrack + ": " + appModel.uriPlayList.get(onTrack));
-            logEvets("video_played", String.valueOf(appModel.uriPlayList.get(onTrack)));
+            logEvets("played_event_test", String.valueOf(appModel.uriPlayList.get(onTrack)));
 
             videoView.start();
             EventBus.getDefault().post(new SaveThePlayListEvent("save"));
@@ -236,8 +236,8 @@ public class MainActivity extends AppCompatActivity {
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
             if (onTrack >=0) {
-                if (onTrack != appModel.uriPlayList.size()) {
-                    if (onTrack<appModel.uriPlayList.size()){
+                if (onTrack != appModel.uriPlayList.size()-1) {
+                    if (onTrack<appModel.uriPlayList.size()-1){
                         onTrack ++;
                     }
                     videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
 
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
 
-            logEvets("video_played",String.valueOf(appModel.uriPlayList.get(onTrack)));
+            logEvets("played_event_test",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
             videoView.start();
         });
@@ -298,10 +298,12 @@ public class MainActivity extends AppCompatActivity {
         //firebase
         Bundle params = new Bundle();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        params.putString(FirebaseAnalytics.Param.ITEM_NAME,getFileName(itemName));
+        params.putString("car_id",appModel.carId);
+        params.putString("tv_code",appModel.tvCode);
+        params.putString("video_name",getFileName(itemName));
         appModel.mFirebaseAnalytics.logEvent(eventName, params);
         //fabric
-        Answers.getInstance().logCustom(new CustomEvent("mainPlayList").putCustomAttribute("played",getFileName(itemName)));
+        Answers.getInstance().logCustom(new CustomEvent("played_event_test").putCustomAttribute(appModel.carId,getFileName(itemName)));
     }
 
     private String getFileName(String path){
