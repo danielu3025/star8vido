@@ -205,14 +205,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (event.getMessage()) {
             case "vis":
-                info.setVisibility(View.VISIBLE);
-
+                //info.setVisibility(View.VISIBLE);
+                System.out.println("visable");
                 break;
             case "invis":
-                info.setVisibility(View.INVISIBLE);
+               // info.setVisibility(View.INVISIBLE);
+                System.out.println("usvis");
                 break;
             default:
-                info.setText(event.getMessage());
+                //info.setText(event.getMessage());
+                System.out.println(event.getMessage());
                 break;
         }
     }
