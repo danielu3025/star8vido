@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -39,9 +40,12 @@ import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -106,9 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseSelector firebaseSelector = new FirebaseSelector();
 
-        /*if (appModel.osId.equals("")){
-            getOsId();
-        }*/
+
 
         info = (Button) findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -205,15 +209,18 @@ public class MainActivity extends AppCompatActivity {
 
         switch (event.getMessage()) {
             case "vis":
-                //info.setVisibility(View.VISIBLE);
+                info.setVisibility(View.VISIBLE);
                 System.out.println("visable");
                 break;
             case "invis":
-               // info.setVisibility(View.INVISIBLE);
+                info.setVisibility(View.INVISIBLE);
                 System.out.println("usvis");
                 break;
+            case "Download Error":
+                logErorEvent("error_event_test",event.getMessage());
+                break;
             default:
-                //info.setText(event.getMessage());
+                info.setText(event.getMessage());
                 System.out.println(event.getMessage());
                 break;
         }
@@ -235,8 +242,16 @@ public class MainActivity extends AppCompatActivity {
 
         appModel.playingVideosStarted = true;
 
+
+
+        List<FileDownloadTask> tasks = appModel.storageRef.getActiveDownloadTasks();
+
+
+
+
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
+            logErorEvent("error_event_test","Errorplaying- "+ appModel.uriPlayList.get(onTrack).toString());
             if (onTrack >=0) {
                 if (onTrack != appModel.uriPlayList.size()-1) {
                     if (onTrack<appModel.uriPlayList.size()-1){
@@ -369,5 +384,14 @@ public class MainActivity extends AppCompatActivity {
 
             });
         });
+    }
+    private void logErorEvent(String eventName, String itemName){
+        //firebase
+        Bundle params = new Bundle();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        params.putString("ErrorType",itemName);
+        appModel.mFirebaseAnalytics.logEvent(eventName, params);
+        //fabric
+        Answers.getInstance().logCustom(new CustomEvent("error_event_test").putCustomAttribute("error in",itemName));
     }
 }

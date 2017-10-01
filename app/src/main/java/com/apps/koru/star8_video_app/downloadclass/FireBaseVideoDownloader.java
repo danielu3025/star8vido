@@ -7,6 +7,7 @@ import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,6 +29,7 @@ public class FireBaseVideoDownloader {
     private  String tempText ="";
     public FireBaseVideoDownloader() {
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         EventBus.getDefault().register(this);
     }
 
@@ -45,6 +47,7 @@ public class FireBaseVideoDownloader {
                     appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
                     }).addOnFailureListener(exception -> {
                         EventBus.getDefault().post(new InfoEvent("Download Error"));
+
                         erorFlag = true;
                         if (videoFile.exists()) {
                             Log.d("deleting", "deleting video: " + videoFile.getPath());

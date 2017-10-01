@@ -81,6 +81,8 @@ public class Model {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         imeiNode = database.getReference().child("Imei");
         carNode = database.getReference().child("Cars");
+
+
         //conectToPlayList("-Kl8dzXX4NqC1b8mYUoG");
     }
     public void conectToPlayList (String pListKey){
