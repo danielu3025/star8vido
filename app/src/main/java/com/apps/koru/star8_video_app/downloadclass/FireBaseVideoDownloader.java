@@ -2,18 +2,21 @@ package com.apps.koru.star8_video_app.downloadclass;
 
 import android.util.Log;
 
+import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * this class job is to download a playlist from fire base storge.
@@ -29,7 +32,7 @@ public class FireBaseVideoDownloader {
     private  String tempText ="";
     public FireBaseVideoDownloader() {
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         EventBus.getDefault().register(this);
     }
 
@@ -44,9 +47,18 @@ public class FireBaseVideoDownloader {
                     appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
                     final File videoFile = new File(appModel.videoDir, fileName);
                     System.out.println("Downloading file: " + videoFile.getName());
-                    appModel.storageRef.getFile(videoFile).addOnSuccessListener(taskSnapshot -> {
-                    }).addOnFailureListener(exception -> {
+
+                    FileDownloadTask downloadTask = appModel.storageRef.getFile(videoFile);
+
+                    downloadTask.addOnSuccessListener(taskSnapshot -> {
+                        Log.d("status",videoFile.getName() + " finish");
+                        EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                    });
+                    downloadTask.addOnFailureListener(exception -> {
                         EventBus.getDefault().post(new InfoEvent("Download Error"));
+                        EventBus.getDefault().post(new DownloadErrorEvent());
+
+                        Log.d("status",videoFile.getName() + " got error");
 
                         erorFlag = true;
                         if (videoFile.exists()) {
@@ -61,20 +73,25 @@ public class FireBaseVideoDownloader {
                             }
                         }
                         exception.getCause();
-                    }).addOnCompleteListener(task -> {
+                    });
+                    downloadTask.addOnPausedListener(taskSnapshot -> {
+                        Log.d("status",videoFile.getName() + " paused");
+                    });
+                    downloadTask.addOnCompleteListener(task -> {
                         Log.d("Complete from total", (dcount + 1) + "/" + event.getList().size());
                         if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
                             tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
                             EventBus.getDefault().post(new InfoEvent(tempText));
-
                         }
                         dcount++;
                         if (dcount == event.getList().size()) {
-                            Log.d("status:", "complete");
+                            Log.d("status:", "complete all");
                             dcount = 0;
                             appModel.downloadFinishd = true;
                             if (erorFlag) {
                                 erorFlag = false;
+                                Log.d("status:", "some file was field to download re download them");
+
                                 EventBus.getDefault().post(new MissVideosEvent("problem"));
                             } else {
                                 File[] lf = appModel.videoDir.listFiles();
@@ -83,6 +100,7 @@ public class FireBaseVideoDownloader {
                                     folderPhats.add(file.getAbsolutePath());
                                 }
                                 if(folderPhats.containsAll(appModel.dbList)) {
+                                    Log.d("status:", "all files are in storage");
                                     EventBus.getDefault().post(new DownloadCompleteEvent("done"));
                                 } else {
                                     EventBus.getDefault().post(new MissVideosEvent("more downloads"));
@@ -91,6 +109,7 @@ public class FireBaseVideoDownloader {
                         }
                     });
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("Main", "IOE Exception");

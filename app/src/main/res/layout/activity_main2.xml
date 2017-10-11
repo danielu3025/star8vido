@@ -39,4 +39,15 @@
         android:layout_marginLeft="100dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <Button
+        android:id="@+id/btDownloadStatus"
+        android:layout_width="45dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginRight="1dp"
+        android:background="@android:color/holo_green_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="546dp" />
+
 </android.support.constraint.ConstraintLayout>

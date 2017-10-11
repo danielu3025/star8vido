@@ -4,6 +4,7 @@ package com.apps.koru.star8_video_app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
+import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
 import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
@@ -51,6 +53,7 @@ import com.squareup.leakcanary.LeakCanary;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -60,6 +63,7 @@ import io.fabric.sdk.android.Fabric;
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
     Button info ;
+    Button downloadStatus;
     int onTrack =0;
     private SharedPreferences sharedPreferences;
     VideoView videoView ;
@@ -115,6 +119,14 @@ public class MainActivity extends AppCompatActivity {
 
         info = (Button) findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
+        downloadStatus= (Button) findViewById(R.id.btDownloadStatus);
+        downloadStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadStatus.setBackgroundColor(Color.GREEN);
+            }
+        });
+
 
         if(!appModel.pause) {
             if(appModel.uriPlayList.size() == 0) {
@@ -138,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -159,8 +170,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d("function","onPause");
-        videoView.pause();
-        savePlayListPosition();
+        try{
+            videoView.pause();
+            savePlayListPosition();
+        }catch (Exception e){}
     }
 
 
@@ -242,16 +255,12 @@ public class MainActivity extends AppCompatActivity {
 
         appModel.playingVideosStarted = true;
 
-
-
-        List<FileDownloadTask> tasks = appModel.storageRef.getActiveDownloadTasks();
-
-
-
+        //List<FileDownloadTask> tasks = appModel.storageRef.getActiveDownloadTasks();
 
         videoView.setOnErrorListener((mp, what, extra) -> {
             Log.d("Error", " - playing video error");
-            logErorEvent("error_event_test","Errorplaying- "+ appModel.uriPlayList.get(onTrack).toString());
+            File tempFile = new File(appModel.uriPlayList.get(onTrack).toString());
+            logErorEvent("error_event_test","Errorplaying- "+ tempFile.getName());
             if (onTrack >=0) {
                 if (onTrack != appModel.uriPlayList.size()-1) {
                     if (onTrack<appModel.uriPlayList.size()-1){
@@ -259,7 +268,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
                 } else {
-                    videoView.setVideoURI(appModel.uriPlayList.get(0));
+                    try{
+                        videoView.setVideoURI(appModel.uriPlayList.get(0));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
             } else if (onTrack>=appModel.uriPlayList.size()){
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
@@ -318,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
         params.putString("car_id",appModel.carId);
         params.putString("tv_code",appModel.tvCode);
         params.putString("video_name",getFileName(itemName));
+
         appModel.mFirebaseAnalytics.logEvent(eventName, params);
         //fabric
         Answers.getInstance().logCustom(new CustomEvent("played_event_test").putCustomAttribute(appModel.carId,getFileName(itemName)));
@@ -393,5 +407,10 @@ public class MainActivity extends AppCompatActivity {
         appModel.mFirebaseAnalytics.logEvent(eventName, params);
         //fabric
         Answers.getInstance().logCustom(new CustomEvent("error_event_test").putCustomAttribute("error in",itemName));
+    }
+    @Subscribe
+    public void DownloadErrorEventListener(DownloadErrorEvent event){
+        System.out.println("DownloadErrorEventListener");
+        downloadStatus.setBackgroundColor(Color.RED);
     }
 }

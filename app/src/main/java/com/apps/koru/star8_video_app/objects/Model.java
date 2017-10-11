@@ -78,6 +78,7 @@ public class Model {
         videoDir.mkdir();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
+        storage.setMaxOperationRetryTimeMillis(30000);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         imeiNode = database.getReference().child("Imei");
         carNode = database.getReference().child("Cars");

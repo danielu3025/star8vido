@@ -27,6 +27,10 @@ android {
     }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
+    dexOptions{
+        maxProcessCount 2
+        javaMaxHeapSize "2g"
+    }
     defaultConfig {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
