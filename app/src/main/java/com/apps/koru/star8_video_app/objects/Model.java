@@ -2,7 +2,6 @@ package com.apps.koru.star8_video_app.objects;
 
 import android.content.Context;
 import android.net.Uri;
-import android.widget.VideoView;
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -30,6 +29,7 @@ public class Model {
     public FirebaseAnalytics mFirebaseAnalytics;
     public ArrayList<Uri> uriPlayList = new ArrayList<>();
     private FirebaseDatabase database ;
+    public DatabaseReference databaseReference;
     public ArrayList<String> playlistFileNames = new ArrayList<>();
     public ArrayList<String> videoListphats = new ArrayList<>();
     public FirebaseStorage storage;
@@ -47,6 +47,9 @@ public class Model {
     public DatabaseReference carNode ;
     public String carId = "";
     public String tvCode = "";
+    public boolean carData = false;
+
+    public CarHandler carHandler ;
 
 
     public String plyListRoot = "Playlists";
@@ -74,16 +77,18 @@ public class Model {
     }
 
     public void initModel(Context context){
+        carHandler = new CarHandler();
         videoDir = new File(context.getExternalCacheDir().getAbsolutePath() + "/playlist");
-        videoDir.mkdir();
+        if (!videoDir.exists()){
+            videoDir.mkdir();
+        }
         database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
         storage = FirebaseStorage.getInstance();
         storage.setMaxOperationRetryTimeMillis(30000);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         imeiNode = database.getReference().child("Imei");
         carNode = database.getReference().child("Cars");
-
-
         //conectToPlayList("-Kl8dzXX4NqC1b8mYUoG");
     }
     public void conectToPlayList (String pListKey){

@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -23,7 +22,7 @@ import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
-import com.apps.koru.star8_video_app.downloadclass.FirebaseSelector;
+import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
@@ -42,12 +41,8 @@ import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,8 +50,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -147,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             appModel.tvCode = InstallationHandler.readInstallationFile(installationHandler.getInstallation());
             System.out.println( "tv code: " + appModel.tvCode);
+            appModel.carHandler.setCar();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -204,11 +199,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(AccessEvent event) {
-        if (event.getMessage().equals("ok")){
+        if (event.getMessage().equals("ok") && appModel.carData){
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
             MissFileFinder missFileFinder = new MissFileFinder();
             FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
+            System.out.println(appModel.carHandler.getMotorNumber());
         }
         else {
             EventBus.getDefault().post(new InfoEvent("vis"));
@@ -299,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
 
-            logEvets("played_event_test",String.valueOf(appModel.uriPlayList.get(onTrack)));
+            logEvets("played_event_alpha",String.valueOf(appModel.uriPlayList.get(onTrack)));
 
             videoView.start();
         });
@@ -327,14 +323,19 @@ public class MainActivity extends AppCompatActivity {
     private void logEvets(String eventName, String itemName){
         //firebase
         Bundle params = new Bundle();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        params.putString("car_id",appModel.carId);
-        params.putString("tv_code",appModel.tvCode);
         params.putString("video_name",getFileName(itemName));
+        params.putString("vehicle_id",appModel.carHandler.getCarId());
+        params.putString("tv_code",appModel.carHandler.getTvCode());
+        params.putString("country",appModel.carHandler.getCountry());
+        params.putString("region",appModel.carHandler.getRegion());
+        params.putString("route",appModel.carHandler.getRoute());
+        params.putString("type",appModel.carHandler.getType());
+        params.putString("cctv",appModel.carHandler.getCctv());
+        params.putString("tag",appModel.carHandler.getTag());
 
         appModel.mFirebaseAnalytics.logEvent(eventName, params);
         //fabric
-        Answers.getInstance().logCustom(new CustomEvent("played_event_test").putCustomAttribute(appModel.carId,getFileName(itemName)));
+        Answers.getInstance().logCustom(new CustomEvent("played_event_alpha").putCustomAttribute(appModel.carId,getFileName(itemName)));
     }
 
     private String getFileName(String path){
@@ -401,12 +402,22 @@ public class MainActivity extends AppCompatActivity {
     }
     private void logErorEvent(String eventName, String itemName){
         //firebase
+
         Bundle params = new Bundle();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         params.putString("ErrorType",itemName);
-        appModel.mFirebaseAnalytics.logEvent(eventName, params);
+        params.putString("video_name",getFileName(itemName));
+        params.putString("vehicle_id",appModel.carHandler.getCarId());
+        params.putString("tv_code",appModel.carHandler.getTvCode());
+        params.putString("country",appModel.carHandler.getCountry());
+        params.putString("region",appModel.carHandler.getRegion());
+        params.putString("route",appModel.carHandler.getRoute());
+        params.putString("type",appModel.carHandler.getType());
+        params.putString("cctv",appModel.carHandler.getCctv());
+        params.putString("tag",appModel.carHandler.getTag());
+
+        appModel.mFirebaseAnalytics.logEvent("error_event_alpha", params);
         //fabric
-        Answers.getInstance().logCustom(new CustomEvent("error_event_test").putCustomAttribute("error in",itemName));
+        Answers.getInstance().logCustom(new CustomEvent("error_event_alpha").putCustomAttribute("error in",itemName));
     }
     @Subscribe
     public void DownloadErrorEventListener(DownloadErrorEvent event){

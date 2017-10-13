@@ -1,5 +1,7 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
@@ -39,75 +41,85 @@ public class FireBaseVideoDownloader {
     @Subscribe
     public void onEvent(DownloadFilesEvent event) {
         if (appModel.storageRef==null || appModel.storageRef.getActiveDownloadTasks().size() == 0) {
+            StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
 
             EventBus.getDefault().post(new InfoEvent("vis"));
             EventBus.getDefault().post(new InfoEvent("Downloading videos :"  +"0/"+event.getList().size()));
             try {
                 for (String fileName : event.getList()) {
-                    appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
-                    final File videoFile = new File(appModel.videoDir, fileName);
-                    System.out.println("Downloading file: " + videoFile.getName());
 
-                    FileDownloadTask downloadTask = appModel.storageRef.getFile(videoFile);
+                    long bytesAvailable = (long)stat.getBlockSize() * (long)stat.getBlockCount();
+                    long megAvailable = bytesAvailable / 1048576;
 
-                    downloadTask.addOnSuccessListener(taskSnapshot -> {
-                        Log.d("status",videoFile.getName() + " finish");
-                        EventBus.getDefault().post(new DownloadCompleteEvent("done"));
-                    });
-                    downloadTask.addOnFailureListener(exception -> {
-                        EventBus.getDefault().post(new InfoEvent("Download Error"));
-                        EventBus.getDefault().post(new DownloadErrorEvent());
+                    if (megAvailable > 500){
+                        appModel.storageRef = appModel.storage.getReferenceFromUrl(appModel.storgeUrl).child(fileName);
+                        final File videoFile = new File(appModel.videoDir, fileName);
+                        System.out.println("Downloading file: " + videoFile.getName());
 
-                        Log.d("status",videoFile.getName() + " got error");
+                        FileDownloadTask downloadTask = appModel.storageRef.getFile(videoFile);
 
-                        erorFlag = true;
-                        if (videoFile.exists()) {
-                            Log.d("deleting", "deleting video: " + videoFile.getPath());
-                            try {
-                                videoFile.delete();
-                                Log.d("deleting", "successes");
-                                // dcount ++;
-                            } catch (Exception e) {
-                                e.getCause();
-                                Log.d("deleting", "Field");
-                            }
-                        }
-                        exception.getCause();
-                    });
-                    downloadTask.addOnPausedListener(taskSnapshot -> {
-                        Log.d("status",videoFile.getName() + " paused");
-                    });
-                    downloadTask.addOnCompleteListener(task -> {
-                        Log.d("Complete from total", (dcount + 1) + "/" + event.getList().size());
-                        if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
-                            tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
-                            EventBus.getDefault().post(new InfoEvent(tempText));
-                        }
-                        dcount++;
-                        if (dcount == event.getList().size()) {
-                            Log.d("status:", "complete all");
-                            dcount = 0;
-                            appModel.downloadFinishd = true;
-                            if (erorFlag) {
-                                erorFlag = false;
-                                Log.d("status:", "some file was field to download re download them");
+                        downloadTask.addOnSuccessListener(taskSnapshot -> {
+                            Log.d("status",videoFile.getName() + " finish");
+                            EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                        });
+                        downloadTask.addOnFailureListener(exception -> {
+                            EventBus.getDefault().post(new InfoEvent("Download Error"));
+                            EventBus.getDefault().post(new DownloadErrorEvent());
 
-                                EventBus.getDefault().post(new MissVideosEvent("problem"));
-                            } else {
-                                File[] lf = appModel.videoDir.listFiles();
-                                ArrayList<String> folderPhats = new ArrayList<>();
-                                for (File file :lf){
-                                    folderPhats.add(file.getAbsolutePath());
+                            Log.d("status",videoFile.getName() + " got error");
+
+                            erorFlag = true;
+                            if (videoFile.exists()) {
+                                Log.d("deleting", "deleting video: " + videoFile.getPath());
+                                try {
+                                    videoFile.delete();
+                                    Log.d("deleting", "successes");
+                                    // dcount ++;
+                                } catch (Exception e) {
+                                    e.getCause();
+                                    Log.d("deleting", "Field");
                                 }
-                                if(folderPhats.containsAll(appModel.dbList)) {
-                                    Log.d("status:", "all files are in storage");
-                                    EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                            }
+                            exception.getCause();
+                        });
+                        downloadTask.addOnPausedListener(taskSnapshot -> {
+                            Log.d("status",videoFile.getName() + " paused");
+                        });
+                        downloadTask.addOnCompleteListener(task -> {
+                            Log.d("Complete from total", (dcount + 1) + "/" + event.getList().size());
+                            if (tempText != "Downloading videos :" + (dcount+1) +"/"+event.getList().size()){
+                                tempText = "Downloading videos :" + (dcount+1) +"/"+event.getList().size();
+                                EventBus.getDefault().post(new InfoEvent(tempText));
+                            }
+                            dcount++;
+                            if (dcount == event.getList().size()) {
+                                Log.d("status:", "complete all");
+                                dcount = 0;
+                                appModel.downloadFinishd = true;
+                                if (erorFlag) {
+                                    erorFlag = false;
+                                    Log.d("status:", "some file was field to download re download them");
+
+                                    EventBus.getDefault().post(new MissVideosEvent("problem"));
                                 } else {
-                                    EventBus.getDefault().post(new MissVideosEvent("more downloads"));
+                                    File[] lf = appModel.videoDir.listFiles();
+                                    ArrayList<String> folderPhats = new ArrayList<>();
+                                    for (File file :lf){
+                                        folderPhats.add(file.getAbsolutePath());
+                                    }
+                                    if(folderPhats.containsAll(appModel.dbList)) {
+                                        Log.d("status:", "all files are in storage");
+                                        EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                                    } else {
+                                        EventBus.getDefault().post(new MissVideosEvent("more downloads"));
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        EventBus.getDefault().post(new InfoEvent("less then 100 mb"));
+                    }
                 }
 
             } catch (Exception e) {
