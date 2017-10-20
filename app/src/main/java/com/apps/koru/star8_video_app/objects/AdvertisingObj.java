@@ -1,19 +1,13 @@
 package com.apps.koru.star8_video_app.objects;
 
 
-import android.os.Environment;
-import android.os.StatFs;
 import android.support.annotation.NonNull;
 
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestDownloadLIstEvent;
-import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -91,6 +85,7 @@ public class AdvertisingObj {
         if (storageReference != null){
             if (trys <16){
                 long megAvailable =  ((long)Model.getInstance().stat.getBlockSize() * (long) Model.getInstance().stat.getBlockCount())/ 1048576;
+
                 if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
                     fileDownloadTask = storageReference.getFile(file);
                     EventBus.getDefault().post(new InfoEvent("vis"));

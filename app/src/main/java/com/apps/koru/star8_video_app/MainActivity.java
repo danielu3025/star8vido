@@ -332,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
 
         videoView.setOnCompletionListener(mp -> {
 
-            logEvets(String.valueOf(appModel.uriPlayList.get(onTrack)),"ok",1);
 
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
@@ -340,6 +339,10 @@ public class MainActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 appModel.needToRefrash = false;
             }
+            if (onTrack < appModel.uriPlayList.size()){
+                logEvets(String.valueOf(appModel.uriPlayList.get(onTrack)),"ok",1);
+            }
+
 
             if (onTrack < appModel.uriPlayList.size()-1) {
                 onTrack++;
@@ -350,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
             videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
 
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
+            logEvets(String.valueOf(appModel.uriPlayList.get(onTrack)),"ok",1);
 
             EventBus.getDefault().post(new TestplayListEvent());
             videoView.start();
