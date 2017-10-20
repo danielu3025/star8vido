@@ -17,14 +17,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.VideoView;
 
-
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
-import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
+import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader2;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
@@ -33,8 +32,11 @@ import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
+import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
+import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.ReportsHandler;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -50,6 +52,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -57,13 +62,21 @@ public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
     Button info ;
     Button downloadStatus;
+    Button btlist;
+    Button btFolder;
     int onTrack =0;
     private SharedPreferences sharedPreferences;
     VideoView videoView ;
+    boolean buttons = true;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");
+    Date now = new Date();
+    String txt = "";
+    String[] textArr = new String[2];
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
     private TelephonyManager mTelephonyManager;
     private InstallationHandler installationHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseSelector firebaseSelector = new FirebaseSelector();
 
-
+        btlist = (Button) findViewById(R.id.btPlatlist);
+        btFolder = (Button) findViewById(R.id.btFolder);
 
         info = (Button) findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
@@ -116,7 +130,19 @@ public class MainActivity extends AppCompatActivity {
         downloadStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadStatus.setBackgroundColor(Color.GREEN);
+                if (buttons) {
+                    btFolder.setVisibility(View.INVISIBLE);
+                    btlist.setVisibility(View.INVISIBLE);
+                    info.setVisibility(View.INVISIBLE);
+                    downloadStatus.setBackgroundColor(Color.TRANSPARENT);
+                    buttons = false;
+                } else {
+                    btFolder.setVisibility(View.VISIBLE);
+                    btlist.setVisibility(View.VISIBLE);
+                    info.setVisibility(View.VISIBLE);
+                    downloadStatus.setBackgroundColor(Color.GREEN);
+                    buttons = true;
+                }
             }
         });
 
@@ -145,6 +171,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        info.setVisibility(View.VISIBLE);
+
+        ReportsHandler reportsHandler= new ReportsHandler();
+
+
     }
 
 
@@ -202,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         if (event.getMessage().equals("ok") && appModel.carData){
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
+            FireBaseVideoDownloader2 fireBaseVideoDownloader2 = new FireBaseVideoDownloader2();
             MissFileFinder missFileFinder = new MissFileFinder();
             FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
             System.out.println(appModel.carHandler.getMotorNumber());
@@ -222,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("visable");
                 break;
             case "invis":
-                info.setVisibility(View.INVISIBLE);
+                //info.setVisibility(View.INVISIBLE);
                 System.out.println("usvis");
                 break;
             case "Download Error":
@@ -243,10 +275,10 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("!!!!!!! " + appModel.osId);
 
             System.out.println("Playing:>> " + onTrack + ": " + appModel.uriPlayList.get(onTrack));
-            logEvets("played_event_test", String.valueOf(appModel.uriPlayList.get(onTrack)));
 
             videoView.start();
             EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+            EventBus.getDefault().post(new TestplayListEvent());
         }
 
         appModel.playingVideosStarted = true;
@@ -254,9 +286,29 @@ public class MainActivity extends AppCompatActivity {
         //List<FileDownloadTask> tasks = appModel.storageRef.getActiveDownloadTasks();
 
         videoView.setOnErrorListener((mp, what, extra) -> {
+            String error = "";
+            switch (extra){
+                case  -1004 :
+                    error = "MEDIA_ERROR_IO";
+                    break;
+                case -1007 :
+                    error = "MEDIA_ERROR_MALFORMED";
+                    break;
+                case -1010:
+                    error = "MEDIA_ERROR_UNSUPPORTED";
+                    break;
+                case -110 :
+                    error = "MEDIA_ERROR_TIMED_OUT";
+                    break;
+                default:
+                    error = "MEDIA_ERROR_UNKNOWN";
+            }
+
             Log.d("Error", " - playing video error");
             File tempFile = new File(appModel.uriPlayList.get(onTrack).toString());
-            logErorEvent("error_event_test","Errorplaying- "+ tempFile.getName());
+
+            logEvets(String.valueOf(appModel.uriPlayList.get(onTrack)),error,-1);
+
             if (onTrack >=0) {
                 if (onTrack != appModel.uriPlayList.size()-1) {
                     if (onTrack<appModel.uriPlayList.size()-1){
@@ -274,10 +326,14 @@ public class MainActivity extends AppCompatActivity {
                 videoView.setVideoURI(appModel.uriPlayList.get(0));
             }
             videoView.start();
+            EventBus.getDefault().post(new TestplayListEvent());
             return true;
         });
 
         videoView.setOnCompletionListener(mp -> {
+
+            logEvets(String.valueOf(appModel.uriPlayList.get(onTrack)),"ok",1);
+
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
                 EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"del"));
@@ -295,14 +351,15 @@ public class MainActivity extends AppCompatActivity {
 
             System.out.println("Playing:>> " + onTrack +": " + appModel.uriPlayList.get(onTrack)) ;
 
-            logEvets("played_event_alpha",String.valueOf(appModel.uriPlayList.get(onTrack)));
-
+            EventBus.getDefault().post(new TestplayListEvent());
             videoView.start();
+            EventBus.getDefault().post(new TestplayListEvent());
         });
     }
 
     @Subscribe
     public void onEvent(SaveThePlayListEvent event) {
+
         AsyncHandler.post(() -> {
             sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -311,8 +368,11 @@ public class MainActivity extends AppCompatActivity {
 
             for(int i=0;i<appModel.uriPlayList.size();i++)
             {
-                editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
-                editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                if (appModel.dbList.size()>0){
+                    editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
+                    editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                }
+
             }
 
             editor.apply();
@@ -320,7 +380,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void logEvets(String eventName, String itemName){
+    private void logEvets(String itemName ,String comment ,int status){
+        now = new Date();
+        txt  =  df.format(now);
+        textArr = txt.split("-", -1);
         //firebase
         Bundle params = new Bundle();
         params.putString("video_name",getFileName(itemName));
@@ -332,10 +395,14 @@ public class MainActivity extends AppCompatActivity {
         params.putString("type",appModel.carHandler.getType());
         params.putString("cctv",appModel.carHandler.getCctv());
         params.putString("tag",appModel.carHandler.getTag());
+        params.putString("date",textArr[0]);
+        params.putString("time", textArr[1]);
+        params.putString("comment",comment);
+        params.putInt("status",status);
 
-        appModel.mFirebaseAnalytics.logEvent(eventName, params);
+        appModel.mFirebaseAnalytics.logEvent("played_event_alpha1", params);
         //fabric
-        Answers.getInstance().logCustom(new CustomEvent("played_event_alpha").putCustomAttribute(appModel.carId,getFileName(itemName)));
+        Answers.getInstance().logCustom(new CustomEvent("played_event_alpha1").putCustomAttribute(appModel.carId,getFileName(itemName)));
     }
 
     private String getFileName(String path){
@@ -381,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                 appModel.pause = sharedPreferences.getBoolean("pause", false);
                 Log.e("**loading", " is finished");
 
-                if(appModel.uriPlayList.size()>0 && appModel.pause)  {
+                if(appModel.uriPlayList.size()>0 && appModel.pause && onTrack < appModel.uriPlayList.size())  {
                     videoView = (VideoView) findViewById(R.id.videoView2);
                     System.out.println("uriPlaylist Size: " + appModel.uriPlayList.size());
                     videoView.pause();
@@ -401,6 +468,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void logErorEvent(String eventName, String itemName){
+
+
+        now = new Date();
+        txt  =  df.format(now);
+        textArr = txt.split("-", -1);
+
         //firebase
 
         Bundle params = new Bundle();
@@ -414,14 +487,40 @@ public class MainActivity extends AppCompatActivity {
         params.putString("type",appModel.carHandler.getType());
         params.putString("cctv",appModel.carHandler.getCctv());
         params.putString("tag",appModel.carHandler.getTag());
+        params.putString("date",textArr[0]);
+        params.putString("time", textArr[1]);
 
-        appModel.mFirebaseAnalytics.logEvent("error_event_alpha", params);
+        appModel.mFirebaseAnalytics.logEvent("error_event_alpha1", params);
         //fabric
-        Answers.getInstance().logCustom(new CustomEvent("error_event_alpha").putCustomAttribute("error in",itemName));
+        Answers.getInstance().logCustom(new CustomEvent("error_event_alpha1").putCustomAttribute("error in",itemName));
     }
     @Subscribe
-    public void DownloadErrorEventListener(DownloadErrorEvent event){
+    public void DownloadErrorEventListener(DownloadErrorEvent event) {
         System.out.println("DownloadErrorEventListener");
         downloadStatus.setBackgroundColor(Color.RED);
     }
+    @Subscribe
+    public void testPlayList(TestplayListEvent event) {
+        if (appModel.uriPlayList.size() > 0) {
+            String txt = "playlist:\n";
+            for (int i = 0; i < appModel.uriPlayList.size(); i++) {
+                if (i == onTrack) {
+                    txt = txt + "=> " + new File(appModel.uriPlayList.get(i).toString()).getName() + "\n";
+
+                } else {
+                    txt = txt + new File(appModel.uriPlayList.get(i).toString()).getName() + "\n";
+                }
+            }
+            btlist.setText(txt);
+        }
+        if (appModel.videoDir.listFiles().length > 0) {
+            String txt2 = "storage:\n";
+            for (int i = 0; i < appModel.videoDir.listFiles().length; i++) {
+                txt2 = txt2 + appModel.videoDir.listFiles()[i].getName() +"\n";
+            }
+            btFolder.setText(txt2);
+        }
+    }
+
+
 }

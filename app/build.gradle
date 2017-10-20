@@ -27,22 +27,25 @@ android {
     }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
-    dexOptions{
-        maxProcessCount 2
-        javaMaxHeapSize "2g"
-    }
     defaultConfig {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 9
         versionName "1.0.5"
-        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         jackOptions {
             enabled true
         }
+        multiDexEnabled true
+
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.0'
     }
     buildTypes {
         release {
@@ -51,19 +54,25 @@ android {
         }
     }
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/raw'] } }
-    productFlavors {
-    }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    packagingOptions {
+        exclude 'project.properties'
+        exclude 'META-INF/INDEX.LIST'
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:multidex:1.0.1'
+    testCompile 'junit:junit:4.12'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
@@ -78,10 +87,10 @@ dependencies {
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
     compile 'org.greenrobot:eventbus:3.0.0'
-    testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    compile 'com.google.cloud:google-cloud-bigquery:0.26.0-beta'
 }
 
 apply plugin: 'com.google.gms.google-services'

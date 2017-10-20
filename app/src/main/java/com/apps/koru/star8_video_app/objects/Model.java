@@ -2,6 +2,8 @@ package com.apps.koru.star8_video_app.objects;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -32,6 +34,7 @@ public class Model {
     public DatabaseReference databaseReference;
     public ArrayList<String> playlistFileNames = new ArrayList<>();
     public ArrayList<String> videoListphats = new ArrayList<>();
+    public ArrayList<AdvertisingObj> advertisingObjs = new ArrayList<>();
     public FirebaseStorage storage;
     public StorageReference storageRef;
     public File videoDir ;
@@ -48,8 +51,8 @@ public class Model {
     public String carId = "";
     public String tvCode = "";
     public boolean carData = false;
-
     public CarHandler carHandler ;
+    StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
 
 
     public String plyListRoot = "Playlists";

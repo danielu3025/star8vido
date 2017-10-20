@@ -2,12 +2,6 @@
 <items version="2" >
 
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/8e69618895369ca95a117635bc23cf7daf7fae59/output/jars/classes.jar"
-        revision="26.0.1"
-        sha1="662d7533b25a666c649c10a16b42edfb95f25a4f">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-0c35d6f14a7c1d6aceed60e01820a696aab70bec.jar" />
-    </item>
-    <item
         jar="/Users/danielluzgarten/.android/build-cache/67cb6ab76507769113eb1ab1069ca6a846199463/output/jars/classes.jar"
         revision="26.0.1"
         sha1="47471eb19df288158b00b8d9cfa41bce7373f5cc">
@@ -20,16 +14,16 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-7aae6b26be25014f709b46c3b064864906f8992b.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/f838ab4fec89fe94e5abf8a705eed73779e4d371/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.22.0/cc014d64ae11117e159d334c99d9c246d9b36f44/google-http-client-jackson2-1.22.0.jar"
         revision="26.0.1"
-        sha1="9935891f23923f39d002087085d9696568a9f657">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-69e7a0123511d368555ae286cc2e573bdeb61a3f.jar" />
+        sha1="cc014d64ae11117e159d334c99d9c246d9b36f44">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-http-client-jackson2-1.22.0-d75654bae530b785253ff35fbad40fab8e4dcf4d.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/f1d50e9a7b35eace2d9e402ceb6b580dad7d4abc/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.1.3/f6c3aed1cdfa21b5c1737c915186ea93a95a58bd/jackson-core-2.1.3.jar"
         revision="26.0.1"
-        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-72cec195994d0ed47d5465c23dfa2f51ddb115f8.jar" />
+        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/jackson-core-2.1.3-d4daf539c17d8ad830b0385e8e52530ec8ba92e7.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/c7c92d3dff397b6d1fa1bdee0eec966749e99769/output/jars/classes.jar"
@@ -38,16 +32,16 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-19716110ec7d7e786f327e80f4a245e4d65d9465.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.squareup.haha/haha/2.0.3/640a438d2d415c056ca6a673ac26b183b044e160/haha-2.0.3.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/org.threeten/threetenbp/1.3.3/3ea31c96676ff12ab56be0b1af6fff61d1a4f1f2/threetenbp-1.3.3.jar"
         revision="26.0.1"
-        sha1="640a438d2d415c056ca6a673ac26b183b044e160">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/haha-2.0.3-cd5b1f6db78cccaa5080ced41c02150adb205c43.jar" />
+        sha1="3ea31c96676ff12ab56be0b1af6fff61d1a4f1f2">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/threetenbp-1.3.3-44b50296111b50923604a5db790eebd165febd14.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-analyzer/1.5.1/77e5213b6ac5b323616a7bd283763bd60c0b3f6f/leakcanary-analyzer-1.5.1.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.22.0/1d63f369ac78e4838a3197147012026e791008cb/google-oauth-client-1.22.0.jar"
         revision="26.0.1"
-        sha1="77e5213b6ac5b323616a7bd283763bd60c0b3f6f">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/leakcanary-analyzer-1.5.1-ff801542a11ce44f8ac04df7e80c286445b3b893.jar" />
+        sha1="1d63f369ac78e4838a3197147012026e791008cb">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-oauth-client-1.22.0-f3719654b96370730559f08b08d6b71d36dd7468.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/38d4d49fb3a2aa0a0599360377d7c74476a46602/output/jars/classes.jar"
@@ -62,16 +56,16 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e34e8f8a741c278ead891bb01d51af7955c7b062.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta4/constraint-layout-solver-1.0.0-beta4.jar"
-        revision="26.0.1"
-        sha1="0a9cb567dc008f570c28531720168f19148da965">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/constraint-layout-solver-1.0.0-beta4-b38d4bfe148a57c852d3429b021e72c672d19179.jar" />
-    </item>
-    <item
         jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/org.greenrobot/eventbus/3.0.0/ddd99896e9569eaababbe81b35d80e1b91c4ad85/eventbus-3.0.0.jar"
         revision="26.0.1"
         sha1="ddd99896e9569eaababbe81b35d80e1b91c4ad85">
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/eventbus-3.0.0-4fcce1e32eba4194a37e0730aa95733bfa18b672.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/0.1.21/19186e90b1ca9c0865d3ffb0403e80deb326c2de/proto-google-common-protos-0.1.21.jar"
+        revision="26.0.1"
+        sha1="19186e90b1ca9c0865d3ffb0403e80deb326c2de">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/proto-google-common-protos-0.1.21-44b4cfb692cd456eaf6a19793b769fd20b2c5cc3.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-watcher/1.5.1/3d719b7e20a11415d409e6c29a34a643c560fc6f/leakcanary-watcher-1.5.1.jar"
@@ -80,10 +74,10 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/leakcanary-watcher-1.5.1-a9ecb4923341e9e3d3463a2ff72d0630cfb87678.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/cb4145c50f7a91611a59ae3ae191278c4d55576d/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-iam-v1/0.1.21/d87229016d2bba0dfa297f2ff7f5b32bc3bb2529/proto-google-iam-v1-0.1.21.jar"
         revision="26.0.1"
-        sha1="374d595ee099a19b6c1c3718cdb4c345be7a3d45">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-99f5b1e6c40300abdf2e2996106faab0f192f7a4.jar" />
+        sha1="d87229016d2bba0dfa297f2ff7f5b32bc3bb2529">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/proto-google-iam-v1-0.1.21-4c87e8afa64037b6abd57755d17b289a3fb0c854.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/af1f6bf305a67c52229368be837ec354c2b64dd1/output/jars/classes.jar"
@@ -110,22 +104,34 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-d3604e1cbf5731d447946ad22662898502a7a5b7.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/5110433dd9284c0ea31547bfc04aa81f467efd06/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.22.0/d441fc58329c4a4c067acec04ac361627f66ecc8/google-http-client-1.22.0.jar"
         revision="26.0.1"
-        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e228d6351ace32894b3db54e42961b8076d03241.jar" />
+        sha1="d441fc58329c4a4c067acec04ac361627f66ecc8">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-http-client-1.22.0-074dde5d884233683e1683ae52e84b0f4210ab76.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/c8437a1051fddafe1f75fb5cc35f9a4a4093705e/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-bigquery/0.26.0-beta/69de62300e43f068fee504fbc055fce5d2e64b94/google-cloud-bigquery-0.26.0-beta.jar"
         revision="26.0.1"
-        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-bfa29097045014e496966a974835c0f4b1748cba.jar" />
+        sha1="69de62300e43f068fee504fbc055fce5d2e64b94">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-cloud-bigquery-0.26.0-beta-75c1858eee0b5b9ecd410b2250df8de7d042c21b.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/53c1a0148a7399ebdbb60542521f2386f03fe0ee/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.22.0/244350c0c845c583717ade13f5666a452fd0cfa/google-api-client-1.22.0.jar"
         revision="26.0.1"
-        sha1="25438f55fc6d906a0e72f30b21487541430ede43">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-89b682262933e63034958d4c5bd603cfc0fd263a.jar" />
+        sha1="0244350c0c845c583717ade13f5666a452fd0cfa">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-api-client-1.22.0-3255ed095ccaf564c02e69389b79ecfef6a6d7ec.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-oauth2-http/0.8.0/3b343c91d25d1bdae085f4f491b921a94cea05e/google-auth-library-oauth2-http-0.8.0.jar"
+        revision="26.0.1"
+        sha1="03b343c91d25d1bdae085f4f491b921a94cea05e">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-auth-library-oauth2-http-0.8.0-9dffc64e00c0eaecb610ff33170aa4441630e606.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/6b8698aa32e479d0c36fd4eeaea995f9ad167f31/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-379edda6f3f187e7d4050d5db372e30f48b835fe.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/2c139d0f793bc1867dd2a82d5983c1023e22b73c/output/jars/classes.jar"
@@ -140,6 +146,162 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-28491211dd3ddd8ed275473b903e9944c677c56f.jar" />
     </item>
     <item
+        jar="/Users/danielluzgarten/.android/build-cache/751b1c4b16e8c11855413474314943d22b523c46/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5136ba3fe1ea53ecf16a3d53fe98a99bbceb7aa1.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/org.codehaus.jackson/jackson-core-asl/1.9.11/e32303ef8bd18a5c9272780d49b81c95e05ddf43/jackson-core-asl-1.9.11.jar"
+        revision="26.0.1"
+        sha1="e32303ef8bd18a5c9272780d49b81c95e05ddf43">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/jackson-core-asl-1.9.11-37e801176a2655bbae974d01b97ac50339e9825b.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.3.1/e8964a2667e55d11a4505b329a4c34247663920b/protobuf-java-3.3.1.jar"
+        revision="26.0.1"
+        sha1="e8964a2667e55d11a4505b329a4c34247663920b">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/protobuf-java-3.3.1-86b6b8898a7b45dbeba5f00cd1572ab18c10dda1.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/20.0/89507701249388e1ed5ddcf8c41f4ce1be7831ef/guava-20.0.jar"
+        revision="26.0.1"
+        sha1="89507701249388e1ed5ddcf8c41f4ce1be7831ef">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/guava-20.0-3fe9a4308a529420d10cc56670ce1ddd1c508d33.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/bb9978e7897b766bf708da7718fee6a5a7ad8eb7/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="952944218ecedea1554a513dec0c14d570642843">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5a03b16afca1b45d38637c41bfbef8dacfaa18c3.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-appengine/1.22.0/37091fdc63f6b496199e4512f0f291d6fffdd697/google-http-client-appengine-1.22.0.jar"
+        revision="26.0.1"
+        sha1="37091fdc63f6b496199e4512f0f291d6fffdd697">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-http-client-appengine-1.22.0-4abd0d950c6fdf47c63e2de9ffb5bbe87782fa8b.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson/1.22.0/de49da148fed367eaf1fb8851fa4d403f091201/google-http-client-jackson-1.22.0.jar"
+        revision="26.0.1"
+        sha1="0de49da148fed367eaf1fb8851fa4d403f091201">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-http-client-jackson-1.22.0-95b70576d0e94b81b86dcb6181cd3335cf996543.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/affee42ee80b06f339b6175c0affc53dd91163c4/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="461929440e66685425a298693507f6fb27b0a872">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-f153d5c0db92f9502315c49011635377cea92ed7.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar"
+        revision="26.0.1"
+        sha1="023ee503b631f69511e335a061ea008f8da60f40">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/support-annotations-26.0.0-alpha1-f868f59f2e3fbd4ab46bca98b1fd827ff30321ae.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/8e69618895369ca95a117635bc23cf7daf7fae59/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="662d7533b25a666c649c10a16b42edfb95f25a4f">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-0c35d6f14a7c1d6aceed60e01820a696aab70bec.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.api/gax/1.9.0/6b60b91ca99758447ba0c30c5eebb89086198d15/gax-1.9.0.jar"
+        revision="26.0.1"
+        sha1="6b60b91ca99758447ba0c30c5eebb89086198d15">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/gax-1.9.0-b270994a978e4b4372d125445c7d66b7f5b4adbd.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.auto.value/auto-value/1.2/6873fed014fe1de1051aae2af68ba266d2934471/auto-value-1.2.jar"
+        revision="26.0.1"
+        sha1="6873fed014fe1de1051aae2af68ba266d2934471">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/auto-value-1.2-7262a82fcbd729de3f68838371fe5508f0967692.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/f838ab4fec89fe94e5abf8a705eed73779e4d371/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="9935891f23923f39d002087085d9696568a9f657">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-69e7a0123511d368555ae286cc2e573bdeb61a3f.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/f1d50e9a7b35eace2d9e402ceb6b580dad7d4abc/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-72cec195994d0ed47d5465c23dfa2f51ddb115f8.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.9.2/36d6e77a419cb455e6fd5909f6f96b168e21e9d0/joda-time-2.9.2.jar"
+        revision="26.0.1"
+        sha1="36d6e77a419cb455e6fd5909f6f96b168e21e9d0">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/joda-time-2.9.2-79cfc7eb6a00bd66575e4edd16273f52b2ee3741.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-analyzer/1.5.1/77e5213b6ac5b323616a7bd283763bd60c0b3f6f/leakcanary-analyzer-1.5.1.jar"
+        revision="26.0.1"
+        sha1="77e5213b6ac5b323616a7bd283763bd60c0b3f6f">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/leakcanary-analyzer-1.5.1-ff801542a11ce44f8ac04df7e80c286445b3b893.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.squareup.haha/haha/2.0.3/640a438d2d415c056ca6a673ac26b183b044e160/haha-2.0.3.jar"
+        revision="26.0.1"
+        sha1="640a438d2d415c056ca6a673ac26b183b044e160">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/haha-2.0.3-cd5b1f6db78cccaa5080ced41c02150adb205c43.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-credentials/0.8.0/585c4d65c6788ca0414e9a0434482094ac80c5a/google-auth-library-credentials-0.8.0.jar"
+        revision="26.0.1"
+        sha1="0585c4d65c6788ca0414e9a0434482094ac80c5a">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-auth-library-credentials-0.8.0-0d083a1492a769d36a700a52d752c7b116cff183.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta4/constraint-layout-solver-1.0.0-beta4.jar"
+        revision="26.0.1"
+        sha1="0a9cb567dc008f570c28531720168f19148da965">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/constraint-layout-solver-1.0.0-beta4-b38d4bfe148a57c852d3429b021e72c672d19179.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/cb4145c50f7a91611a59ae3ae191278c4d55576d/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="374d595ee099a19b6c1c3718cdb4c345be7a3d45">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-99f5b1e6c40300abdf2e2996106faab0f192f7a4.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar"
+        revision="26.0.1"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/gson-2.7-3db3934f3605967ba0f1c2a414ef178074a6b591.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java-util/3.3.1/35d048270e0b2f29e7e4a45daf21d46d1b121a24/protobuf-java-util-3.3.1.jar"
+        revision="26.0.1"
+        sha1="35d048270e0b2f29e7e4a45daf21d46d1b121a24">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/protobuf-java-util-3.3.1-f42375638f278e6c078db71f5a7e277dd8dfa425.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/5110433dd9284c0ea31547bfc04aa81f467efd06/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-e228d6351ace32894b3db54e42961b8076d03241.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/c8437a1051fddafe1f75fb5cc35f9a4a4093705e/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-bfa29097045014e496966a974835c0f4b1748cba.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core/1.8.0/98ede50a9dfdf818204cfc65e494936feb8c5078/google-cloud-core-1.8.0.jar"
+        revision="26.0.1"
+        sha1="98ede50a9dfdf818204cfc65e494936feb8c5078">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-cloud-core-1.8.0-46c0f67ffe3f5fbd7f85a4dc7244f3a80fe93e77.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.android/build-cache/53c1a0148a7399ebdbb60542521f2386f03fe0ee/output/jars/classes.jar"
+        revision="26.0.1"
+        sha1="25438f55fc6d906a0e72f30b21487541430ede43">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-89b682262933e63034958d4c5bd603cfc0fd263a.jar" />
+    </item>
+    <item
         jar="/Users/danielluzgarten/.android/build-cache/d34030b63f0f203c5b182af56191375443508a08/output/jars/classes.jar"
         revision="26.0.1"
         sha1="9cca2818594cc5348806d6662133491e7ea0fa8d">
@@ -150,12 +312,6 @@
         revision="26.0.1"
         sha1="09cf6aa1390f95157e8295d02be7868f568825fc">
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5238134b0db999aeb2939d76af15beccce034197.jar" />
-    </item>
-    <item
-        jar="/Users/danielluzgarten/.android/build-cache/751b1c4b16e8c11855413474314943d22b523c46/output/jars/classes.jar"
-        revision="26.0.1"
-        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5136ba3fe1ea53ecf16a3d53fe98a99bbceb7aa1.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/ee4f4cc67ca673dff403c06da155bb5920cdf953/output/jars/classes.jar"
@@ -170,16 +326,16 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-2ec93f1d83106bf21773a510bf8c6e03354b3a7f.jar" />
     </item>
     <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.api/api-common/1.1.0/14733901500ad0744cebf7adf73045a466ce1a11/api-common-1.1.0.jar"
+        revision="26.0.1"
+        sha1="14733901500ad0744cebf7adf73045a466ce1a11">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/api-common-1.1.0-4f4dd4e591d1f32ac826ceac20c71768aad8b297.jar" />
+    </item>
+    <item
         jar="/Users/danielluzgarten/.android/build-cache/f38cbf230f0bcf6a264a36608b83129bb78eeb0a/output/jars/classes.jar"
         revision="26.0.1"
         sha1="7045152f3bd1870740b9bcb1cddff495e189774e">
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-56784b292bdc8ee7b015fc8f6b3e0c5956aa6eea.jar" />
-    </item>
-    <item
-        jar="/Users/danielluzgarten/.android/build-cache/bb9978e7897b766bf708da7718fee6a5a7ad8eb7/output/jars/classes.jar"
-        revision="26.0.1"
-        sha1="952944218ecedea1554a513dec0c14d570642843">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-5a03b16afca1b45d38637c41bfbef8dacfaa18c3.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/557d8e92aa5b76632edc57c5a079885448fdadcd/output/jars/classes.jar"
@@ -188,10 +344,22 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-bcf146bc0eb85d1443fa397b4daf6b00d3901f06.jar" />
     </item>
     <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-bigquery/v2-rev347-1.22.0/e2af16d5aa41a08d582890168a562decb557a0c6/google-api-services-bigquery-v2-rev347-1.22.0.jar"
+        revision="26.0.1"
+        sha1="e2af16d5aa41a08d582890168a562decb557a0c6">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-api-services-bigquery-v2-rev347-1.22.0-1860fb80002bfe8505543f01eb6eca2f2788e275.jar" />
+    </item>
+    <item
         jar="/Users/danielluzgarten/.android/build-cache/223ae6a2bccdda8988ca73eeea603e479ed38a8c/output/jars/classes.jar"
         revision="26.0.1"
         sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-55d36a831fc3cdbdb73e61a9b93c6018f42303d5.jar" />
+    </item>
+    <item
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-http/1.8.0/9436bd625f2421bd1810529280b950a0707c633d/google-cloud-core-http-1.8.0.jar"
+        revision="26.0.1"
+        sha1="9436bd625f2421bd1810529280b950a0707c633d">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/google-cloud-core-http-1.8.0-b2013deefb4dc37a82c81ec9f4d0f749440144d6.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/f63fb15bf1aff515fffb050b2f58f01291844ac2/output/jars/classes.jar"
@@ -206,16 +374,10 @@
         <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-7c95b8020fbb3bcb193e3bbf7464d048979d7e72.jar" />
     </item>
     <item
-        jar="/Users/danielluzgarten/.android/build-cache/affee42ee80b06f339b6175c0affc53dd91163c4/output/jars/classes.jar"
+        jar="/Users/danielluzgarten/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.0/5871fb60dc68d67da54a663c3fd636a10a532948/jsr305-3.0.0.jar"
         revision="26.0.1"
-        sha1="461929440e66685425a298693507f6fb27b0a872">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/classes-f153d5c0db92f9502315c49011635377cea92ed7.jar" />
-    </item>
-    <item
-        jar="/Users/danielluzgarten/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/26.0.0-alpha1/support-annotations-26.0.0-alpha1.jar"
-        revision="26.0.1"
-        sha1="023ee503b631f69511e335a061ea008f8da60f40">
-        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/support-annotations-26.0.0-alpha1-f868f59f2e3fbd4ab46bca98b1fd827ff30321ae.jar" />
+        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
+        <dex dex="/Users/danielluzgarten/Desktop/star8video2/app/build/intermediates/transforms/preJackPackagedLibraries/debug/jars/8000/1f/jsr305-3.0.0-1aee4f27bbd281db483fcd11d34112a0740da5cb.jar" />
     </item>
     <item
         jar="/Users/danielluzgarten/.android/build-cache/b8bac7a9517b88aeffa1e94f8eddd8a0131f051a/output/jars/classes.jar"

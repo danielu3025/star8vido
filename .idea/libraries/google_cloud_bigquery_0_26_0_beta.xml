@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="google-cloud-bigquery-0.26.0-beta">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-bigquery/0.26.0-beta/69de62300e43f068fee504fbc055fce5d2e64b94/google-cloud-bigquery-0.26.0-beta.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-bigquery/0.26.0-beta/ff8942565b8059859f355e26dd904656c6c52e7a/google-cloud-bigquery-0.26.0-beta-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

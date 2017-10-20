@@ -2,6 +2,7 @@ package com.apps.koru.star8_video_app.downloadclass;
 
 import android.os.Bundle;
 
+import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
@@ -21,7 +22,7 @@ import java.util.LinkedHashSet;
 /**
  * this class job is to listen changes in firebase db
  * it calls also when app get acseess to the db
- * this class decides if it nedd to download new content or start playing
+ * this class decides if it needs to download new content or start playing
  */
 public class FireBaseDbListener {
     private Model appModel = Model.getInstance();
@@ -33,6 +34,7 @@ public class FireBaseDbListener {
                 //get playlist files names
                 appModel.listSnapshot = dataSnapshot;
                 appModel.dbList.clear();
+                appModel.videoListphats.clear();
                 appModel.playlistFileNames.clear();
                 if (dataSnapshot.getChildrenCount()<1){
                     System.out.println("empty playlist");
@@ -61,6 +63,8 @@ public class FireBaseDbListener {
                             }
                             //playTheplayList
                             EventBus.getDefault().post(new DownloadCompleteEvent("play"));
+                            EventBus.getDefault().post(new TestplayListEvent());
+
                             break;
                         case 2:// not all videos are in the storage
                             EventBus.getDefault().post(new MissVideosEvent("download"));

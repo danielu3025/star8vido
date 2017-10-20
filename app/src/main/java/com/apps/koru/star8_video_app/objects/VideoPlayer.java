@@ -7,6 +7,7 @@ import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
+import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +41,7 @@ public class VideoPlayer {
             for (String path : appModel.dbList) {
                 appModel.uriPlayList.add(Uri.parse(path));
             }
+            EventBus.getDefault().post(new TestplayListEvent());
             EventBus.getDefault().post(new SaveThePlayListEvent("save"));
             appModel.needToRefrash = true;
 
