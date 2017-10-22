@@ -52,7 +52,8 @@ public class Model {
     public String tvCode = "";
     public boolean carData = false;
     public CarHandler carHandler ;
-    StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+    public StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+    public String nowPlayingName = "";
 
 
     public String plyListRoot = "Playlists";

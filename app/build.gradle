@@ -90,7 +90,12 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    compile 'com.google.cloud:google-cloud-bigquery:0.26.0-beta'
+//    compile 'com.google.cloud:google-cloud-bigquery:0.26.0-beta'
+
+    compile ('com.google.cloud:gcloud-java-bigquery:0.2.1') {
+        exclude group: 'com.google.api-client', module: 'google-api-client-appengine'
+    }
+
 }
 
 apply plugin: 'com.google.gms.google-services'
