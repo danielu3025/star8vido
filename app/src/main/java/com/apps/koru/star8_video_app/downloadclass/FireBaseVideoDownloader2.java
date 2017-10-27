@@ -94,6 +94,7 @@ public class FireBaseVideoDownloader2 {
                                 Log.d("deleting", "deleting video: " + ad.getFile().getName());
                                 try {
                                     ad.getFile().delete();
+
                                     Log.d("deleting", "successes");
                                 } catch (Exception e) {
                                     Log.d("deleting", "Field");

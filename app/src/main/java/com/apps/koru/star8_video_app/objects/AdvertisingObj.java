@@ -8,7 +8,6 @@ import com.apps.koru.star8_video_app.events.testEvents.TestDownloadLIstEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
@@ -28,6 +27,14 @@ public class AdvertisingObj {
     float transferd=0;
     float total = 0;
     float p = 0;
+    public boolean  onStorage = false;
+    int doration = 10 ;
+    public  boolean allBytes = false;
+    public String po = "";
+    public String poStartingDate;
+
+
+
 
     public void setName(String name) {
         this.name = name;
@@ -89,19 +96,19 @@ public class AdvertisingObj {
                 if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
                     fileDownloadTask = storageReference.getFile(file);
                     EventBus.getDefault().post(new InfoEvent("vis"));
-                    fileDownloadTask.addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            transferd =  (taskSnapshot.getBytesTransferred()/1048576);
-                            if (total > 0){
-                                p = (transferd/total)*100;
-                                if ((int) p >progress){
-                                    progress = (int) p;
-                                    //EventBus.getDefault().post(new InfoEvent(name +" "+ progress+"%"));
-                                    //System.out.println("%%% " + name + " " +progress +"%");
-                                    EventBus.getDefault().post(new TestDownloadLIstEvent());
-                                }
+                    fileDownloadTask.addOnProgressListener(taskSnapshot -> {
+                        transferd =  (taskSnapshot.getBytesTransferred()/1048576);
+                        if (total > 0){
+                            p = (transferd/total)*100;
+                            if ((int) p >progress){
+                                progress = (int) p;
+                                //EventBus.getDefault().post(new InfoEvent(name +" "+ progress+"%"));
+                                //System.out.println("%%% " + name + " " +progress +"%");
+                                EventBus.getDefault().post(new TestDownloadLIstEvent());
                             }
+                        }
+                        else {
+                            System.out.println(name  + " total file size is zero");
                         }
                     });
                 }

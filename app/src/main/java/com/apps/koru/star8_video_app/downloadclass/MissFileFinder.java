@@ -58,7 +58,9 @@ public class MissFileFinder {
                     toDownloadList.add(temp.getName());
                 }
             }
+
             EventBus.getDefault().post(new DownloadFilesEvent(toDownloadList));
         }
     }
+
 }

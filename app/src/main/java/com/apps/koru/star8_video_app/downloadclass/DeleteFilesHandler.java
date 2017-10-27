@@ -37,12 +37,12 @@ public class DeleteFilesHandler {
             i++;
             if (!list.contains(path)){
                 File  toDelete = new File(path);
-                try {
-                    toDelete.delete();
-                    System.out.println("**cleaning files: " + path + "is deleted");
-                }catch (Exception e){
-                    e.getCause();
-                }
+//                try {
+//                    toDelete.delete();
+//                    System.out.println("**cleaning files: " + path + "is deleted");
+//                }catch (Exception e){
+//                    e.getCause();
+//                }
             }
         }
         if(message.equals("delete")){

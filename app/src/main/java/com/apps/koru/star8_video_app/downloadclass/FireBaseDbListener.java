@@ -2,20 +2,18 @@ package com.apps.koru.star8_video_app.downloadclass;
 
 import android.os.Bundle;
 
-import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
-import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
+import com.apps.koru.star8_video_app.objects.Model;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
@@ -76,7 +74,6 @@ public class FireBaseDbListener {
                         default:
                     }
                 }
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

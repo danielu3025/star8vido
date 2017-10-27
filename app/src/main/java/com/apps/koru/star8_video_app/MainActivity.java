@@ -22,11 +22,13 @@ import android.widget.VideoView;
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
+import com.apps.koru.star8_video_app.downloadclass.DbListenr2;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader2;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
+import com.apps.koru.star8_video_app.downloadclass.MissFileFinder2;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
@@ -44,7 +46,6 @@ import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-
 import com.google.cloud.AuthCredentials;
 import com.google.cloud.WriteChannel;
 import com.google.cloud.bigquery.BigQuery;
@@ -53,10 +54,8 @@ import com.google.cloud.bigquery.FormatOptions;
 import com.google.cloud.bigquery.Table;
 import com.google.cloud.bigquery.TableId;
 import com.google.cloud.bigquery.WriteChannelConfiguration;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
@@ -197,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
        // ReportsHandler reportsHandler= new ReportsHandler();
 
 
+
     }
 
 
@@ -254,7 +254,9 @@ public class MainActivity extends AppCompatActivity {
         if (event.getMessage().equals("ok") && appModel.carData){
             VideoPlayer player= new VideoPlayer();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
+            DbListenr2 dbListenr2 = new DbListenr2();
             FireBaseVideoDownloader2 fireBaseVideoDownloader2 = new FireBaseVideoDownloader2();
+            MissFileFinder2 missFileFinder2 = new MissFileFinder2();
             MissFileFinder missFileFinder = new MissFileFinder();
             FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
             System.out.println(appModel.carHandler.getMotorNumber());
