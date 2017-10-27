@@ -106,6 +106,7 @@ public class DbListenr2 {
                            toRemove.clear();
                        }
                        EventBus.getDefault().post(new FuterInAdsDownloadEventStage3());
+                       counter = 0;
                    }
                }
                @Override
