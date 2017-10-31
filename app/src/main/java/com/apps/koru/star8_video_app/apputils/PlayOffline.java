@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.apps.koru.star8_video_app.events.GetToPlayOfflineEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

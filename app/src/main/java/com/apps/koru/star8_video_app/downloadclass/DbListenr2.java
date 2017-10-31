@@ -4,13 +4,12 @@ import com.apps.koru.star8_video_app.events.downloadsEvents.FuterInAdsDownloadEv
 import com.apps.koru.star8_video_app.events.downloadsEvents.FuterInAdsDownloadEventStage3;
 import com.apps.koru.star8_video_app.events.downloadsEvents.MissFileEvent;
 import com.apps.koru.star8_video_app.objects.AdvertisingObj;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.objects.dbobjects.AdFormatAndPo;
 import com.apps.koru.star8_video_app.objects.dbobjects.PurchaseOrder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,16 +20,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.concurrent.TimeUnit;
 
 public class DbListenr2 {
    Model appModel  = Model.getInstance();
-   FirebaseDatabase  firebaseDatabase = FirebaseDatabase.getInstance();
-   DatabaseReference playlistRef  = firebaseDatabase.getReference("test").child("Playlists").child("playListCodeExample1").child("videos");
-   DatabaseReference currentRef  = firebaseDatabase.getReference("test").child("Playlists").child("playListCodeExample1").child("futureIn");
-   DatabaseReference poRef  = firebaseDatabase.getReference("test").child("PurchaseOrder");
-   DatabaseReference pVideos  = firebaseDatabase.getReference("test").child("Videos");
-   DatabaseReference ref =firebaseDatabase.getReference("test").child("Videos") ;
+   DatabaseReference  firebaseDatabaseRef = appModel.databaseReference;
+   DatabaseReference playlistRef  = firebaseDatabaseRef.child("test").child("Playlists").child("playListCodeExample1").child("videos");
+   DatabaseReference currentRef  = firebaseDatabaseRef.child("test").child("Playlists").child("playListCodeExample1").child("futureIn");
+   DatabaseReference poRef  = firebaseDatabaseRef.child("test").child("PurchaseOrder");
+   DatabaseReference pVideos  = firebaseDatabaseRef.child("test").child("Videos");
+   DatabaseReference ref =firebaseDatabaseRef.child("test").child("Videos") ;
    Date today = new Date() ;
    Date adsDate ;
    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -131,6 +131,7 @@ public class DbListenr2 {
                    fullList.add(ad.getName());
                }
 
+               fullList = new ArrayList<>(new LinkedHashSet<>(fullList));
                EventBus.getDefault().post(new MissFileEvent(fullList));
                fullList.clear();
 

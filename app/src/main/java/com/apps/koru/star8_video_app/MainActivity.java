@@ -22,7 +22,6 @@ import android.widget.VideoView;
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
 import com.apps.koru.star8_video_app.apputils.PlayOffline;
-import com.apps.koru.star8_video_app.downloadclass.DbListenr2;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
@@ -38,7 +37,6 @@ import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.apps.koru.star8_video_app.objects.FirebaseSelector;
-import com.apps.koru.star8_video_app.objects.Model;
 import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
@@ -251,20 +249,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(AccessEvent event) {
-        if (event.getMessage().equals("ok") && appModel.carData){
-            VideoPlayer player= new VideoPlayer();
-            FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
-            DbListenr2 dbListenr2 = new DbListenr2();
+        if (event.getMessage().equals("ok") && appModel.carData) {
+            VideoPlayer player = new VideoPlayer();
             FireBaseVideoDownloader2 fireBaseVideoDownloader2 = new FireBaseVideoDownloader2();
+            FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
             MissFileFinder2 missFileFinder2 = new MissFileFinder2();
             MissFileFinder missFileFinder = new MissFileFinder();
             FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
+            //DbListenr2 dbListenr2 = new DbListenr2();
             System.out.println(appModel.carHandler.getMotorNumber());
+
         }
+         else if (event.getMessage().equals("setRealTimeListener")) {
+             if (!appModel.isOldInstace){
+                 appModel.isOldInstace = true;
+                 //FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
+             }
+         }
+
         else {
             EventBus.getDefault().post(new InfoEvent("vis"));
             EventBus.getDefault().post(new InfoEvent(event.getMessage()));
-
         }
     }
 
@@ -561,26 +566,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveToBQ(String name,String id,String tvcode, String country ,String region, String route , String type ,String cctv,String tag , String date, String houer,String minuts,String sec, String comment , int value){
-        final String newRow =
-                       "{" +
-                        "\"video_name\": " +"\"" +name +"\""+ ", " +
-                        "\"vehicle_id\": " + "\""+ id + "\""+ ","+
-                        "\"tv_code\": " + "\""+ tvcode + "\""+ ","+
-                        "\"country\": " + "\""+ country + "\""+ ","+
-                        "\"region\": " + "\""+ region + "\""+ ","+
-                        "\"route\": " + "\""+ route + "\""+ ","+
-                        "\"type\": " + "\""+ type + "\""+ ","+
-                        "\"cctv\": " + "\""+ cctv + "\""+ ","+
-                        "\"tag\": " + "\""+ tag + "\""+ ","+
-                        "\"date\": " + "\""+ date + "\""+ ","+
-                        "\"hour\": " + "\""+ houer + "\""+ ","+
-                        "\"minuet\": " + "\""+ minuts + "\""+ ","+
-                        "\"sec\": " + "\""+ sec +"\""+ ","+
-                        "\"comment\": " + "\""+ comment + "\""+ ","+
-                        "\"value\": "  + value +
-                        "}";
-        // BigQuery Streaming in blocks of ROW_INTERVAL records
-        new BigQueryTask().execute(newRow);
+//        final String newRow =
+//                       "{" +
+//                        "\"video_name\": " +"\"" +name +"\""+ ", " +
+//                        "\"vehicle_id\": " + "\""+ id + "\""+ ","+
+//                        "\"tv_code\": " + "\""+ tvcode + "\""+ ","+
+//                        "\"country\": " + "\""+ country + "\""+ ","+
+//                        "\"region\": " + "\""+ region + "\""+ ","+
+//                        "\"route\": " + "\""+ route + "\""+ ","+
+//                        "\"type\": " + "\""+ type + "\""+ ","+
+//                        "\"cctv\": " + "\""+ cctv + "\""+ ","+
+//                        "\"tag\": " + "\""+ tag + "\""+ ","+
+//                        "\"date\": " + "\""+ date + "\""+ ","+
+//                        "\"hour\": " + "\""+ houer + "\""+ ","+
+//                        "\"minuet\": " + "\""+ minuts + "\""+ ","+
+//                        "\"sec\": " + "\""+ sec +"\""+ ","+
+//                        "\"comment\": " + "\""+ comment + "\""+ ","+
+//                        "\"value\": "  + value +
+//                        "}";
+//        // BigQuery Streaming in blocks of ROW_INTERVAL records
+//        new BigQueryTask().execute(newRow);
+        System.out.println("big query report is shout down for now :)");
     }
 
     private class BigQueryTask extends AsyncTask<String, Integer, String> {

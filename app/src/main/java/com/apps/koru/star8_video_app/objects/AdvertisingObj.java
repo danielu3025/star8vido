@@ -3,6 +3,7 @@ package com.apps.koru.star8_video_app.objects;
 
 import android.support.annotation.NonNull;
 
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestDownloadLIstEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -91,7 +92,7 @@ public class AdvertisingObj {
     public void setFileDownloadTask() {
         if (storageReference != null){
             if (trys <16){
-                long megAvailable =  ((long)Model.getInstance().stat.getBlockSize() * (long) Model.getInstance().stat.getBlockCount())/ 1048576;
+                long megAvailable =  ((long) Model.getInstance().stat.getBlockSize() * (long) Model.getInstance().stat.getBlockCount())/ 1048576;
 
                 if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
                     fileDownloadTask = storageReference.getFile(file);

@@ -1,11 +1,10 @@
 package com.apps.koru.star8_video_app.objects;
 
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.AccessEvent;
-import com.apps.koru.star8_video_app.objects.Model;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -103,17 +102,17 @@ public class CarHandler {
     }
 
     public void  setCar(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("TVCode").child(appModel.tvCode).child("car");
+        DatabaseReference ref =appModel.databaseReference.child("TVCode").child(appModel.tvCode).child("car");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setCarId(dataSnapshot.getValue().toString());
-                DatabaseReference carRef = FirebaseDatabase.getInstance().getReference().child("Cars");
+                DatabaseReference carRef = appModel.databaseReference.child("Cars");
                 carRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild(carId)){
-                            FirebaseDatabase.getInstance().getReference().child("Cars").child(carId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            appModel.databaseReference.child("Cars").child(carId).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot snap : dataSnapshot.getChildren()){

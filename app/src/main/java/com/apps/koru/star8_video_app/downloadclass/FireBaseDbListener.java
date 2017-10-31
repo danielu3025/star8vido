@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +34,10 @@ public class FireBaseDbListener {
                 appModel.dbList.clear();
                 appModel.videoListphats.clear();
                 appModel.playlistFileNames.clear();
+                appModel.playlists.clear();
+                for (int i = 0 ;i<24; i++){
+                    appModel.playlists.add(new ArrayList<String>());
+                }
                 if (dataSnapshot.getChildrenCount()<1){
                     System.out.println("empty playlist");
                     Bundle params = new Bundle();
@@ -43,13 +47,22 @@ public class FireBaseDbListener {
                     Answers.getInstance().logCustom(new CustomEvent("emptyPlatList").putCustomAttribute("status","emptyPlaylist"));
                 }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+//                    for (DataSnapshot aPlaylist: postSnapshot.getChildren()){
+//                        appModel.playlists.get(Integer.parseInt(postSnapshot.getKey())).add(aPlaylist.getValue().toString());
+//                        appModel.playlistFileNames.add(aPlaylist.getValue().toString());
+//                        appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + aPlaylist.getValue());
+////                        appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + aPlaylist.getValue());
+//                    }
+
                     appModel.playlistFileNames.add((String) postSnapshot.getValue());
                     appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
                     appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
-
+//
                     appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                     appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
                 }
+
+                System.out.println(appModel.playlists.size());
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {
                     //all videos are in storage ?

@@ -1,9 +1,8 @@
 package com.apps.koru.star8_video_app.objects;
 
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
-import com.apps.koru.star8_video_app.objects.Model;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +29,8 @@ public class FirebaseSelector {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     appModel.conectToPlayList((String) dataSnapshot.getValue());
+
+
                                     EventBus.getDefault().post(new AccessEvent("ok"));
                                 }
 

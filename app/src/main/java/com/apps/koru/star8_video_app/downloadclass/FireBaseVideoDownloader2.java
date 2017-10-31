@@ -3,6 +3,7 @@ package com.apps.koru.star8_video_app.downloadclass;
 
 import android.util.Log;
 
+import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
@@ -12,7 +13,7 @@ import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage1;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage2;
 import com.apps.koru.star8_video_app.events.testEvents.TestDownloadLIstEvent;
 import com.apps.koru.star8_video_app.objects.AdvertisingObj;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 
 
 
@@ -75,14 +76,12 @@ public class FireBaseVideoDownloader2 {
                 if (ad.getFileDownloadTask() != null){
 
                     updateInfo("downloading "+ ad.getName());
-
                     ad.getFileDownloadTask().addOnCompleteListener(task -> {
                         count++;
                         if (task.isSuccessful()){
                             System.out.println("finish downloading " + ad.getName());
                             //send updatePlaylist Event
                             EventBus.getDefault().post(new DownloadCompleteEvent("done"));
-
                         }
                         else {
                             errorFlag = true;
@@ -120,6 +119,7 @@ public class FireBaseVideoDownloader2 {
                             if(folderPhats.containsAll(needTobePaths)) {
                                 Log.d("status:", "all files are in storage");
                                 EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                                EventBus.getDefault().post(new AccessEvent("setRealTimeListener"));
                             } else {
                                 EventBus.getDefault().post(new MissVideosEvent("more downloads"));
                             }

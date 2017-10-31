@@ -3,6 +3,7 @@ package com.apps.koru.star8_video_app.objects;
 import android.net.Uri;
 import android.util.Log;
 
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;

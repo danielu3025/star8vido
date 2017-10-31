@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 

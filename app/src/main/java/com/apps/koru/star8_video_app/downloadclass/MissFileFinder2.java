@@ -1,9 +1,10 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
 
+import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage0;
 import com.apps.koru.star8_video_app.events.downloadsEvents.MissFileEvent;
-import com.apps.koru.star8_video_app.objects.Model;
+import com.apps.koru.star8_video_app.Model;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,16 +24,27 @@ public class MissFileFinder2 {
         ArrayList<String> toDownload  = new ArrayList<>();
         ArrayList<String> onDevice  = new ArrayList<>();
         File [] lf = appMpdel.videoDir.listFiles();
-        if (lf != null && lf.length>0){
-            for (File  file : lf){
-                onDevice.add(file.getName());
-            }
-            for (String adname : adsNames){
-                if (!(onDevice.contains(adname))){
-                    toDownload.add(adname);
+        if (lf != null ){
+            if (lf.length>0){
+                for (File  file : lf){
+                    onDevice.add(file.getName());
+                }
+                for (String adname : adsNames){
+                    if (!(onDevice.contains(adname))){
+                        toDownload.add(adname);
+                    }
+                }
+                if (toDownload.size()>0){
+                    EventBus.getDefault().post(new DownloadEventStage0(toDownload));
+                }
+                else {
+                    System.out.println("all videos and feature videos are in storage");
+                    EventBus.getDefault().post(new AccessEvent("setRealTimeListener"));
                 }
             }
-            EventBus.getDefault().post(new DownloadEventStage0(toDownload));
+            else {
+                EventBus.getDefault().post(new DownloadEventStage0(event.getList()));
+            }
         }
 
     }

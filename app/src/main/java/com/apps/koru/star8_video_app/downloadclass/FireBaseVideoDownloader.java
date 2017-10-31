@@ -1,30 +1,14 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import android.os.Environment;
-import android.os.StatFs;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
-import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage0;
 import com.apps.koru.star8_video_app.objects.AdvertisingObj;
-import com.apps.koru.star8_video_app.objects.Model;
-import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
+import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
-import com.apps.koru.star8_video_app.events.MissVideosEvent;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.StorageMetadata;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * this class job is to download a playlist from fire base storge.
