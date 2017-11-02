@@ -93,29 +93,30 @@ public class AdvertisingObj {
         if (storageReference != null){
             if (trys <16){
                 long megAvailable =  ((long) Model.getInstance().stat.getBlockSize() * (long) Model.getInstance().stat.getBlockCount())/ 1048576;
-
-                if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
-                    fileDownloadTask = storageReference.getFile(file);
-                    EventBus.getDefault().post(new InfoEvent("vis"));
-                    fileDownloadTask.addOnProgressListener(taskSnapshot -> {
-                        transferd =  (taskSnapshot.getBytesTransferred()/1048576);
-                        if (total > 0){
-                            p = (transferd/total)*100;
-                            if ((int) p >progress){
-                                progress = (int) p;
-                                //EventBus.getDefault().post(new InfoEvent(name +" "+ progress+"%"));
-                                //System.out.println("%%% " + name + " " +progress +"%");
-                                EventBus.getDefault().post(new TestDownloadLIstEvent());
+                if (metadataTask.getResult() != null){
+                    if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
+                        fileDownloadTask = storageReference.getFile(file);
+                        EventBus.getDefault().post(new InfoEvent("vis"));
+                        fileDownloadTask.addOnProgressListener(taskSnapshot -> {
+                            transferd =  (taskSnapshot.getBytesTransferred()/1048576);
+                            if (total > 0){
+                                p = (transferd/total)*100;
+                                if ((int) p >progress){
+                                    progress = (int) p;
+                                    //EventBus.getDefault().post(new InfoEvent(name +" "+ progress+"%"));
+                                    //System.out.println("%%% " + name + " " +progress +"%");
+                                    EventBus.getDefault().post(new TestDownloadLIstEvent());
+                                }
                             }
-                        }
-                        else {
-                            System.out.println(name  + " total file size is zero");
-                        }
-                    });
-                }
-                else {
-                    fileDownloadTask = null;
-                    System.out.println("canceling " +name+ "downloading -"+trys + " device storage is short");
+                            else {
+                                System.out.println(name  + " total file size is zero");
+                            }
+                        });
+                    }
+                    else {
+                        fileDownloadTask = null;
+                        System.out.println("canceling " +name+ "downloading -"+trys + " device storage is short");
+                    }
                 }
             }
             else {

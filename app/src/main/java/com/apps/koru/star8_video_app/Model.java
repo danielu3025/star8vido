@@ -20,6 +20,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * this class job is to hold the state of the app
@@ -68,9 +69,11 @@ public class Model {
 
     public String storgeUrl = "gs://star8videoapp.appspot.com/ph/videos";
 
-    /**-----------DEV------------**/
+    /**--------environment---------**/
 
-    final private  Boolean isDev = false ;
+    //final private  String environment = "DEV" ;
+    //final private  String environment = "PROD" ;
+    final private  String environment = "QA" ;
 
     /**-------------------------**/
 
@@ -102,15 +105,18 @@ public class Model {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         isOldInstace = false;
         //dev - mode :
-        if (isDev){
+        if (Objects.equals(environment, "DEV")){
             databaseReference = database.getReference().child("DEV");
         }
+        else if (Objects.equals(environment,"PROD")){
+            databaseReference = database.getReference().child("PROD");
+        }
         else {
-           // databaseReference = database.getReference().child("PROD");
             databaseReference = database.getReference();
         }
         imeiNode = databaseReference.child("TVCode");
         carNode = databaseReference.child("Cars");
+
 
 
         //conectToPlayList("-Kl8dzXX4NqC1b8mYUoG");
@@ -124,5 +130,10 @@ public class Model {
             mainPlayList = new PlayList();
             mainPlayListTemp = new PlayList();
         }
+    }
+
+
+    public String getEnvironment() {
+        return environment;
     }
 }

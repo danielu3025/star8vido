@@ -35,6 +35,7 @@ import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
+import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadComplateReportEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.objects.PlayList;
@@ -75,15 +76,26 @@ public class MainActivity extends AppCompatActivity {
     Button info ;
     Button downloadStatus;
     Button btlist;
+    Button btReports;
+    Button btVersion;
     Button btFolder;
+    Button btNext;
+    Button btBack;
+    Boolean doReports = true;
     int onTrack =0;
     private SharedPreferences sharedPreferences;
     VideoView videoView ;
     boolean buttons = true;
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy-HH-mm-ss");
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");
     Date now = new Date();
     String txt = "";
     String[] textArr = new String[4];
+
+    Date now2 = new Date();
+    String txt2 = "";
+    String[] textArr2 = new String[4];
+
+
 
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
     private TelephonyManager mTelephonyManager;
@@ -141,6 +153,12 @@ public class MainActivity extends AppCompatActivity {
 
         btlist = (Button) findViewById(R.id.btPlatlist);
         btFolder = (Button) findViewById(R.id.btFolder);
+        btReports = (Button)findViewById(R.id.btReports);
+        btVersion = (Button)findViewById(R.id.btversion);
+        btReports.setBackgroundColor(Color.GREEN);
+
+        btNext = (Button) findViewById(R.id.btNext);
+        btBack =  (Button)findViewById(R.id.btBack);
 
         info = (Button) findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
@@ -148,21 +166,92 @@ public class MainActivity extends AppCompatActivity {
         downloadStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                System.out.println(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
                 if (buttons) {
                     btFolder.setVisibility(View.INVISIBLE);
                     btlist.setVisibility(View.INVISIBLE);
                     info.setVisibility(View.INVISIBLE);
                     downloadStatus.setBackgroundColor(Color.TRANSPARENT);
+                    btVersion.setVisibility(View.INVISIBLE);
+                    btReports.setVisibility(View.INVISIBLE);
+                    btNext.setVisibility(View.INVISIBLE);
+                    btBack.setVisibility(View.INVISIBLE);
                     buttons = false;
                 } else {
                     btFolder.setVisibility(View.VISIBLE);
                     btlist.setVisibility(View.VISIBLE);
                     info.setVisibility(View.VISIBLE);
+                    btVersion.setVisibility(View.VISIBLE);
+                    btReports.setVisibility(View.VISIBLE);
+                    btBack.setVisibility(View.VISIBLE);
+                    btNext.setVisibility(View.VISIBLE);
                     downloadStatus.setBackgroundColor(Color.GREEN);
                     buttons = true;
                 }
             }
         });
+        btReports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (doReports){
+                    doReports = false;
+                    btReports.setBackgroundColor(Color.RED);
+                }
+                else {
+                    doReports = true;
+                    btReports.setBackgroundColor(Color.GREEN);
+                }
+
+            }
+        });
+        btNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onTrack == appModel.uriPlayList.size()-1){
+                    onTrack = 0;
+                }
+                else   {
+                    onTrack++;
+                }
+                EventBus.getDefault().post(new TestplayListEvent());
+                try {
+                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                    videoView.start();
+                }catch (Exception e){
+                    onTrack = 0;
+                    videoView.start();
+                    EventBus.getDefault().post(new TestplayListEvent());
+                }
+
+
+            }
+        });
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onTrack == 0){
+                    onTrack = appModel.uriPlayList.size()-1;
+                }
+                else   {
+                    onTrack--;
+                }
+                try {
+                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
+                    videoView.start();
+                    EventBus.getDefault().post(new TestplayListEvent());
+                }catch (Exception e){
+                    onTrack = appModel.uriPlayList.size()-1;
+                    videoView.start();
+                    EventBus.getDefault().post(new TestplayListEvent());
+                }
+            }
+        });
+
+        btVersion.setBackgroundColor(Color.rgb(83,187,240));
+        btVersion.setText(appModel.getEnvironment());
 
 
         if(!appModel.pause) {
@@ -428,20 +517,20 @@ public class MainActivity extends AppCompatActivity {
         params.putString("cctv",appModel.carHandler.getCctv());
         params.putString("tag",appModel.carHandler.getTag());
         params.putString("date",textArr[0]);
-        params.putString("hour", textArr[1]);
-        params.putString("minuet", textArr[2]);
-        params.putString("sec", textArr[3]);
-        params.putString("comment",comment);
+        params.putString("time", textArr[1]);
+
         params.putInt("status",status);
 
         appModel.mFirebaseAnalytics.logEvent("played_event_alpha1", params);
 
 
         //BIGQUERY
-        saveToBQ(getFileName(itemName),appModel.carHandler.getCarId(),appModel.carHandler.getTvCode(),
-                appModel.carHandler.getCountry(),appModel.carHandler.getRegion(),
-                appModel.carHandler.getRoute(),appModel.carHandler.getType(),
-                appModel.carHandler.getCctv(),appModel.carHandler.getTag(),textArr[0],textArr[1],textArr[2],textArr[3],comment,status);
+        if (doReports){
+            saveToBQ(0,getFileName(itemName),appModel.carHandler.getCarId(),appModel.carHandler.getTvCode(),
+                    appModel.carHandler.getCountry(),appModel.carHandler.getRegion(),
+                    appModel.carHandler.getRoute(),appModel.carHandler.getType(),
+                    appModel.carHandler.getCctv(),appModel.carHandler.getTag(),textArr[0],textArr[1],comment,status);
+        }
 
         //fabric
         Answers.getInstance().logCustom(new CustomEvent("played_event_alpha1").putCustomAttribute(appModel.carId,getFileName(itemName)));
@@ -565,28 +654,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveToBQ(String name,String id,String tvcode, String country ,String region, String route , String type ,String cctv,String tag , String date, String houer,String minuts,String sec, String comment , int value){
-//        final String newRow =
-//                       "{" +
-//                        "\"video_name\": " +"\"" +name +"\""+ ", " +
-//                        "\"vehicle_id\": " + "\""+ id + "\""+ ","+
-//                        "\"tv_code\": " + "\""+ tvcode + "\""+ ","+
-//                        "\"country\": " + "\""+ country + "\""+ ","+
-//                        "\"region\": " + "\""+ region + "\""+ ","+
-//                        "\"route\": " + "\""+ route + "\""+ ","+
-//                        "\"type\": " + "\""+ type + "\""+ ","+
-//                        "\"cctv\": " + "\""+ cctv + "\""+ ","+
-//                        "\"tag\": " + "\""+ tag + "\""+ ","+
-//                        "\"date\": " + "\""+ date + "\""+ ","+
-//                        "\"hour\": " + "\""+ houer + "\""+ ","+
-//                        "\"minuet\": " + "\""+ minuts + "\""+ ","+
-//                        "\"sec\": " + "\""+ sec +"\""+ ","+
-//                        "\"comment\": " + "\""+ comment + "\""+ ","+
-//                        "\"value\": "  + value +
-//                        "}";
-//        // BigQuery Streaming in blocks of ROW_INTERVAL records
-//        new BigQueryTask().execute(newRow);
-        System.out.println("big query report is shout down for now :)");
+    // 0 to masterdata2  1 to downloadinfo
+    public void saveToBQ(int table,String name,String id,String tvcode, String country ,String region, String route , String type ,String cctv,String tag , String date, String time, String comment , int value){
+           final String newRow =
+                       "{" +
+                        "\"video_name\": " +"\"" +name +"\""+ ", " +
+                        "\"vehicle_id\": " + "\""+ id + "\""+ ","+
+                        "\"tv_code\": " + "\""+ tvcode + "\""+ ","+
+                        "\"country\": " + "\""+ country + "\""+ ","+
+                        "\"region\": " + "\""+ region + "\""+ ","+
+                        "\"route\": " + "\""+ route + "\""+ ","+
+                        "\"type\": " + "\""+ type + "\""+ ","+
+                        "\"cctv\": " + "\""+ cctv + "\""+ ","+
+                        "\"tag\": " + "\""+ tag + "\""+ ","+
+                        "\"date\": " + "\""+ date + "\""+ ","+
+                        "\"time\": " + "\""+ time + "\""+ ","+
+                        "\"comment\": " + "\""+ comment + "\""+ ","+
+                        "\"status\": "  + value +
+                        "}";
+        // BigQuery Streaming in blocks of ROW_INTERVAL records
+        if (table ==0){
+            new BigQueryTask().execute(newRow);
+        }
+        else if (table == 1){
+            new BigQueryTask2().execute(newRow);
+        }
     }
 
     private class BigQueryTask extends AsyncTask<String, Integer, String> {
@@ -598,7 +690,7 @@ public class MainActivity extends AppCompatActivity {
                 AssetManager am = MainActivity.this.getAssets();
                 InputStream isCredentialsFile = am.open(CREDENTIALS_FILE);
                 BigQuery bigquery = BigQueryOptions.builder().authCredentials(AuthCredentials.createForJson(isCredentialsFile)).projectId(PROJECT_ID).build().service();
-                TableId tableId = TableId.of("playedVideos","masterData01");
+                TableId tableId = TableId.of("playedVideos","masterData2");
                 Table table = bigquery.getTable(tableId);
 
 
@@ -617,6 +709,50 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Main", "Exception: " + e.toString());
             }
             return "Done";
+        }
+    }
+
+    private class BigQueryTask2 extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String JSON_CONTENT = params[0];
+            try {
+                AssetManager am = MainActivity.this.getAssets();
+                InputStream isCredentialsFile = am.open(CREDENTIALS_FILE);
+                BigQuery bigquery = BigQueryOptions.builder().authCredentials(AuthCredentials.createForJson(isCredentialsFile)).projectId(PROJECT_ID).build().service();
+                TableId tableId = TableId.of("playedVideos","DownloadsInfo");
+                Table table = bigquery.getTable(tableId);
+
+
+                int num = 0;
+                Log.d("Main", "Sending JSON: " + JSON_CONTENT);
+                WriteChannelConfiguration configuration = WriteChannelConfiguration.builder(tableId).formatOptions(FormatOptions.json()).build();
+                try (WriteChannel channel = bigquery.writer(configuration)) {
+                    num = channel.write(ByteBuffer.wrap(JSON_CONTENT.getBytes(StandardCharsets.UTF_8)));
+                    channel.close();
+                } catch (IOException e) {
+                    Log.d("Main", e.toString());
+                }
+                Log.d("Main", "Loading " + Integer.toString(num) + " bytes into table " + tableId);
+
+            } catch (Exception e) {
+                Log.d("Main", "Exception: " + e.toString());
+            }
+            return "Done";
+        }
+    }
+    @Subscribe
+    public void downloadComplateEvent(DownloadComplateReportEvent event){
+        if (doReports){
+            now2 = new Date();
+            txt2  =  df.format(now);
+            textArr2 = txt.split("-", -1);
+
+            saveToBQ(1,getFileName(event.getItemName()),appModel.carHandler.getCarId(),appModel.carHandler.getTvCode(),
+                    appModel.carHandler.getCountry(),appModel.carHandler.getRegion(),
+                    appModel.carHandler.getRoute(),appModel.carHandler.getType(),
+                    appModel.carHandler.getCctv(),appModel.carHandler.getTag(),textArr2[0],textArr2[1],event.getComment(),event.getStatus());
         }
 
     }

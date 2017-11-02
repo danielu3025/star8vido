@@ -9,23 +9,19 @@
     <VideoView
         android:id="@+id/videoView2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="0dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="359dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginRight="0dp"
+        android:layout_alignParentTop="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/infoBt"
@@ -68,11 +64,48 @@
         android:id="@+id/btFolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btPlatlist"
         app:layout_constraintTop_toTopOf="@+id/videoView2" />
+
+    <Button
+        android:id="@+id/btReports"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:text="reports"
+        app:layout_constraintBottom_toBottomOf="@+id/videoView2"
+        app:layout_constraintEnd_toStartOf="@+id/btDownloadStatus" />
+
+    <Button
+        android:id="@+id/btversion"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:text="version"
+        app:layout_constraintEnd_toStartOf="@+id/infoBt"
+        app:layout_constraintTop_toTopOf="@+id/videoView2" />
+
+    <Button
+        android:id="@+id/btNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:drawable/ic_media_ff"
+        app:layout_constraintBottom_toTopOf="@+id/btDownloadStatus"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:drawable/ic_media_rew"
+        app:layout_constraintBottom_toTopOf="@+id/btNext"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

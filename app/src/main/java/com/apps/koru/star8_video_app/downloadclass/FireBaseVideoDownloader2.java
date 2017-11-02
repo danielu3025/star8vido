@@ -8,6 +8,7 @@ import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
 import com.apps.koru.star8_video_app.events.MissVideosEvent;
+import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadComplateReportEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage0;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage1;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage2;
@@ -81,13 +82,16 @@ public class FireBaseVideoDownloader2 {
                         if (task.isSuccessful()){
                             System.out.println("finish downloading " + ad.getName());
                             //send updatePlaylist Event
+
                             EventBus.getDefault().post(new DownloadCompleteEvent("done"));
+                            EventBus.getDefault().post(new DownloadComplateReportEvent(ad.getName(),"Successful",1));
                         }
                         else {
                             errorFlag = true;
                             ad.updateTry();
                             EventBus.getDefault().post(new DownloadCompleteEvent("done"));
                             EventBus.getDefault().post(new DownloadErrorEvent());
+                            EventBus.getDefault().post(new DownloadComplateReportEvent(ad.getName(),"Failed",-1));
                             updateInfo("Error while downloading - " + ad.getName());
                             if (ad.getFile().exists()) {
                                 Log.d("deleting", "deleting video: " + ad.getFile().getName());
@@ -177,5 +181,7 @@ public class FireBaseVideoDownloader2 {
         }
         EventBus.getDefault().post(new InfoEvent(txt));
     }
+
+
 
 }
