@@ -91,7 +91,7 @@ public class FireBaseVideoDownloader2 {
                             ad.updateTry();
                             EventBus.getDefault().post(new DownloadCompleteEvent("done"));
                             EventBus.getDefault().post(new DownloadErrorEvent());
-                            EventBus.getDefault().post(new DownloadComplateReportEvent(ad.getName(),"Failed",-1));
+                            EventBus.getDefault().post(new DownloadComplateReportEvent(ad.getName(),"Failed",0));
                             updateInfo("Error while downloading - " + ad.getName());
                             if (ad.getFile().exists()) {
                                 Log.d("deleting", "deleting video: " + ad.getFile().getName());

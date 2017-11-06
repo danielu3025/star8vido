@@ -25,6 +25,13 @@ android {
             storeFile file('/Users/danielluzgarten/Documents/studtis/mobileAppDev/fastFood-Skater/fastfood.jks')
 //            storeFile file('/home/shahar/StudioProjects/fastfood.jks')
         }
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+
     }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
@@ -32,8 +39,8 @@ android {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 9
-        versionName "1.0.5"
+        versionCode 10
+        versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         jackOptions {
@@ -67,18 +74,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
-
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
-
     //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
@@ -89,14 +94,24 @@ dependencies {
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
     compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.google.code.gson:gson:2.8.2'
+
+
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-//    compile 'com.google.cloud:google-cloud-bigquery:0.26.0-beta'
+    implementation 'android.arch.persistence.room:runtime:1.0.0-rc1'
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
 
-    compile ('com.google.cloud:gcloud-java-bigquery:0.2.1') {
+    //    compile 'com.google.cloud:google-cloud-bigquery:0.26.0-beta'
+    compile('com.google.cloud:gcloud-java-bigquery:0.2.1') {
         exclude group: 'com.google.api-client', module: 'google-api-client-appengine'
     }
+    implementation 'com.android.support:support-v4:26.1.0'
+
+
+
 
 }
 

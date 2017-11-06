@@ -3,7 +3,6 @@ package com.apps.koru.star8_video_app.objects;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-
 import java.io.File;
 import java.util.ArrayList;
 

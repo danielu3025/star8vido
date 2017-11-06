@@ -9,6 +9,7 @@ import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.objects.AdvertisingObj;
 import com.apps.koru.star8_video_app.objects.CarHandler;
 import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.RoomDb.LocalDbManger;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -16,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,6 +59,8 @@ public class Model {
     public StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
     public String nowPlayingName = "";
     public Boolean isOldInstace = false;
+    public LocalDbManger localDbManger = new LocalDbManger();
+
 
     public String plyListRoot = "Playlists";
     public String playListName = "videos";
@@ -116,6 +118,7 @@ public class Model {
         }
         imeiNode = databaseReference.child("TVCode");
         carNode = databaseReference.child("Cars");
+
 
 
 

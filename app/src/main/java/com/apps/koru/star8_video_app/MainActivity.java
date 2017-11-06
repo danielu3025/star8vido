@@ -1,6 +1,7 @@
 package com.apps.koru.star8_video_app;
 
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +40,8 @@ import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadComplateRepo
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.RoomDb.ReportRecord;
+import com.apps.koru.star8_video_app.objects.RoomDb.ReportsRecDatabase;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     Date now2 = new Date();
     String txt2 = "";
     String[] textArr2 = new String[4];
+
 
 
 
@@ -282,8 +286,8 @@ public class MainActivity extends AppCompatActivity {
 
        // ReportsHandler reportsHandler= new ReportsHandler();
 
-
-
+        appModel.localDbManger.reportsRecDatabase = Room.databaseBuilder(this.getApplicationContext(), ReportsRecDatabase.class, "reports.db").build();
+        appModel.localDbManger.getRecordsinReportRecs();
     }
 
 
@@ -422,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Log.d("Error", " - playing video error");
-            logEvets(String.valueOf(appModel.nowPlayingName),error,-1);
+            logEvets(String.valueOf(appModel.nowPlayingName),error,0);
 
             if (onTrack >=0) {
                 if (onTrack != appModel.uriPlayList.size()-1) {
@@ -489,11 +493,11 @@ public class MainActivity extends AppCompatActivity {
 
             for(int i=0;i<appModel.uriPlayList.size();i++)
             {
-                if (appModel.dbList.size()>0){
+
+                if (appModel.dbList.size()>0 &&  appModel.dbList.size() <= appModel.uriPlayList.size()){
                     editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
                     editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
                 }
-
             }
 
             editor.apply();
@@ -672,16 +676,26 @@ public class MainActivity extends AppCompatActivity {
                         "\"comment\": " + "\""+ comment + "\""+ ","+
                         "\"status\": "  + value +
                         "}";
+        appModel.localDbManger.reportRecord =  appModel.localDbManger.jsonToRecord.getReportRecord(newRow,table);
+        //reportRecord = new ReportRecord(table,name,id,tvcode,country,region,route,type,cctv,tag,date,time,comment,value);
         // BigQuery Streaming in blocks of ROW_INTERVAL records
         if (table ==0){
-            new BigQueryTask().execute(newRow);
+            new BigQueryTaskPlayed().execute(newRow);
         }
         else if (table == 1){
-            new BigQueryTask2().execute(newRow);
+            new BigQueryTaskDownload().execute(newRow);
         }
+        if (appModel.localDbManger.toreport != null){
+            if (appModel.localDbManger.toreport.size()>0){
+                for (ReportRecord rc : appModel.localDbManger.toreport){
+                    new BigQueryReTransmit().execute(rc.toJson(),String.valueOf(rc.getTable()));
+                }
+            }
+        }
+
     }
 
-    private class BigQueryTask extends AsyncTask<String, Integer, String> {
+    private class BigQueryTaskPlayed extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -702,17 +716,26 @@ public class MainActivity extends AppCompatActivity {
                     channel.close();
                 } catch (IOException e) {
                     Log.d("Main", e.toString());
+                    logErorEvent("","Error in BQ reporting");
+                    appModel.localDbManger.insertToReportRecDb(appModel.localDbManger.reportRecord);
+                    appModel.localDbManger.getRecordsinReportRecs();
+                    return "error";
                 }
                 Log.d("Main", "Loading " + Integer.toString(num) + " bytes into table " + tableId);
 
             } catch (Exception e) {
                 Log.d("Main", "Exception: " + e.toString());
+                logErorEvent("","Error  connecting  BQ");
+                appModel.localDbManger.insertToReportRecDb(appModel.localDbManger.reportRecord);
+                appModel.localDbManger.getRecordsinReportRecs();
+                return "error";
+
             }
             return "Done";
         }
     }
 
-    private class BigQueryTask2 extends AsyncTask<String, Integer, String> {
+    private class BigQueryTaskDownload extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -733,27 +756,73 @@ public class MainActivity extends AppCompatActivity {
                     channel.close();
                 } catch (IOException e) {
                     Log.d("Main", e.toString());
+                    logErorEvent("","Error in BQ reporting");
+
                 }
                 Log.d("Main", "Loading " + Integer.toString(num) + " bytes into table " + tableId);
 
             } catch (Exception e) {
                 Log.d("Main", "Exception: " + e.toString());
+                logErorEvent("","Error  connecting  BQ");
+
+
             }
             return "Done";
         }
     }
+    private class BigQueryReTransmit extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stat = "";
+            String JSON_CONTENT = params[0];
+            int TABLE = Integer.parseInt(params[1]);
+
+            try {
+                AssetManager am = MainActivity.this.getAssets();
+                InputStream isCredentialsFile = am.open(CREDENTIALS_FILE);
+                BigQuery bigquery = BigQueryOptions.builder().authCredentials(AuthCredentials.createForJson(isCredentialsFile)).projectId(PROJECT_ID).build().service();
+                TableId tableId = TableId.of("playedVideos","DownloadsInfo");
+                Table table = bigquery.getTable(tableId);
+
+
+                int num = 0;
+                Log.d("Main", "Sending JSON: " + JSON_CONTENT);
+                WriteChannelConfiguration configuration = WriteChannelConfiguration.builder(tableId).formatOptions(FormatOptions.json()).build();
+                try (WriteChannel channel = bigquery.writer(configuration)) {
+                    num = channel.write(ByteBuffer.wrap(JSON_CONTENT.getBytes(StandardCharsets.UTF_8)));
+                    channel.close();
+
+                    //call delete Event from db
+                    appModel.localDbManger.deleteFromRecords(appModel.localDbManger.jsonToRecord.getReportRecord(JSON_CONTENT,TABLE));
+                    appModel.localDbManger.getRecordsinReportRecs();
+                    stat =" done";
+                } catch (IOException e) {
+                    Log.d("Main", e.toString());
+                    logErorEvent("","Error in BQ reporting");
+                    stat =  "error";
+                }
+                Log.d("Main", "Loading " + Integer.toString(num) + " bytes into table " + tableId);
+
+            } catch (Exception e) {
+                Log.d("Main", "Exception: " + e.toString());
+                logErorEvent("","Error  connecting  BQ");
+                stat =  "error";
+            }
+            return  stat;
+        }
+    }
+
     @Subscribe
     public void downloadComplateEvent(DownloadComplateReportEvent event){
         if (doReports){
             now2 = new Date();
             txt2  =  df.format(now);
             textArr2 = txt.split("-", -1);
-
             saveToBQ(1,getFileName(event.getItemName()),appModel.carHandler.getCarId(),appModel.carHandler.getTvCode(),
                     appModel.carHandler.getCountry(),appModel.carHandler.getRegion(),
                     appModel.carHandler.getRoute(),appModel.carHandler.getType(),
                     appModel.carHandler.getCctv(),appModel.carHandler.getTag(),textArr2[0],textArr2[1],event.getComment(),event.getStatus());
         }
-
     }
 }

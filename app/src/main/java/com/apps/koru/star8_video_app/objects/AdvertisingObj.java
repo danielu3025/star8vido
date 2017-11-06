@@ -33,6 +33,7 @@ public class AdvertisingObj {
     public  boolean allBytes = false;
     public String po = "";
     public String poStartingDate;
+    public long bitsize = 0;
 
 
 
@@ -82,7 +83,14 @@ public class AdvertisingObj {
 
     public void setMetadataTask() {
         if (storageReference != null){
-            metadataTask = storageReference.getMetadata();
+            metadataTask = storageReference.getMetadata().addOnCompleteListener(new OnCompleteListener<StorageMetadata>() {
+                @Override
+                public void onComplete(@NonNull Task<StorageMetadata> task) {
+                    if (task.isSuccessful()){
+                        bitsize = task.getResult().getSizeBytes();
+                    }
+                }
+            });
         }
         else {
             System.out.printf("AdvertisingObj: " + name + " storage reference is  null" );
@@ -93,8 +101,8 @@ public class AdvertisingObj {
         if (storageReference != null){
             if (trys <16){
                 long megAvailable =  ((long) Model.getInstance().stat.getBlockSize() * (long) Model.getInstance().stat.getBlockCount())/ 1048576;
-                if (metadataTask.getResult() != null){
-                    if (((metadataTask.getResult().getSizeBytes()/1048576)+1) < (megAvailable -500)){
+                if (bitsize > 0){
+                    if (((bitsize/1048576)+1) < (megAvailable -500)){
                         fileDownloadTask = storageReference.getFile(file);
                         EventBus.getDefault().post(new InfoEvent("vis"));
                         fileDownloadTask.addOnProgressListener(taskSnapshot -> {
