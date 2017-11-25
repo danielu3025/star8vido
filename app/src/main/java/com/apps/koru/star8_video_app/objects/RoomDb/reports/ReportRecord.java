@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.objects.RoomDb;
+package com.apps.koru.star8_video_app.objects.RoomDb.reports;
 
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;

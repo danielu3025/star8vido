@@ -1,15 +1,19 @@
 package com.apps.koru.star8_video_app;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
 import com.apps.koru.star8_video_app.objects.AdvertisingObj;
+import com.apps.koru.star8_video_app.objects.BQ.BigQueryReportMangar;
 import com.apps.koru.star8_video_app.objects.CarHandler;
 import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.RoomDb.JsonToRecord;
 import com.apps.koru.star8_video_app.objects.RoomDb.LocalDbManger;
+import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -59,13 +63,18 @@ public class Model {
     public StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
     public String nowPlayingName = "";
     public Boolean isOldInstace = false;
-    public LocalDbManger localDbManger = new LocalDbManger();
-
-
+    public LocalDbManger localDbManger;
+    public AssetManager assetManager;
+    private final String CREDENTIALS_FILE = "star8videoApp-97e879ca12f2.json";
+    private final String PROJECT_ID = "star8videoapp";
+    public JsonToRecord jsonToRecord = new JsonToRecord();
+    public BigQueryReportMangar bigQueryReportMangar;
     public String plyListRoot = "Playlists";
     public String playListName = "videos";
     public String playListKey = "";
     public FirebaseAuth mAuth;
+    public ArrayList<ReportRecord> rcs = new ArrayList<>();
+
 
     public InstallationHandler installationHandler;
 
@@ -120,6 +129,7 @@ public class Model {
         carNode = databaseReference.child("Cars");
 
 
+        localDbManger = new LocalDbManger();
 
 
         //conectToPlayList("-Kl8dzXX4NqC1b8mYUoG");
@@ -139,4 +149,14 @@ public class Model {
     public String getEnvironment() {
         return environment;
     }
+
+    public String getPROJECT_ID() {
+        return PROJECT_ID;
+    }
+
+    public String getCREDENTIALS_FILE() {
+        return CREDENTIALS_FILE;
+    }
+
+
 }

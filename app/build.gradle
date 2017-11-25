@@ -39,8 +39,8 @@ android {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 10
-        versionName "1.0.6"
+        versionCode 12
+        versionName "1.0.62"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         jackOptions {

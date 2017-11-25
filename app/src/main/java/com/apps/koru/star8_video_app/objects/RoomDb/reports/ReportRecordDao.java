@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.objects.RoomDb;
+package com.apps.koru.star8_video_app.objects.RoomDb.reports;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -21,4 +21,5 @@ public interface ReportRecordDao {
 
     @Delete
     void delete(ReportRecord reportRecord);
+
 }

@@ -37,8 +37,13 @@ public class OfflinePlayList {
                 size[0] = sharedPreferences.getInt("size", 0);
                 for(int i=0;i<size[0];i++)
                 {
-                    appModel.dbList.add(i, sharedPreferences.getString("db_"+i,null));
-                    appModel.uriPlayList.add(i, Uri.parse(sharedPreferences.getString("video_"+i, null)));
+                    try {
+                        appModel.dbList.add(i, sharedPreferences.getString("db_"+i,null));
+                        appModel.uriPlayList.add(i, Uri.parse(sharedPreferences.getString("video_"+i, null)));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
                 Log.e("**loading", " is finished");
                 if (message.equals("delete")){

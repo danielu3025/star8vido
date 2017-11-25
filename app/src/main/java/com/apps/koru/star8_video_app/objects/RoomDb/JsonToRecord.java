@@ -1,6 +1,7 @@
 package com.apps.koru.star8_video_app.objects.RoomDb;
 
 
+import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
