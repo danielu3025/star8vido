@@ -11,7 +11,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class PlayOffline {
     private Model appModel = Model.getInstance();
-    public PlayOffline() { EventBus.getDefault().register(this);
+    public PlayOffline() {
+        EventBus.getDefault().register(this);
     }
     @Subscribe
     public void onEvent(GetToPlayOfflineEvent event) {

@@ -39,8 +39,8 @@ android {
         applicationId "com.apps.koru.star8_video_app"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.0.62"
+        versionCode 15
+        versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         jackOptions {
@@ -96,6 +96,13 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
 
     compile 'com.google.code.gson:gson:2.8.2'
+
+    compile 'com.google.guava:guava:23.3-android'
+    compile 'com.android.support:multidex:1.0.2'
+
+
+
+
 
 
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'

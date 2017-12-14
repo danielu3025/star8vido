@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.BQSucseesEvent;
+import com.apps.koru.star8_video_app.events.testEvents.BqErrorEvent;
 import com.google.cloud.AuthCredentials;
 import com.google.cloud.WriteChannel;
 import com.google.cloud.bigquery.BigQuery;
@@ -46,11 +47,15 @@ public class BigQueryDownloadReport  extends AsyncTask<String, Integer, String> 
             } catch (IOException e) {
                 Log.d("BQ-Download", e.toString());
                 stat = "Error";
+                EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
+
             }
 
         } catch (Exception e) {
             Log.d("BQ-Download", "Exception: " + e.toString());
             stat = "Error";
+            EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
+
         }
         return stat;
     }

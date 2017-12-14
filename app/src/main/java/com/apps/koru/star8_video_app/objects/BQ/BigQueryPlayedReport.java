@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.BQSucseesEvent;
+import com.apps.koru.star8_video_app.events.testEvents.BqErrorEvent;
 import com.google.cloud.AuthCredentials;
 import com.google.cloud.WriteChannel;
 import com.google.cloud.bigquery.BigQuery;
@@ -50,11 +51,15 @@ public class BigQueryPlayedReport extends AsyncTask<String, Integer, String> {
             } catch (IOException e) {
                 Log.d("BQ-Played", e.toString());
                 stat =  "Error";
+                EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
+
             }
         }
         catch (Exception e) {
             Log.d("BQ-Played", "Exception: " + e.toString());
              stat =  "Error";
+            EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
+
         }
         return stat;
     }

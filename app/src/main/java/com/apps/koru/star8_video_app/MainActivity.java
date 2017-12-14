@@ -1,15 +1,24 @@
 package com.apps.koru.star8_video_app;
 
 
+import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -37,12 +46,14 @@ import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadComplateReportEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.ReSendtoBqEvent;
+import com.apps.koru.star8_video_app.events.testEvents.BqErrorEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestRoomDbEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
 import com.apps.koru.star8_video_app.objects.BQ.BQResend2;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryDownloadReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryPlayedReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryReportMangar;
+import com.apps.koru.star8_video_app.objects.FireBaseOfflineHendler;
 import com.apps.koru.star8_video_app.objects.FirebaseSelector;
 import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfoDataBase;
@@ -56,6 +67,11 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
@@ -74,7 +90,7 @@ import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
-    Button info ;
+    Button info;
     Button downloadStatus;
     Button btlist;
     Button btReports;
@@ -83,10 +99,11 @@ public class MainActivity extends AppCompatActivity {
     Button btNext;
     Button btBack;
     Button btRoomStat;
+    Button btRoomError;
     Boolean doReports = true;
-    int onTrack =0;
+    int onTrack = 0;
     private SharedPreferences sharedPreferences;
-    VideoView videoView ;
+    VideoView videoView;
     boolean buttons = false;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
     Date now = new Date();
@@ -97,8 +114,13 @@ public class MainActivity extends AppCompatActivity {
     String[] textArr2 = new String[4];
     AssetManager am;
     private InstallationHandler installationHandler;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
+    private FireBaseOfflineHendler fireBaseOfflineHendler;
 
     /**====================lifeCycle methods======================**/
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("funtion called:", "onCreate");
@@ -128,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         }
         LeakCanary.install(getApplication());
         Fabric.with(this, new Crashlytics());
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setContentView(R.layout.activity_main2);
 
         appModel.initModel(this.getApplicationContext());
@@ -150,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
         appModel.localDbManger.carInfoDataBase = Room.databaseBuilder(this.getApplicationContext(), CarInfoDataBase.class, "carsInfo.db").build();
 
 
-
         FirebaseSelector firebaseSelector = new FirebaseSelector();
 
         btlist = (Button) findViewById(R.id.btPlatlist);
@@ -162,19 +183,22 @@ public class MainActivity extends AppCompatActivity {
         btNext = (Button) findViewById(R.id.btNext);
         btBack = (Button) findViewById(R.id.btBack);
         btRoomStat = (Button) findViewById(R.id.btRoomStat);
+        btRoomError = (Button) findViewById(R.id.btRoomErrorInfo);
+        btRoomError.setText("");
 
         info = (Button) findViewById(R.id.infoBt);
         info.setTransformationMethod(null);
         downloadStatus = (Button) findViewById(R.id.btDownloadStatus);
 
 
-
-
         downloadStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                fireBaseOfflineHendler.offlinePlaylis();
+
                 System.out.println(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
 
                 if (buttons) {
                     btFolder.setVisibility(View.INVISIBLE);
@@ -186,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     btNext.setVisibility(View.INVISIBLE);
                     btBack.setVisibility(View.INVISIBLE);
                     btRoomStat.setVisibility(View.INVISIBLE);
+                    btRoomError.setVisibility(View.INVISIBLE);
                     buttons = false;
                 } else {
                     btFolder.setVisibility(View.VISIBLE);
@@ -196,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     btBack.setVisibility(View.VISIBLE);
                     btNext.setVisibility(View.VISIBLE);
                     btRoomStat.setVisibility(View.VISIBLE);
+                    btRoomError.setVisibility(View.VISIBLE);
                     downloadStatus.setBackgroundColor(Color.GREEN);
                     buttons = true;
                 }
@@ -211,7 +237,11 @@ public class MainActivity extends AppCompatActivity {
                         appModel.rcs.add(rc);
                     }
                     for (ReportRecord rc : appModel.rcs) {
-                        new BQResend2().executeOnExecutor(THREAD_POOL_EXECUTOR, rc.toJson(), "0");
+                        try {
+                            new BQResend2().executeOnExecutor(THREAD_POOL_EXECUTOR, rc.toJson(), "0");
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
                     }
                 }
             }
@@ -299,6 +329,22 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         appModel.localDbManger.getRecordsinReportRecs();
+
+        btFolder.setVisibility(View.INVISIBLE);
+        btlist.setVisibility(View.INVISIBLE);
+        info.setVisibility(View.INVISIBLE);
+        downloadStatus.setBackgroundColor(Color.TRANSPARENT);
+        btVersion.setVisibility(View.INVISIBLE);
+        btReports.setVisibility(View.INVISIBLE);
+        btNext.setVisibility(View.INVISIBLE);
+        btBack.setVisibility(View.INVISIBLE);
+        btRoomStat.setVisibility(View.INVISIBLE);
+        btRoomError.setVisibility(View.INVISIBLE);
+
+        buttons = false;
+
+        setLocationManager();
+
 
     }
 
@@ -481,6 +527,38 @@ public class MainActivity extends AppCompatActivity {
             //DbListenr2 dbListenr2 = new DbListenr2();
             System.out.println(appModel.carHandler.getMotorNumber());
 
+            // testing here///
+
+            try {
+                appModel.databaseReference.child("Presence").child(appModel.carId).setValue("onLine");
+                appModel.databaseReference.child("Presence").child(appModel.carId).onDisconnect().setValue("offLine");
+                fireBaseOfflineHendler = new FireBaseOfflineHendler();
+            }
+            catch (Exception e){
+                e.getMessage();
+            }
+
+
+
+            DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+            connectedRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    boolean connected = snapshot.getValue(Boolean.class);
+                    if (connected) {
+                        System.out.println("connected");
+                        appModel.databaseReference.child("Presence").child(appModel.carId).setValue("onLine");
+                    } else {
+                        System.out.println("not connected");
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    System.err.println("Listener was cancelled");
+                }
+            });
+
+
         }
          else if (event.getMessage().equals("setRealTimeListener")) {
              if (!appModel.isOldInstace){
@@ -618,22 +696,25 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(SaveThePlayListEvent event) {
 
         AsyncHandler.post(() -> {
-            sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            try {
+                sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putInt("size", appModel.uriPlayList.size());
+                editor.putInt("size", appModel.uriPlayList.size());
 
-            for(int i=0;i<appModel.uriPlayList.size();i++)
-            {
+                for(int i=0;i<appModel.uriPlayList.size();i++)
+                {
 
-                if (appModel.dbList.size()>0 &&  appModel.dbList.size() <= appModel.uriPlayList.size()){
-                    editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
-                    editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                    if (appModel.dbList.size()>0 &&  appModel.dbList.size() <= appModel.uriPlayList.size()){
+                        editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
+                        editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
+                    }
                 }
+                editor.apply();
+                Log.d("**saving"," playlist saved");
+            }catch (Exception e){
+                e.getMessage();
             }
-
-            editor.apply();
-            Log.d("**saving"," playlist saved");
         });
     }
 
@@ -733,6 +814,17 @@ public class MainActivity extends AppCompatActivity {
                     btRoomStat.setBackgroundColor(Color.rgb(254,197,112));
                 }
                 btRoomStat.setText(String.valueOf(appModel.localDbManger.toreport.size()));
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void OnBqErrorEvent(BqErrorEvent event){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                btRoomError.setText(event.getMsg());
             }
         });
     }
@@ -764,7 +856,99 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTestColor(){
         if (Objects.equals(btRoomStat.getText(),"0")){
+            btRoomError.setText("");
             btRoomStat.setBackgroundColor(Color.rgb(254,197,112));
+        }
+    }
+
+    /**====================Location functions======================**/
+
+    public void onRequestPermissionsResult(int requestcode, @NonNull String[] premissons , @NonNull int[] getresults){
+        super.onRequestPermissionsResult(requestcode,premissons,getresults);
+
+        if (requestcode == 1){
+            if (getresults.length>0 && getresults[0] == PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    requestForLocationListenr();
+                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                }
+            }
+        }
+    }
+    @SuppressLint("MissingPermission")
+    public void requestForLocationListenr(){
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,100,locationListener);
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
+    public void updateLocation(Location location){
+        try {
+            System.out.println("%%%Gps");
+            appendNode(appModel.carId,location.getLatitude(),location.getLongitude());
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+    }
+    public void setLocationManager(){
+
+        try {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    updateLocation(location);
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {}
+
+                @Override
+                public void onProviderEnabled(String s) {}
+
+                @Override
+                public void onProviderDisabled(String s) {}
+            };
+
+            if (Build.VERSION.SDK_INT <23){
+                requestForLocationListenr();
+            }
+            else {
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},1);
+                }
+                else {
+                    requestForLocationListenr();
+                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    if (lastKnownLocation != null){
+                        updateLocation(lastKnownLocation);
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+
+    }
+    public void appendNode(String carid, double lat , double lon) {
+        try {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Locations");
+            if (carid != ""){
+                if (appModel.carHandler.getMotorNumber() != null){
+                    reference.child(carid+"/motor").setValue(String.valueOf(appModel.carHandler.getMotorNumber()));
+                }
+                reference.child(carid+"/motor").setValue(String.valueOf(appModel.carHandler.getMotorNumber()));
+                reference.child(carid+"/lat").setValue(String.valueOf(lat));
+                reference.child(carid+"/lon").setValue(String.valueOf(lon));
+            }
+        }catch (Exception e){
+            e.getMessage();
         }
     }
 

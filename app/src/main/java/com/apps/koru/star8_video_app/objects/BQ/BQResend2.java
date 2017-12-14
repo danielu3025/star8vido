@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.apps.koru.star8_video_app.Model;
+import com.apps.koru.star8_video_app.events.testEvents.BqErrorEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestRoomDbEvent;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.google.cloud.AuthCredentials;
@@ -80,6 +81,7 @@ public class BQResend2 extends AsyncTask<String, Integer, String> {
                     appModel.localDbManger.deleteRecord(rc);
                 }catch (Exception e){
                     e.getMessage();
+                    EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
                 }
 
                 JSON_CONTENT +=
@@ -103,11 +105,13 @@ public class BQResend2 extends AsyncTask<String, Integer, String> {
                  appModel.localDbManger.toreport = appModel.localDbManger.getRecords();
             }catch (Exception e){
                 Log.d("BQ-ReSend Room Query deleteAllAndUPdate",e.getMessage());
+                EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
             }
 
         } catch (Exception e) {
             Log.d("BQ-ReSend", "Exception: " + e.toString());
             stat =  "Error";
+            EventBus.getDefault().post(new BqErrorEvent(e.getMessage()));
         }
         return  stat;
     }

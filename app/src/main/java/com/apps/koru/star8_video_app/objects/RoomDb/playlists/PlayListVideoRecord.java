@@ -3,8 +3,6 @@ package com.apps.koru.star8_video_app.objects.RoomDb.playlists;
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
 
-import java.io.File;
-
 /**
  * Created by danielluzgarten on 25/11/2017.
  */
@@ -19,7 +17,7 @@ public class PlayListVideoRecord {
 
 
     int trys;
-    File file;
+    String file;
     int doration ;
     public String po ;
     public String poStartingDate;
@@ -27,7 +25,7 @@ public class PlayListVideoRecord {
     public long bitsize;
     String customer;
 
-    public PlayListVideoRecord(@NonNull String name, @NonNull int hour, @NonNull int slot, int trys, File file, int doration, String po, String poStartingDate, String poEndDate, long bitsize, String customer) {
+    public PlayListVideoRecord(@NonNull String name, @NonNull int hour, @NonNull int slot, int trys, String file, int doration, String po, String poStartingDate, String poEndDate, long bitsize, String customer) {
         this.name = name;
         this.hour = hour;
         this.slot = slot;
@@ -76,11 +74,11 @@ public class PlayListVideoRecord {
         this.trys = trys;
     }
 
-    public File getFile() {
+    public String getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    public void setFile(String file) {
         this.file = file;
     }
 

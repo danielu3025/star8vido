@@ -114,6 +114,8 @@ public class Model {
         storage.setMaxOperationRetryTimeMillis(30000);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+
+
         isOldInstace = false;
         //dev - mode :
         if (Objects.equals(environment, "DEV")){
