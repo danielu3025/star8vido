@@ -26,19 +26,20 @@ public class FireBaseDbListener {
     private Model appModel = Model.getInstance();
 
     public FireBaseDbListener() {
+        appModel.playlists = new ArrayList<>();
+        appModel.playlistNode.keepSynced(true);
         appModel.playlistNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //get playlist files names
-                appModel.listSnapshot = dataSnapshot;
+                DataSnapshot videosNode = dataSnapshot.child("videos");
+                DataSnapshot toDownloadNode = dataSnapshot.child("toDownload");
                 appModel.dbList.clear();
                 appModel.videoListphats.clear();
                 appModel.playlistFileNames.clear();
                 appModel.playlists.clear();
-                for (int i = 0 ;i<24; i++){
-                    appModel.playlists.add(new ArrayList<String>());
-                }
-                if (dataSnapshot.getChildrenCount()<1){
+
+                if (videosNode.getChildrenCount()<1){
                     System.out.println("empty playlist");
                     Bundle params = new Bundle();
                     params.putString("status","emptyPlaylist");
@@ -46,23 +47,34 @@ public class FireBaseDbListener {
                     //fabric
                     Answers.getInstance().logCustom(new CustomEvent("emptyPlatList").putCustomAttribute("status","emptyPlaylist"));
                 }
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                    for (DataSnapshot aPlaylist: postSnapshot.getChildren()){
-//                        appModel.playlists.get(Integer.parseInt(postSnapshot.getKey())).add(aPlaylist.getValue().toString());
-//                        appModel.playlistFileNames.add(aPlaylist.getValue().toString());
-//                        appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + aPlaylist.getValue());
-////                        appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + aPlaylist.getValue());
-//                    }
 
-                    appModel.playlistFileNames.add((String) postSnapshot.getValue());
-                    appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
-                    appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + postSnapshot.getValue());
-//
+                if (appModel.playlists.size()>0){
+                    appModel.playlists.clear();
                 }
+
+                for (DataSnapshot hour : videosNode.getChildren()){
+                    ArrayList<String> hourPlaylist = new ArrayList<>();
+                    for (DataSnapshot video : hour.getChildren()){
+                        hourPlaylist.add(video.getValue().toString());
+
+                        appModel.playlistFileNames.add((String) video.getValue());
+                        appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
+                        appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
+                    }
+                    appModel.playlists.add(hourPlaylist);
+                }
+
+                for (DataSnapshot videoName: toDownloadNode.getChildren()){
+                    appModel.playlistFileNames.add((String) videoName.getValue());
+                    appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + videoName.getValue());
+                }
+
+                System.out.println(appModel.playlists.size());
+
+
                 appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                 appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
 
-                System.out.println(appModel.playlists.size());
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {
                     //all videos are in storage ?
@@ -91,9 +103,10 @@ public class FireBaseDbListener {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println( databaseError.getMessage());
-
             }
         });
+
+
     }
 }
 

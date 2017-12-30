@@ -74,6 +74,7 @@ public class Model {
     public String playListKey = "";
     public FirebaseAuth mAuth;
     public ArrayList<ReportRecord> rcs = new ArrayList<>();
+    public  int hour   = 0;
 
 
     public InstallationHandler installationHandler;
@@ -89,6 +90,8 @@ public class Model {
     /**-------------------------**/
 
     public ArrayList<ArrayList<String>> playlists = new ArrayList<>() ;
+    public ArrayList<ArrayList<Uri>> urisPlayLists = new ArrayList<>();
+
     public DatabaseReference playlistNode  ;
     public ArrayList <String>dbList = new ArrayList<>();
     public boolean playing;
@@ -139,7 +142,7 @@ public class Model {
     public void conectToPlayList (String pListKey){
         if (pListKey != null){
             playListKey = pListKey;
-            playlistNode = databaseReference.child(plyListRoot).child(playListKey).child(playListName);
+            playlistNode = databaseReference.child("DEV/Playlists/Daniel1/app");
             //this is for testing only remove me
 //            playlistNode = databaseReference.child("test/Playlists/playListCodeExample1/videos");
             mainPlayList = new PlayList();

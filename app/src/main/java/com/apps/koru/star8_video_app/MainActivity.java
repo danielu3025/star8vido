@@ -12,24 +12,26 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
-import com.apps.koru.star8_video_app.apputils.OfflinePlayList;
-import com.apps.koru.star8_video_app.apputils.PlayOffline;
 import com.apps.koru.star8_video_app.downloadclass.DeleteFilesHandler;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
@@ -40,9 +42,7 @@ import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.BQSucseesEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 import com.apps.koru.star8_video_app.events.DownloadErrorEvent;
-import com.apps.koru.star8_video_app.events.GetOfflinePlayListEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
-import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadComplateReportEvent;
 import com.apps.koru.star8_video_app.events.downloadsEvents.ReSendtoBqEvent;
@@ -59,6 +59,7 @@ import com.apps.koru.star8_video_app.objects.PlayList;
 import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfoDataBase;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportsRecDatabase;
+import com.apps.koru.star8_video_app.objects.TimeHendler;
 import com.apps.koru.star8_video_app.objects.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
@@ -88,14 +89,16 @@ import io.fabric.sdk.android.Fabric;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 
+//import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
+
 public class MainActivity extends AppCompatActivity {
     Model appModel = Model.getInstance();
     Button info;
     Button downloadStatus;
-    Button btlist;
+    TextView btlist;
     Button btReports;
     Button btVersion;
-    Button btFolder;
+    TextView btFolder;
     Button btNext;
     Button btBack;
     Button btRoomStat;
@@ -161,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
         appModel.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
 
-        OfflinePlayList offlinePlayList = new OfflinePlayList();
-        PlayOffline playOffline = new PlayOffline();
+        //OfflinePlayList offlinePlayList = new OfflinePlayList();
+        //PlayOffline playOffline = new PlayOffline();
         DeleteFilesHandler deleteFilesHandler = new DeleteFilesHandler();
         PlayList playList = new PlayList();
 
@@ -174,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseSelector firebaseSelector = new FirebaseSelector();
 
-        btlist = (Button) findViewById(R.id.btPlatlist);
-        btFolder = (Button) findViewById(R.id.btFolder);
+        btlist = (TextView) findViewById(R.id.btPlatlist);
+        btFolder = (TextView) findViewById(R.id.btFolder);
         btReports = (Button) findViewById(R.id.btReports);
         btVersion = (Button) findViewById(R.id.btversion);
         btReports.setBackgroundColor(Color.GREEN);
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                fireBaseOfflineHendler.offlinePlaylis();
+//                fireBaseOfflineHendler.offlinePlaylis();
 
                 System.out.println(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -309,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
             videoView = (VideoView) findViewById(R.id.videoView2);
             videoView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.adx);
             videoView.start();
-            EventBus.getDefault().post(new GetOfflinePlayListEvent("delete", this.getApplicationContext()));
+            //EventBus.getDefault().post(new GetOfflinePlayListEvent("delete", this.getApplicationContext()));
         }
 
 
@@ -330,18 +333,20 @@ public class MainActivity extends AppCompatActivity {
         }
         appModel.localDbManger.getRecordsinReportRecs();
 
-        btFolder.setVisibility(View.INVISIBLE);
-        btlist.setVisibility(View.INVISIBLE);
-        info.setVisibility(View.INVISIBLE);
-        downloadStatus.setBackgroundColor(Color.TRANSPARENT);
-        btVersion.setVisibility(View.INVISIBLE);
-        btReports.setVisibility(View.INVISIBLE);
-        btNext.setVisibility(View.INVISIBLE);
-        btBack.setVisibility(View.INVISIBLE);
-        btRoomStat.setVisibility(View.INVISIBLE);
-        btRoomError.setVisibility(View.INVISIBLE);
-
-        buttons = false;
+//        btFolder.setVisibility(View.INVISIBLE);
+//        btlist.setVisibility(View.INVISIBLE);
+//        info.setVisibility(View.INVISIBLE);
+//        downloadStatus.setBackgroundColor(Color.TRANSPARENT);
+//        btVersion.setVisibility(View.INVISIBLE);
+//        btReports.setVisibility(View.INVISIBLE);
+//        btNext.setVisibility(View.INVISIBLE);
+//        btBack.setVisibility(View.INVISIBLE);
+//        btRoomStat.setVisibility(View.INVISIBLE);
+//        btRoomError.setVisibility(View.INVISIBLE);
+//
+//        buttons = false;
+        btlist.setMovementMethod(new ScrollingMovementMethod());
+        btFolder.setMovementMethod(new ScrollingMovementMethod());
 
         setLocationManager();
 
@@ -599,15 +604,15 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(VideoViewEvent event) {
         if(!appModel.playing) {
             videoView.stopPlayback();
-            onTrack = 0;
+            onTrack = insertInTime();
             videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
             appModel.nowPlayingName = new File(String.valueOf(appModel.uriPlayList.get(onTrack))).getName();
             System.out.println("!!!!!!! " + appModel.osId);
             System.out.println("Playing:>> " + onTrack + ": " + appModel.uriPlayList.get(onTrack));
 
             videoView.start();
-            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
-            EventBus.getDefault().post(new TestplayListEvent());
+            //EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+            //EventBus.getDefault().post(new TestplayListEvent());
         }
 
         appModel.playingVideosStarted = true;
@@ -666,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
                 EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"del"));
-                EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+                //EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 appModel.needToRefrash = false;
             }
 //            if (onTrack < appModel.uriPlayList.size()){
@@ -679,6 +684,11 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 onTrack = 0;
+                appModel.hour++;
+                if (appModel.hour == 24){
+                    appModel.hour = 0;
+                }
+                appModel.uriPlayList = appModel.urisPlayLists.get(appModel.hour);
             }
             videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
 
@@ -689,32 +699,6 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().post(new TestplayListEvent());
             setTestColor();
 
-        });
-    }
-
-    @Subscribe
-    public void onEvent(SaveThePlayListEvent event) {
-
-        AsyncHandler.post(() -> {
-            try {
-                sharedPreferences = this.getSharedPreferences("play_list", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putInt("size", appModel.uriPlayList.size());
-
-                for(int i=0;i<appModel.uriPlayList.size();i++)
-                {
-
-                    if (appModel.dbList.size()>0 &&  appModel.dbList.size() <= appModel.uriPlayList.size()){
-                        editor.putString("db_" + i, String.valueOf(appModel.dbList.get(i)));
-                        editor.putString("video_" + i, String.valueOf(appModel.uriPlayList.get(i)));
-                    }
-                }
-                editor.apply();
-                Log.d("**saving"," playlist saved");
-            }catch (Exception e){
-                e.getMessage();
-            }
         });
     }
 
@@ -859,6 +843,36 @@ public class MainActivity extends AppCompatActivity {
             btRoomError.setText("");
             btRoomStat.setBackgroundColor(Color.rgb(254,197,112));
         }
+    }
+
+    public int insertInTime(){
+        int min =0;
+        int i = 0;
+        int videoNumber = 0;
+        try {
+            for(Uri file : appModel.uriPlayList){
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                //use one of overloaded setDataSource() functions to set your data source
+                retriever.setDataSource(this, file);
+                String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                long timeInMillisec = Long.parseLong(time);
+                timeInMillisec = timeInMillisec / 1000;
+                min+=timeInMillisec;
+                if (min/60 > new TimeHendler().minute){
+                    System.out.println("this is the video to start with:: " + i);
+                    videoNumber =i;
+                }
+                else {
+                    i++;
+                }
+                retriever.release();
+            }
+        }catch (Exception e){
+            e.getMessage();
+            return  0;
+        }
+
+        return videoNumber;
     }
 
     /**====================Location functions======================**/

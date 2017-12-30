@@ -6,10 +6,8 @@ import android.util.Log;
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadCompleteEvent;
 import com.apps.koru.star8_video_app.events.InfoEvent;
-import com.apps.koru.star8_video_app.events.SaveThePlayListEvent;
 import com.apps.koru.star8_video_app.events.VideoViewEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestplayListEvent;
-
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,9 +18,11 @@ import java.util.ArrayList;
 
 public class VideoPlayer {
     private Model appModel = Model.getInstance();
+    TimeHendler timeHendler = new TimeHendler() ;
 
     public VideoPlayer() {
         EventBus.getDefault().register(this);
+        appModel.urisPlayLists = new ArrayList<>();
     }
     @Subscribe
     public void onEvent(DownloadCompleteEvent event) {
@@ -39,15 +39,27 @@ public class VideoPlayer {
             }
             appModel.uriPlayList.clear();
 
-            for (String path : appModel.dbList) {
-                appModel.uriPlayList.add(Uri.parse(path));
+            if (appModel.urisPlayLists.size()>0){
+                appModel.urisPlayLists.clear();
             }
+
+            for (ArrayList<String> arrayList: appModel.playlists){
+                ArrayList<Uri> uriList = new ArrayList<>();
+                for (String videoName : arrayList){
+                    uriList.add(Uri.parse(appModel.videoDir.getAbsolutePath()+"/"+videoName));
+                }
+                appModel.urisPlayLists.add(uriList);
+            }
+            appModel.hour = timeHendler.getHouer();
+            appModel.uriPlayList =  appModel.urisPlayLists.get(appModel.hour);
+
+
             EventBus.getDefault().post(new TestplayListEvent());
-            EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+            //EventB us.getDefault().post(new SaveThePlayListEvent("save"));
             appModel.needToRefrash = true;
 
             if (!appModel.playingVideosStarted){
-                EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+               // EventBus.getDefault().post(new SaveThePlayListEvent("save"));
                 EventBus.getDefault().post(new VideoViewEvent());
             }
 

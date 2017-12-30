@@ -11,26 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="264dp"
         android:background="@color/common_google_signin_btn_text_dark_default"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btFolder"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btPlatlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/common_google_signin_btn_text_dark_default"
-        android:textAlignment="viewStart"
-        android:textAllCaps="false"
-        android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="@+id/videoView2"
-        app:layout_constraintTop_toTopOf="@+id/videoView2" />
 
     <Button
         android:id="@+id/btDownloadStatus"
@@ -42,16 +28,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="546dp" />
-
-    <Button
-        android:id="@+id/btFolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btPlatlist"
-        app:layout_constraintTop_toTopOf="@+id/videoView2" />
 
     <Button
         android:id="@+id/btReports"
@@ -121,6 +97,32 @@
         android:layout_alignParentTop="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btFolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/background_light"
+        android:maxLines="3000"
+        android:scrollbars="vertical"
+        android:text="Storage:"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@+id/btPlatlist"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
+        android:id="@+id/btPlatlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:maxLines="3000"
+        android:scrollbars="vertical"
+        android:text="PlayList:"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
