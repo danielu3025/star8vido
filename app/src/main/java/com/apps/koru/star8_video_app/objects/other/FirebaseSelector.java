@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.objects;
+package com.apps.koru.star8_video_app.objects.other;
 
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.AccessEvent;
@@ -16,11 +16,11 @@ public class FirebaseSelector {
 
     public FirebaseSelector() {
         appModel.mAuth = FirebaseAuth.getInstance();
+        appModel.imeiNode.keepSynced(true);
         appModel.imeiNode.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(appModel.tvCode)){
-
                     appModel.imeiNode.child(appModel.tvCode).child("car").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -29,8 +29,6 @@ public class FirebaseSelector {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     appModel.conectToPlayList((String) dataSnapshot.getValue());
-
-
                                     EventBus.getDefault().post(new AccessEvent("ok"));
                                 }
 

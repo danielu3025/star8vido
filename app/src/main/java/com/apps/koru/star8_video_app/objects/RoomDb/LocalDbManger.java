@@ -6,14 +6,11 @@ import android.util.Log;
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.RoomQueryEvent;
 import com.apps.koru.star8_video_app.events.testEvents.TestRoomDbEvent;
-import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfo;
-import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfoDataBase;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportsRecDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +21,8 @@ public class LocalDbManger {
     public JsonToRecord jsonToRecord = new JsonToRecord();
     public List<ReportRecord> toreport;
     public ReportsRecDatabase reportsRecDatabase;
-    public CarInfoDataBase carInfoDataBase;
     public ReportRecord reportRecord;
     Model appModel = Model.getInstance();
-    public  ArrayList<CarInfo> carInfosArray = new ArrayList<>();
 
     public void insertToReportRecDb (ReportRecord record){
         AsyncTask.execute(new Runnable() {
@@ -107,29 +102,6 @@ public class LocalDbManger {
             Log.d("deleteRecord","deleting "+ record.getVideo_name() + " "+ record.getTime());
         }catch (Exception e){
             Log.d("deleteRecord","Error deleting "+ record.getVideo_name() + " "+ record.getTime()+"" +" \n"+e.getMessage());
-        }
-    }
-
-
-    public void insertCarInfo (CarInfo info){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    carInfoDataBase.carInfoDao().insertAll(info);
-                }
-                catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
-    }
-    public List<CarInfo> getCarInfos() {
-        try {
-            return carInfoDataBase.carInfoDao().getall();
-        }catch (Exception e){
-            e.getMessage();
-            return null;
         }
     }
 }

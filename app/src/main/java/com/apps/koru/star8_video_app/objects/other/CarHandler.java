@@ -1,10 +1,7 @@
-package com.apps.koru.star8_video_app.objects;
-
-import android.os.AsyncTask;
+package com.apps.koru.star8_video_app.objects.other;
 
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.AccessEvent;
-import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +24,6 @@ public class CarHandler {
     String route = "";
     String tag = "";
     String type = "";
-
 
     public CarHandler() {
     }
@@ -106,6 +102,7 @@ public class CarHandler {
 
     public void  setCar(){
         DatabaseReference ref =appModel.databaseReference.child("TVCode").child(appModel.tvCode).child("car");
+        ref.keepSynced(true);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -174,7 +171,6 @@ public class CarHandler {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             route = dataSnapshot.getValue().toString();
                             appModel.carData = true;
-                            appModel.localDbManger.insertCarInfo(new CarInfo(carId,tvCode,country,region,route,type,cctv,tag));
                             EventBus.getDefault().post(new AccessEvent("ok"));
                         }
 
@@ -192,31 +188,5 @@ public class CarHandler {
             }
         });
     }
-    public void setCarFromRoom(){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (CarInfo info : appModel.localDbManger.getCarInfos()){
-                    appModel.localDbManger.carInfosArray.add(info);
-                }
-                if (appModel.localDbManger.carInfosArray.size()>0){
-                    CarInfo carInfo = appModel.localDbManger.carInfosArray.get(0);
-                    if (carInfo !=null){
-                        carId = carInfo.getVehicle_id();
-                        tvCode = carInfo.getTv_code();
-                        cctv = carInfo.getCctv();
-                        country = carInfo.getCountry();
-                        motorNumber = " ";
-                        region = carInfo.getRegion();
-                        route = carInfo.getRoute();
-                        tag = carInfo.getTag();
-                        type = carInfo.getType();
-                        EventBus.getDefault().post(new AccessEvent("ok"));
-                    }
-                }
 
-            }
-        });
-
-    }
 }

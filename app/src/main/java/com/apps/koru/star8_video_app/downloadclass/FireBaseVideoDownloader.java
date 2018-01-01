@@ -1,7 +1,7 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage0;
-import com.apps.koru.star8_video_app.objects.AdvertisingObj;
+import com.apps.koru.star8_video_app.objects.other.AdvertisingObj;
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.DownloadFilesEvent;
 

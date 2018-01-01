@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.objects;
+package com.apps.koru.star8_video_app.objects.other;
 
 import com.apps.koru.star8_video_app.Model;
 import com.google.firebase.database.DataSnapshot;

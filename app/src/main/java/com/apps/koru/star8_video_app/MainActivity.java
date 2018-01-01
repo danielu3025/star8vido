@@ -53,14 +53,13 @@ import com.apps.koru.star8_video_app.objects.BQ.BQResend2;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryDownloadReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryPlayedReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryReportMangar;
-import com.apps.koru.star8_video_app.objects.FireBaseOfflineHendler;
-import com.apps.koru.star8_video_app.objects.FirebaseSelector;
-import com.apps.koru.star8_video_app.objects.PlayList;
-import com.apps.koru.star8_video_app.objects.RoomDb.carInfo.CarInfoDataBase;
+import com.apps.koru.star8_video_app.objects.other.FireBaseOfflineHendler;
+import com.apps.koru.star8_video_app.objects.other.FirebaseSelector;
+import com.apps.koru.star8_video_app.objects.other.PlayList;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportsRecDatabase;
-import com.apps.koru.star8_video_app.objects.TimeHendler;
-import com.apps.koru.star8_video_app.objects.VideoPlayer;
+import com.apps.koru.star8_video_app.objects.other.TimeHendler;
+import com.apps.koru.star8_video_app.objects.other.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
 import com.apps.koru.star8_video_app.sharedutils.UiHandler;
 import com.crashlytics.android.Crashlytics;
@@ -172,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
 
         appModel.bigQueryReportMangar = new BigQueryReportMangar();
         appModel.localDbManger.reportsRecDatabase = Room.databaseBuilder(this.getApplicationContext(), ReportsRecDatabase.class, "reports.db").build();
-        appModel.localDbManger.carInfoDataBase = Room.databaseBuilder(this.getApplicationContext(), CarInfoDataBase.class, "carsInfo.db").build();
 
 
         FirebaseSelector firebaseSelector = new FirebaseSelector();
@@ -325,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
             appModel.tvCode = InstallationHandler.readInstallationFile(installationHandler.getInstallation());
             System.out.println("tv code: " + appModel.tvCode);
             appModel.carHandler.setCar();
-            appModel.carHandler.setCarFromRoom();
 
 
         } catch (IOException e) {

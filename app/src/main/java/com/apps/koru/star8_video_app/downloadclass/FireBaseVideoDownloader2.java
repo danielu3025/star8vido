@@ -13,7 +13,7 @@ import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage0;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage1;
 import com.apps.koru.star8_video_app.events.downloadsEvents.DownloadEventStage2;
 import com.apps.koru.star8_video_app.events.testEvents.TestDownloadLIstEvent;
-import com.apps.koru.star8_video_app.objects.AdvertisingObj;
+import com.apps.koru.star8_video_app.objects.other.AdvertisingObj;
 import com.apps.koru.star8_video_app.Model;
 
 

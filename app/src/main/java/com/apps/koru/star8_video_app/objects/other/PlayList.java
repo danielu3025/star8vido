@@ -1,4 +1,4 @@
-package com.apps.koru.star8_video_app.objects;
+package com.apps.koru.star8_video_app.objects.other;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;

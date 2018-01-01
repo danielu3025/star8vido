@@ -7,10 +7,10 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.apps.koru.star8_video_app.apputils.InstallationHandler;
-import com.apps.koru.star8_video_app.objects.AdvertisingObj;
+import com.apps.koru.star8_video_app.objects.other.AdvertisingObj;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryReportMangar;
-import com.apps.koru.star8_video_app.objects.CarHandler;
-import com.apps.koru.star8_video_app.objects.PlayList;
+import com.apps.koru.star8_video_app.objects.other.CarHandler;
+import com.apps.koru.star8_video_app.objects.other.PlayList;
 import com.apps.koru.star8_video_app.objects.RoomDb.JsonToRecord;
 import com.apps.koru.star8_video_app.objects.RoomDb.LocalDbManger;
 import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
