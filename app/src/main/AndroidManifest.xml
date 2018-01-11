@@ -61,7 +61,7 @@
         <service
             android:name=".AppRunService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
 
 </manifest>

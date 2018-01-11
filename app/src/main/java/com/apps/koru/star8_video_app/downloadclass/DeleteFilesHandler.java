@@ -1,8 +1,9 @@
 package com.apps.koru.star8_video_app.downloadclass;
 
-import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
-import com.apps.koru.star8_video_app.events.GetToPlayOfflineEvent;
+import android.util.Log;
+
 import com.apps.koru.star8_video_app.Model;
+import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,30 +26,44 @@ public class DeleteFilesHandler {
     }
     @Subscribe
     public void onEvent(DeleteVideosEvent event) {
-        message = event.getMessage();
-        list = event.getList();
+
+        list  = event.getList();
+        // get all files from folder
         File[] lf = appModel.videoDir.listFiles();
-        ArrayList<String> folderPhats = new ArrayList<>();
-        int i = 0;
-        for (File file :lf){
-            folderPhats.add(file.getAbsolutePath());
-        }
-        for (String path : folderPhats){
-            i++;
-            if (!list.contains(path)){
-                File  toDelete = new File(path);
-//                try {
-//                    toDelete.delete();
-//                    System.out.println("**cleaning files: " + path + "is deleted");
-//                }catch (Exception e){
-//                    e.getCause();
-//                }
+        ArrayList<String> paths = new ArrayList<>();
+        ArrayList<String> toDelet = new ArrayList<>();
+        for (File file : lf){
+            String name = file.getName();
+            name = name.toUpperCase();
+            if (!name.contains("STAR8")){
+                paths.add(file.getAbsolutePath());
             }
         }
-        if(message.equals("delete")){
-            EventBus.getDefault().post(new GetToPlayOfflineEvent("play"));
-        } else if(message.equals("offline")){
-            EventBus.getDefault().post(new GetToPlayOfflineEvent("play"));
+        //isolate only files that need to br removed
+        for (String name : paths){
+            if (!list.contains(name)){
+                toDelet.add(name);
+            }
+        }
+
+        //delete files
+
+        if (toDelet.size()>0){
+            for (String filepath : toDelet){
+                File  file=  new File(filepath);
+                if (file.exists()){
+                    Log.d("Delteting","trying to delete - " + file.getName());
+                    try {
+                        file.delete();
+                        Log.d("Delteting","deleted - " + file.getName());
+                    }
+                    catch (Exception e){
+                        e.getMessage();
+                        Log.d("Delteting","failed to  delete - " + file.getName());
+
+                    }
+                }
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ import com.apps.koru.star8_video_app.downloadclass.FireBaseDbListener;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader;
 import com.apps.koru.star8_video_app.downloadclass.FireBaseVideoDownloader2;
 import com.apps.koru.star8_video_app.downloadclass.MissFileFinder;
-import com.apps.koru.star8_video_app.downloadclass.MissFileFinder2;
+//import com.apps.koru.star8_video_app.downloadclass.MissFileFinder2;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.apps.koru.star8_video_app.events.BQSucseesEvent;
 import com.apps.koru.star8_video_app.events.DeleteVideosEvent;
@@ -53,11 +53,11 @@ import com.apps.koru.star8_video_app.objects.BQ.BQResend2;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryDownloadReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryPlayedReport;
 import com.apps.koru.star8_video_app.objects.BQ.BigQueryReportMangar;
+import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
+import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportsRecDatabase;
 import com.apps.koru.star8_video_app.objects.other.FireBaseOfflineHendler;
 import com.apps.koru.star8_video_app.objects.other.FirebaseSelector;
 import com.apps.koru.star8_video_app.objects.other.PlayList;
-import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportRecord;
-import com.apps.koru.star8_video_app.objects.RoomDb.reports.ReportsRecDatabase;
 import com.apps.koru.star8_video_app.objects.other.TimeHendler;
 import com.apps.koru.star8_video_app.objects.other.VideoPlayer;
 import com.apps.koru.star8_video_app.sharedutils.AsyncHandler;
@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
 
         am = MainActivity.this.getAssets();
         appModel.assetManager = am;
+
+        appModel.justOpen = true;
 
         appModel.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = appModel.mAuth.getCurrentUser();
@@ -523,7 +525,7 @@ public class MainActivity extends AppCompatActivity {
             VideoPlayer player = new VideoPlayer();
             FireBaseVideoDownloader2 fireBaseVideoDownloader2 = new FireBaseVideoDownloader2();
             FireBaseVideoDownloader fireBaseVideoDownloader = new FireBaseVideoDownloader();
-            MissFileFinder2 missFileFinder2 = new MissFileFinder2();
+           // MissFileFinder2 missFileFinder2 = new MissFileFinder2();
             MissFileFinder missFileFinder = new MissFileFinder();
             FireBaseDbListener fireBaseDbListener = new FireBaseDbListener();
             //DbListenr2 dbListenr2 = new DbListenr2();
@@ -599,6 +601,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(VideoViewEvent event) {
+
         if(!appModel.playing) {
             videoView.stopPlayback();
             onTrack = insertInTime();
@@ -606,10 +609,7 @@ public class MainActivity extends AppCompatActivity {
             appModel.nowPlayingName = new File(String.valueOf(appModel.uriPlayList.get(onTrack))).getName();
             System.out.println("!!!!!!! " + appModel.osId);
             System.out.println("Playing:>> " + onTrack + ": " + appModel.uriPlayList.get(onTrack));
-
             videoView.start();
-            //EventBus.getDefault().post(new SaveThePlayListEvent("save"));
-            //EventBus.getDefault().post(new TestplayListEvent());
         }
 
         appModel.playingVideosStarted = true;
@@ -637,26 +637,6 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("Error", " - playing video error");
             logEvets(String.valueOf(appModel.nowPlayingName),error,0);
-
-            if (onTrack >=0) {
-                if (onTrack != appModel.uriPlayList.size()-1) {
-                    if (onTrack<appModel.uriPlayList.size()-1){
-                        onTrack ++;
-                    }
-                    videoView.setVideoURI(appModel.uriPlayList.get(onTrack));
-                } else {
-                    try{
-                        videoView.setVideoURI(appModel.uriPlayList.get(0));
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            } else if (onTrack>=appModel.uriPlayList.size()){
-                videoView.setVideoURI(appModel.uriPlayList.get(0));
-            }
-            videoView.start();
-            appModel.nowPlayingName = new File(String.valueOf(appModel.uriPlayList.get(onTrack))).getName();
-            EventBus.getDefault().post(new TestplayListEvent());
             return true;
         });
 
@@ -664,11 +644,12 @@ public class MainActivity extends AppCompatActivity {
 
             logEvets(String.valueOf(appModel.nowPlayingName),"ok",1);
 
-
             if (appModel.needToRefrash){
                 Log.d("**playing"," playlist has Updated");
-                EventBus.getDefault().post(new DeleteVideosEvent(appModel.dbList,"del"));
-                //EventBus.getDefault().post(new SaveThePlayListEvent("save"));
+
+
+
+                EventBus.getDefault().post(new DeleteVideosEvent(appModel.workingVideos,"del"));
                 appModel.needToRefrash = false;
             }
 //            if (onTrack < appModel.uriPlayList.size()){
@@ -697,6 +678,10 @@ public class MainActivity extends AppCompatActivity {
             setTestColor();
 
         });
+
+       if (!appModel.justOpen){
+
+       }
     }
 
     @Subscribe
@@ -847,6 +832,7 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
         int videoNumber = 0;
         try {
+            Log.d("Calc","calcing time to get in");
             for(Uri file : appModel.uriPlayList){
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 //use one of overloaded setDataSource() functions to set your data source
@@ -856,7 +842,6 @@ public class MainActivity extends AppCompatActivity {
                 timeInMillisec = timeInMillisec / 1000;
                 min+=timeInMillisec;
                 if (min/60 > new TimeHendler().minute){
-                    System.out.println("this is the video to start with:: " + i);
                     videoNumber =i;
                 }
                 else {

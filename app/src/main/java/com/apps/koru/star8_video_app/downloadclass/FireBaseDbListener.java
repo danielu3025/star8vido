@@ -52,28 +52,35 @@ public class FireBaseDbListener {
                     appModel.playlists.clear();
                 }
 
-                for (DataSnapshot hour : videosNode.getChildren()){
-                    ArrayList<String> hourPlaylist = new ArrayList<>();
-                    for (DataSnapshot video : hour.getChildren()){
-                        hourPlaylist.add(video.getValue().toString());
 
-                        appModel.playlistFileNames.add((String) video.getValue());
-                        appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
-                        appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
+                if (videosNode.getValue() != null){
+                    for (DataSnapshot hour : videosNode.getChildren()){
+                        ArrayList<String> hourPlaylist = new ArrayList<>();
+                        for (DataSnapshot video : hour.getChildren()){
+                            hourPlaylist.add(video.getValue().toString());
+
+                            appModel.playlistFileNames.add((String) video.getValue());
+                            appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
+                            appModel.dbList.add(appModel.videoDir.getAbsolutePath() + "/" + video.getValue());
+                        }
+                        appModel.playlists.add(hourPlaylist);
                     }
-                    appModel.playlists.add(hourPlaylist);
                 }
+                if (toDownloadNode.getValue() != null){
+                    for (DataSnapshot videoName: toDownloadNode.getChildren()){
+                        appModel.playlistFileNames.add((String) videoName.getValue());
+                        appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + videoName.getValue());
+                    }
 
-                for (DataSnapshot videoName: toDownloadNode.getChildren()){
-                    appModel.playlistFileNames.add((String) videoName.getValue());
-                    appModel.videoListphats.add(appModel.videoDir.getAbsolutePath() + "/" + videoName.getValue());
+                    System.out.println(appModel.playlists.size());
                 }
-
-                System.out.println(appModel.playlists.size());
 
 
                 appModel.playlistFileNames = new ArrayList<>(new LinkedHashSet<>(appModel.playlistFileNames));
                 appModel.videoListphats = new ArrayList<>(new LinkedHashSet<>(appModel.videoListphats));
+
+                appModel.workingVideos = appModel.videoListphats;
+
 
                 //check if playlist Folder is exists
                 if (appModel.mainPlayList.checkFolderExists(appModel.videoDir)) {

@@ -1,5 +1,7 @@
 package com.apps.koru.star8_video_app.objects.other;
 
+import android.util.Log;
+
 import com.apps.koru.star8_video_app.Model;
 import com.apps.koru.star8_video_app.events.AccessEvent;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,8 @@ public class CarHandler {
     String route = "";
     String tag = "";
     String type = "";
+    Car car;
+    RouteArea routeArea;
 
     public CarHandler() {
     }
@@ -112,38 +116,27 @@ public class CarHandler {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild(carId)){
+
                             appModel.databaseReference.child("Cars").child(carId).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot snap : dataSnapshot.getChildren()){
-                                        switch (snap.getKey()){
-                                            case "cctv":
-                                                cctv = snap.getValue().toString();
-                                                break;
-                                            case "country":
-                                                country = snap.getValue().toString();
-                                                break;
-                                            case "motorNumber":
-                                                motorNumber = snap.getValue().toString();
-                                                break;
-                                            case "region":
-                                                region = snap.getValue().toString();
-                                                break;
-                                            case "route":
-                                                route = snap.getValue().toString();
-                                                break;
-                                            case "tag":
-                                                tag = snap.getValue().toString();
-                                                break;
-                                            case "tvcode":
-                                                tvCode = snap.getValue().toString();
-                                                break;
-                                            case "type":
-                                                type = snap.getValue().toString();
-                                                break;
-                                        }
+                                    try {
+                                        car = dataSnapshot.getValue(Car.class);
+                                        carId = car.getCarNumber();
+                                        tvCode = car.getTvcode();
+                                        cctv = car.getCctv();
+                                        country = car.getCountry();
+                                        motorNumber = car.motorNumber;
+                                        region = car.getRegion();
+                                        tag = car.getTag();
+                                        type= car.getType();
+                                        route = car.getRoute();
+                                        getRouteName();
+                                    }catch (Exception e){
+                                        Log.d("Setting car Error", e.getMessage());
+                                        e.getMessage();
                                     }
-                                    getRouteName();
+
 
                                 }
                                 @Override
@@ -162,14 +155,21 @@ public class CarHandler {
 
     }
     private void getRouteName(){
-        appModel.databaseReference.child("Routes").addListenerForSingleValueEvent(new ValueEventListener() {
+        //change here !!!!
+        DatabaseReference routsAreaNode  = appModel.databaseReference.child("Routes");
+        routsAreaNode.keepSynced(true);
+        routsAreaNode.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.hasChild(route)){
-                    appModel.databaseReference.child("Routes").child(route).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    routsAreaNode.child(route).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            route = dataSnapshot.getValue().toString();
+                            routeArea = dataSnapshot.getValue(RouteArea.class);
+                            route = routeArea.getName();
+                            region = routeArea.getRegion();
                             appModel.carData = true;
                             EventBus.getDefault().post(new AccessEvent("ok"));
                         }
